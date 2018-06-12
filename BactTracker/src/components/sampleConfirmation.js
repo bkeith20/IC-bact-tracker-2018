@@ -4,7 +4,7 @@ import { createStackNavigator } from 'react-navigation';
 
 export default class ConfirmScreen extends React.Component {
     static navigationOptions = {
-        title: 'Login',
+        title: 'Confirmation',
     };
   render() {
       

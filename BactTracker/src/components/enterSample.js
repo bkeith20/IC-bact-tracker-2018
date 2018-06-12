@@ -4,7 +4,7 @@ import { createStackNavigator } from 'react-navigation';
 
 export default class EnterSampleScreen extends React.Component {
     static navigationOptions = {
-        title: 'Login',
+        title: 'Enter Sample',
     };
   render() {
       

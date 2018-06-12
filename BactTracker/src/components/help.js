@@ -4,7 +4,7 @@ import { createStackNavigator } from 'react-navigation';
 
 export default class HelpScreen extends React.Component {
     static navigationOptions = {
-        title: 'Login',
+        title: 'Help',
     };
   render() {
       

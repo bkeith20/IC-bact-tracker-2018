@@ -4,7 +4,7 @@ import { createStackNavigator } from 'react-navigation';
 
 export default class TrackerScreen extends React.Component {
     static navigationOptions = {
-        title: 'Login',
+        title: 'Tracker',
     };
   render() {
       
