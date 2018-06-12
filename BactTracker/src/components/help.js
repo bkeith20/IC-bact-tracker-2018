@@ -41,7 +41,7 @@ export default class HelpScreen extends React.Component {
   render() {
       
     return (
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView showsVerticalScrollIndicator={false} >
             <View style={styles.videoContainer}>
                 <WebView
                     style={styles.view}
@@ -53,7 +53,7 @@ export default class HelpScreen extends React.Component {
                 />
             </View>
         
-            <View>
+            <View style={styles.containerOuter}>
         
                 <Text>This is the Help Screen</Text>
                 <Text>These can be written instructions to accompany the video.</Text>
@@ -84,6 +84,13 @@ export default class HelpScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
+    containerOuter: {
+        backgroundColor: 'white',
+        //flex:1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        //flexDirection: 'column'
+    },
     videoContainer: {
         height: 300,
     },

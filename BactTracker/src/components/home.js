@@ -35,7 +35,7 @@ export default class HomeScreen extends React.Component {
                         style={styles.button}
                         disabled={false}
                     >
-                        <Text style={styles.buttonText}>BACT-Tracker</Text>
+                        <Text style={styles.buttonText}>BACT-TRACKER</Text>
                     </TouchableOpacity>        
                 </View>
             </View>
@@ -50,7 +50,7 @@ export default class HomeScreen extends React.Component {
                         style={styles.button}
                         disabled={false}
                     >
-                        <Text style={styles.buttonText}>help</Text>
+                        <Text style={styles.buttonText}>HELP</Text>
                     </TouchableOpacity> 
             </View>
         
@@ -61,7 +61,7 @@ export default class HomeScreen extends React.Component {
 
 const styles = StyleSheet.create({
   containerOuter: {
-    //backgroundColor: 'darkgrey',
+    backgroundColor: 'white',
     flex:1,
     alignItems: 'center',
     justifyContent: 'center',
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column'
   },
   button: {
-    backgroundColor: 'rgb(39, 40, 43)',
+    backgroundColor: '#003b71',
     width: 130,
     height: 40,
   },
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
   },
   title: {
     //color: 'white',
-    color: 'black',
+    color: '#003b71',
     textAlign: 'center',
     fontWeight: 'bold',
     fontSize: 30,
