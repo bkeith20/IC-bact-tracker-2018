@@ -41,7 +41,7 @@ export default class HelpScreen extends React.Component {
   render() {
       
     return (
-        <ScrollView showsVerticalScrollIndicator={false} >
+        <View style={styles.containerOuter}>
             <View style={styles.videoContainer}>
                 <WebView
                     style={styles.view}
@@ -53,32 +53,34 @@ export default class HelpScreen extends React.Component {
                 />
             </View>
         
-            <View style={styles.containerOuter}>
+            <ScrollView showsVerticalScrollIndicator={false} style={{padding: 20}}>
         
-                <Text>This is the Help Screen</Text>
-                <Text>These can be written instructions to accompany the video.</Text>
-                <Text>Step 1</Text>
-                <Text>Step 2</Text>
-                <Text>Step 3</Text>
-                <Text>Step 4</Text>
-                <Text>Step 5</Text>
-                <Text>Step 6</Text>
-                <Text>Step 7</Text>
-                <Text>Step 8</Text>
-                <Text>Step 9</Text>
-                <Text>Step 10</Text>
-                <Text>Step 11</Text>
-                <Text>Step 12</Text>
-                <Text>Step 13</Text>
-                <Text>Step 14</Text>
-                <Text>Step 15</Text>
-                <Text>Step 16</Text>
-                <Text>Step 17</Text>
-                <Text>Step 18</Text>
-                <Text>Step 19</Text>
+                <Text style={styles.title}>This is the Help Screen</Text>
+                <Text style={styles.regularText}>These can be written instructions to accompany the video.</Text>
+                <Text style={styles.subtitles}>Step 1</Text>
+                <Text style={styles.regularText}>These can be written instructions to accompany the video.</Text>
+                <Text style={styles.subtitles}>Step 2</Text>
+                <Text style={styles.regularText}>These can be written instructions to accompany the video.</Text>
+                <Text style={styles.subtitles}>Step 3</Text>
+                <Text style={styles.subtitles}>Step 4</Text>
+                <Text style={styles.subtitles}>Step 5</Text>
+                <Text style={styles.subtitles}>Step 6</Text>
+                <Text style={styles.subtitles}>Step 7</Text>
+                <Text style={styles.subtitles}>Step 8</Text>
+                <Text style={styles.subtitles}>Step 9</Text>
+                <Text style={styles.subtitles}>Step 10</Text>
+                <Text style={styles.subtitles}>Step 11</Text>
+                <Text style={styles.subtitles}>Step 12</Text>
+                <Text style={styles.subtitles}>Step 13</Text>
+                <Text style={styles.subtitles}>Step 14</Text>
+                <Text style={styles.subtitles}>Step 15</Text>
+                <Text style={styles.subtitles}>Step 16</Text>
+                <Text style={styles.subtitles}>Step 17</Text>
+                <Text style={styles.subtitles}>Step 18</Text>
+                <Text style={styles.subtitles}>Step 19</Text>
         
-            </View>
-        </ScrollView>
+            </ScrollView>
+        </View>
     );
   }
 }
@@ -86,9 +88,9 @@ export default class HelpScreen extends React.Component {
 const styles = StyleSheet.create({
     containerOuter: {
         backgroundColor: 'white',
-        //flex:1,
-        alignItems: 'center',
-        justifyContent: 'center',
+        flex:1,
+        //alignItems: 'center',
+        //justifyContent: 'center',
         //flexDirection: 'column'
     },
     videoContainer: {
@@ -97,4 +99,25 @@ const styles = StyleSheet.create({
     view: {
         marginTop: (Platform.OS == 'ios')?20:0,
     },
+    title: {
+        color: '#003b71',
+        //textAlign: 'center',
+        fontWeight: 'bold',
+        fontSize: 30,
+        //paddingLeft: 10
+    },
+    regularText: {
+         color: '#003b71',
+        //textAlign: 'center',
+        //fontWeight: 'bold',
+        fontSize: 16,
+        paddingLeft: 30
+    },
+    subtitles: {
+         color: '#003b71',
+        //textAlign: 'center',
+        fontWeight: 'bold',
+        fontSize: 20,
+        paddingLeft: 10
+    }
 });
