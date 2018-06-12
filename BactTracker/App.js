@@ -22,7 +22,8 @@ const RootStack = createStackNavigator({
     Viewer: ViewerScreen,
 },
 {
-    initialRouteName: 'Login',
+    //initialRouteName: 'Login',
+    initialRouteName: 'Home',
     navigationOptions: {
         headerStyle: {
             //backgroundColor: 'pink',

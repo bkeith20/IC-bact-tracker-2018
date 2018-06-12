@@ -11,7 +11,7 @@ export default class ViewerScreen extends React.Component {
     return (
       <ScrollView showsVerticalScrollIndicator={false}>
         
-            <Text>This is the login Screen</Text>
+            <Text>This is the Viewer Screen</Text>
         
       </ScrollView>
     );

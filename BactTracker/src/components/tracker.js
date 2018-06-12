@@ -11,7 +11,7 @@ export default class TrackerScreen extends React.Component {
     return (
       <ScrollView showsVerticalScrollIndicator={false}>
         
-            <Text>This is the login Screen</Text>
+            <Text>This is the Tracker Screen</Text>
         
       </ScrollView>
     );
