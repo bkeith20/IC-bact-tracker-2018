@@ -14,8 +14,8 @@
 
     const williams = {
             title: "Williams",
-            latitude : '42.422691',
-            longitude : '-76.495041',
+            latitude : 42.422691,
+            longitude : -76.495041,
             description: "There are three areas that are available for sampling",
             altDescription: "There are three areas that are available for sampling. Get closer to take a sample",
             displayDescription:"",
@@ -24,8 +24,8 @@
         }
     const campusCenter = {
             title: "Campus Center",
-            latitude : '42.422115',
-            longitude : '-76.494273',
+            latitude : 42.422115,
+            longitude : -76.494273,
             description: "There are five areas that are available for sampling",
             altDescription: "There are five areas that are available for sampling. Get closer to take a sample",
             displayDescription:"",
@@ -39,8 +39,8 @@
         super(props);
 
         this.state = {
-          latitude: "",
-          longitude: "",  
+          latitude: 1,
+          longitude: 1,  
         };
       }
 
@@ -146,7 +146,7 @@
         container: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'top',
+        justifyContent: 'center',
         backgroundColor: '#ecf0f1',
         margin: 5,
       },

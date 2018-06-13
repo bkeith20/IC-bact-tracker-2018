@@ -7,7 +7,7 @@ import { createStackNavigator } from 'react-navigation';
 import HomeScreen from './src/components/home.js';
 import HelpScreen from './src/components/help.js';
 import EnterSampleScreen from './src/components/enterSample.js';
-import LoginScreen from './src/components/login.js';
+import LoginScreen from './src/components/Login.js';
 import ConfirmScreen from './src/components/sampleConfirmation.js';
 import TrackerScreen from './src/components/tracker.js';
 import ViewerScreen from './src/components/viewer.js';
@@ -15,15 +15,15 @@ import ViewerScreen from './src/components/viewer.js';
 const RootStack = createStackNavigator({
    Home: HomeScreen,
    Help: HelpScreen,
-   EnterSample: EnterSampleScreen,
+   BactTracker: EnterSampleScreen,
     Login: LoginScreen,
-    SampleConfirmation: ConfirmScreen,
+    Confirmation: ConfirmScreen,
     Tracker: TrackerScreen,
     Viewer: ViewerScreen,
 },
 {
-    //initialRouteName: 'Login',
-    initialRouteName: 'SampleConfirmation',
+    initialRouteName: 'Login',
+    //initialRouteName: 'Home',
     navigationOptions: {
         headerStyle: {
             backgroundColor: '#003b71',

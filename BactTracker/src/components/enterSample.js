@@ -17,6 +17,7 @@
     });
 
     var options = {
+        auto: 'placeholders',
         fields: {
             sampleType: {
                 label: "Sample Type"
@@ -50,7 +51,7 @@ export default class enterSample extends React.Component{
                 SampleID: this.state.sampleID,
                 SampleType : Fvalue.sampleType,
             }
-            this.props.navigation.navigate('Confirmation', {formInfo})
+            this.props.navigation.navigate('Confirmation', {fInfo: formInfo});
         }
     }
 
@@ -59,7 +60,7 @@ export default class enterSample extends React.Component{
     render () {
         return(
             <ScrollView>
-            <View style = {{alignItems: 'center', backgroundColor: 'powderblue', flex: 1, justifyContent: 'right' }}>
+            <View style = {{alignItems: 'center', backgroundColor: 'powderblue', flex: 1,  }}>
             <Text style={styles.buttonText}> Location: {this.state.location}  </Text>
             <Text style={styles.buttonText}> Sample ID: {this.state.sampleID}</Text>
             <Form 

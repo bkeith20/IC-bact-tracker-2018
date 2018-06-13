@@ -8,6 +8,9 @@ export default class ConfirmScreen extends React.Component {
     };
   render() {
       
+    const { navigation } = this.props;
+    const formInfo = navigation.getParam('fInfo', 'NO-ID');
+      
     return (
         
         <View style={styles.containerOuter}>
@@ -24,7 +27,7 @@ export default class ConfirmScreen extends React.Component {
                 <Text style={styles.infoLabel}> Sample ID: </Text>
             </View>
             <View style={styles.containerRow}>
-                <Text style={styles.info}> sampleID </Text>
+                <Text style={styles.info}> {formInfo.SampleID} </Text>
             </View>
         
         
@@ -39,21 +42,14 @@ export default class ConfirmScreen extends React.Component {
                 <Text style={styles.infoLabel}> Location: </Text>
             </View>
             <View style={styles.containerRow}>
-                <Text style={styles.info}> location </Text>
+                <Text style={styles.info}> {formInfo.Location} </Text>
             </View>
         
             <View style={styles.containerRow}>
-                <Text style={styles.infoLabel}> Campus Area: </Text>
+                <Text style={styles.infoLabel}> Type: </Text>
             </View>
             <View style={styles.containerRow}>
-                <Text style={styles.info}> building </Text>
-            </View>
-        
-            <View style={styles.containerRow}>
-                <Text style={styles.infoLabel}> User: </Text>
-            </View>
-            <View style={styles.containerRow}>
-                <Text style={styles.info}> user name </Text>
+                <Text style={styles.info}> {formInfo.SampleType} </Text>
             </View>
         
             <View style={styles.containerRow}>
