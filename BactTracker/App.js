@@ -17,17 +17,18 @@ const RootStack = createStackNavigator({
    Help: HelpScreen,
    EnterSample: EnterSampleScreen,
     Login: LoginScreen,
-    SampleConfrimation: ConfirmScreen,
+    SampleConfirmation: ConfirmScreen,
     Tracker: TrackerScreen,
     Viewer: ViewerScreen,
 },
 {
-    initialRouteName: 'Login',
+    //initialRouteName: 'Login',
+    initialRouteName: 'SampleConfirmation',
     navigationOptions: {
         headerStyle: {
-            //backgroundColor: 'pink',
+            backgroundColor: '#003b71',
         },
-        headerTintColor: 'black',
+        headerTintColor: 'white',
         headerTitleStyle: {
             fontWeight: 'bold',
         },
