@@ -1,4 +1,3 @@
-
     import React from 'react';
     import { AppRegistry,StyleSheet, Image, Text, View, Button, TouchableOpacity, TextInput, AsyncStorage } from 'react-native';
     import { createStackNavigator, TabNavigator} from 'react-navigation';
@@ -14,7 +13,7 @@
     } from 'react-native-popup-menu';
 
     const williams = {
-
+            title: "Williams",
             latitude : '42.422691',
             longitude : '-76.495041',
             description: "There are three areas that are available for sampling",
@@ -24,7 +23,7 @@
 
         }
     const campusCenter = {
-
+            title: "Campus Center",
             latitude : '42.422115',
             longitude : '-76.494273',
             description: "There are five areas that are available for sampling",
@@ -70,6 +69,7 @@
              else{
                  area.displayDescription = area.altDescription;
              }
+             AsyncStorage.setItem("clickedLocation",area.title);
       }
 
       onRef = r => {
@@ -87,7 +87,7 @@
                 name="menu-1" ref={this.onRef}>
                 <MenuTrigger text="Select option"/>
                 <MenuOptions>
-                  <MenuOption onSelect={() => this.props.navigation.navigate('BactTracker')} text="Sample" />
+                  <MenuOption onSelect={() => this.props.navigation.navigate('BactTracker',{inNetpass})} text="Sample" />
 
                 </MenuOptions>
               </Menu>

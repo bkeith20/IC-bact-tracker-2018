@@ -55,7 +55,7 @@
             console.log(this.state.userPass);
             if(this.state.userPass != null){
             if(inPass == this.state.userPass){
-                this.props.navigation.navigate('Home')
+                this.props.navigation.navigate('Home', {inNetpass})
             }
                 else{
                 Alert.alert("Your netpass and/or password were incorrect.")
@@ -91,7 +91,7 @@
             </View>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress ={() => this.props.navigation.navigate('forgotPass')}>
+            <TouchableOpacity onPress ={() => this.props.navigation.navigate('Map')}>
             <View style = {styles.button}>
             <Text style={styles.buttonText}>Forgot Password</Text>
             </View>
