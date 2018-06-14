@@ -55,7 +55,7 @@
             if(inPass == this.state.userPass){
                 this.props.navigation.navigate('Home', {inNetpass})
             }
-                else{
+            else{
                 Alert.alert("Your netpass and/or password were incorrect.")
             }
             }
@@ -69,8 +69,8 @@
         return (
 
 
-          <View style={{alignItems: 'center', backgroundColor: 'powderblue', flex: 1 }}>
-             <View style={{width: 50, height: 100, backgroundColor: 'powderblue'}} />
+          <View style={{alignItems: 'center', backgroundColor: 'white', flex: 1 }}>
+             <View style={{width: 50, height: 100, backgroundColor: 'white'}} />
 
             <Form 
                     type={User} options = {options}
@@ -83,7 +83,7 @@
             </View>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress ={() => this.props.navigation.navigate('CreateAccount')}>
+            <TouchableOpacity onPress ={() => this.props.navigation.navigate('createAcc')}>
             <View style = {styles.button}>
             <Text style={styles.buttonText}>Create an Account</Text>
             </View>
@@ -107,12 +107,14 @@
         marginBottom: 10,
         width: 250,
         alignItems: 'center',
-        backgroundColor: '#191970'
+        backgroundColor: '#003b71'
       },
 
       buttonText: {
         padding: 20,
-        color: 'white'
+        color: 'white',
+        fontWeight: 'bold'
       },
+       
 
     });

@@ -35,7 +35,7 @@ export default class ConfirmScreen extends React.Component {
                 <Text style={styles.infoLabel}> Date: </Text>
             </View>
             <View style={styles.containerRow}>
-                <Text style={styles.info}> sampleDate </Text>
+                <Text style={styles.info}> {formInfo.SampleDate} </Text>
             </View>
         
             <View style={styles.containerRow}>
@@ -56,14 +56,14 @@ export default class ConfirmScreen extends React.Component {
                 <Text style={styles.infoLabel}> User initials: </Text>
             </View>
             <View style={styles.containerRow}>
-                <Text style={styles.info}> UI </Text>
+                <Text style={styles.info}> {formInfo.User} </Text>
             </View>
         
             <View style={styles.containerRow}>
                 <Text style={styles.infoLabel}> Notes: </Text>
             </View>
             <View style={styles.containerRow}>
-                <Text style={styles.info}> Here will be the user's notes about the sample. this has to be longer to check that if the user enters a lot of info ion the notes it ill not make the data go off of the page, but i suspect it will. Might have to use a scrollview. </Text>
+                <Text style={styles.info}> {formInfo.SampleNotes} </Text>
             </View>
         
             </ScrollView>
@@ -73,7 +73,7 @@ export default class ConfirmScreen extends React.Component {
             <View style={styles.containerRow}>
                 <View style={styles.containerCol}>
                     <TouchableOpacity
-                        onPress={() => Alert.alert("You have pressed cancel!")}
+                        onPress={() => this.props.navigation.goBack()}
                         style={styles.button}
                         disabled={false}
                     >
@@ -83,7 +83,7 @@ export default class ConfirmScreen extends React.Component {
         
                 <View style={styles.containerCol}>
                     <TouchableOpacity
-                        onPress={() => this.props.navigation.navigate('Tracker')}
+                        onPress={() => Alert.alert("You have pressed submit!")}
                         style={styles.button}
                         disabled={false}
                     >
