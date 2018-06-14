@@ -29,11 +29,9 @@
         this.state = {userPass: '', } 
 
       }
-        componentDidMount() {
-            AsyncStorage.multiSet([["Esteele","1234"],["Jbarr","5678"]]);
+        
 
-        }
-
+        //this breaks if password is entered before netpass
         handleInput(inValue){
             AsyncStorage.getItem(inValue.Netpass).then((value) => {
                 if(value!=null){
@@ -85,6 +83,7 @@
             </View>
             </TouchableOpacity>
 
+
             <TouchableOpacity onPress ={() =>  this.props.navigation.navigate('CreateAccount')}>
             <View style = {styles.button}>
             <Text style={styles.buttonText}>Create an Account</Text>
@@ -105,7 +104,8 @@
     }
     const styles = StyleSheet.create({
       button: {
-        marginBottom: 30,
+        borderRadius: 8,
+        marginBottom: 10,
         width: 250,
         alignItems: 'center',
         backgroundColor: '#003b71'
