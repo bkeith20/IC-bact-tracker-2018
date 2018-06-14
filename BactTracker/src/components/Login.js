@@ -1,5 +1,5 @@
     import React from 'react';
-    import { AppRegistry,StyleSheet, Image, Text, View, Button, TouchableOpacity, TextInput, AsyncStorage} from 'react-native';
+    import { AppRegistry,StyleSheet, Image, Text, View, Button, TouchableOpacity, TextInput, AsyncStorage, Alert} from 'react-native';
     import { createStackNavigator, TabNavigator} from 'react-navigation';
     import t from 'tcomb-form-native'; 
 
@@ -29,10 +29,7 @@
         this.state = {userPass: '', } 
 
       }
-        componentDidMount() {
-            AsyncStorage.multiSet([["Esteele","1234"],["Jbarr","5678"]]);
-
-        }
+        
 
         handleInput(inValue){
             AsyncStorage.getItem(inValue.Netpass).then((value) => {
