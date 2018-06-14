@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, Button, Alert, ScrollView, TextInput, TouchableOpacity, Dimensions, Picker, StyleSheet } from 'react-native';
+import { View, Text, Image, Button, Alert, ScrollView, TextInput, TouchableOpacity, Dimensions, Picker, StyleSheet, AsyncStorage } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 import t from 'tcomb-form-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -70,6 +70,11 @@ export default class ViewerScreen extends React.Component {
         const val = this._accform.getValue();
         if(val){
             console.log(val);
+            await AsyncStorage.setItem(val.netpassUsername, val.password);
+            const inpass = await AsyncStorage.getItem(val.netpassUsername);
+            console.log(inpass);
+            const inNetpass = val.netpassUsername;
+            this.props.navigation.navigate('Home', {inNetpass});
         }
         else{
             if(this.state.value.confirmPassword && !samePasswords(this.state.value)){
