@@ -85,7 +85,7 @@
             </View>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress ={() => this.props.navigation.navigate('createAcc')}>
+            <TouchableOpacity onPress ={() => this.props.navigation.navigate('CreateAccount')}>
             <View style = {styles.button}>
             <Text style={styles.buttonText}>Create an Account</Text>
             </View>

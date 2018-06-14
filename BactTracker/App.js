@@ -11,6 +11,7 @@ import LoginScreen from './src/components/Login.js';
 import ConfirmScreen from './src/components/sampleConfirmation.js';
 import TrackerScreen from './src/components/tracker.js';
 import ViewerScreen from './src/components/viewer.js';
+import CreateAccountScreen from './src/components/CreateAccount.js';
 
 const RootStack = createStackNavigator({
    Home: HomeScreen,
@@ -20,6 +21,7 @@ const RootStack = createStackNavigator({
     Confirmation: ConfirmScreen,
     Tracker: TrackerScreen,
     Viewer: ViewerScreen,
+    CreateAccount: CreateAccountScreen,
 },
 {
     initialRouteName: 'Login',
