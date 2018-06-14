@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, Image, Button, Alert, ScrollView, TextInput, TouchableOpacity, Dimensions, Picker, StyleSheet } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 import t from 'tcomb-form-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const Form = t.form.Form;
 
@@ -93,8 +94,9 @@ export default class ViewerScreen extends React.Component {
   render() {
       
     return (
-      <View style={styles.container}>
-            <ScrollView showsVerticalScrollIndicator={false}>
+    <KeyboardAwareScrollView enableOnAndroid={true}>
+      
+            <View style={styles.container}>
                 <Form
                     ref={c => this._accform = c}
                     type={Student}
@@ -105,8 +107,9 @@ export default class ViewerScreen extends React.Component {
             <TouchableOpacity style={styles.button} onPress={this.onPress.bind(this)} underlayColor='#99d9f4'>
                 <Text style={styles.buttonText}>Save</Text>
             </TouchableOpacity>
-            </ScrollView>
-        </View>
+            </View>
+        
+    </KeyboardAwareScrollView>
     );
   }
 }
@@ -117,7 +120,7 @@ const styles = StyleSheet.create({
     //marginTop: 50,
     padding: 20,
     backgroundColor: '#ffffff',
-    flex: 1
+    //flex: 1
   },
   title: {
     fontSize: 30,
