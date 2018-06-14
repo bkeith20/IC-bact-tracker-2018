@@ -73,7 +73,7 @@ export default class ViewerScreen extends React.Component {
             await AsyncStorage.setItem(val.netpassUsername, val.password);
             const inpass = await AsyncStorage.getItem(val.netpassUsername);
             console.log(inpass);
-            const inNetpass = val.netpassUsername;
+            inNetpass = val.netpassUsername;
             this.props.navigation.navigate('Home', {inNetpass});
         }
         else{
