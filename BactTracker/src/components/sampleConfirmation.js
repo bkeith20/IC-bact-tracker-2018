@@ -83,7 +83,7 @@ export default class ConfirmScreen extends React.Component {
         
                 <View style={styles.containerCol}>
                     <TouchableOpacity
-                        onPress={() => Alert.alert("You have pressed submit!")}
+                        onPress={() => this.props.navigation.navigate('Tracker')}
                         style={styles.button}
                         disabled={false}
                     >
