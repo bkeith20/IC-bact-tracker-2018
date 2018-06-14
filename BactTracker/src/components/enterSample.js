@@ -12,6 +12,7 @@
     
     const sample = t.struct({
       sampleType: type,
+      notes: t.maybe(t.String)
    
 
     });
@@ -20,9 +21,18 @@
         auto: 'placeholders',
         fields: {
             sampleType: {
-                label: "Sample Type"
-    }
+                label: "Sample Type",
+                help: "Tap field to select a different type"
+    },
+            notes: {
+                label: "Additional Notes"
+        }
  }
+};
+
+var val = {
+    sampleType: 'Single',
+    
 };
 
 var sDate = new Date();
@@ -32,7 +42,7 @@ export default class enterSample extends React.Component{
     constructor(props) {
         super(props);
         this.onSubmit = this.onSubmit.bind(this);
-        this.state = {location : "", sampleID :this.props.navigation.state.params.inNetpass+""+sDate.getMonth()+""+sDate.getHours()+""+sDate.getSeconds(),}
+        this.state = {location : "", sampleID :this.props.navigation.state.params.inNetpass+""+(sDate.getMonth()+1)+""+sDate.getHours()+""+sDate.getSeconds(),}
     }
     componentDidMount(){
          AsyncStorage.getItem("clickedLocation").then((value) => {
@@ -50,6 +60,9 @@ export default class enterSample extends React.Component{
                 Location: this.state.location,
                 SampleID: this.state.sampleID,
                 SampleType : Fvalue.sampleType,
+                SampleNotes: Fvalue.notes,
+                User: inNetpass,
+                SampleDate: (sDate.getMonth()+1)+"/"+sDate.getDate()+"/"+sDate.getFullYear(),
             }
             this.props.navigation.navigate('Confirmation', {fInfo: formInfo});
         }
@@ -59,13 +72,16 @@ export default class enterSample extends React.Component{
     
     render () {
         return(
+            <View style = {{alignItems: 'center', backgroundColor: 'white', flex: 1,  }}>
             <ScrollView>
-            <View style = {{alignItems: 'center', backgroundColor: 'powderblue', flex: 1,  }}>
-            <Text style={styles.buttonText}> Location: {this.state.location}  </Text>
-            <Text style={styles.buttonText}> Sample ID: {this.state.sampleID}</Text>
+            
+            <Text style={styles.infoLabel}> Location: {this.state.location}  </Text>
+            <Text style={styles.infoLabel}> Sample ID: {this.state.sampleID}</Text>
+            <View style={{width: 50, height: 30, backgroundColor: 'white'}} />
             <Form 
                 type={sample} options= {options}
                 ref={c => this._form = c}
+                value={val}
                 
                 
             /> 
@@ -77,8 +93,9 @@ export default class enterSample extends React.Component{
         </View>
         </TouchableOpacity>
             
-        </View>
+        
             </ScrollView>
+            </View>
         );
     }
 }
@@ -89,12 +106,21 @@ const styles = StyleSheet.create({
         marginBottom: 30,
         width: 250,
         alignItems: 'center',
-        backgroundColor: '#191970'
+        backgroundColor: '#003b71'
       },
 
       buttonText: {
         padding: 20,
-        color: 'white'
+        color: 'white',
+        fontWeight: 'bold'
       },
+      infoLabel :{
+    color: '#003b71',
+    fontSize: 20,
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingTop: 10,
+    fontWeight: 'bold',
+  },
 
     });
