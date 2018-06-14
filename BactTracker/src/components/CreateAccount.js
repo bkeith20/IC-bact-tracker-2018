@@ -40,10 +40,12 @@ const defaultOptions = {
         },
         password: {
             help: 'Restrictions on passwords if want any',
-            error: 'Password must meet restrictions'
+            error: 'Password must meet restrictions',
+            secureTextEntry: true,
         },
         confirmPassword: {
-            error: 'Password must meet restrictions'
+            error: 'Password must meet restrictions',
+            secureTextEntry: true
         },
         section: {
             nullOption: {value: 'null', text: 'Choose your section'}

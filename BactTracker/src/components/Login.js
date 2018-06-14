@@ -31,6 +31,7 @@
       }
         
 
+        //this breaks if password is entered before netpass
         handleInput(inValue){
             AsyncStorage.getItem(inValue.Netpass).then((value) => {
                 if(value!=null){
