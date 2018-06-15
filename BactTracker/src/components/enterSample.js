@@ -88,10 +88,10 @@ export default class enterSample extends React.Component{
             
         
             <TouchableOpacity onPress ={this.onSubmit}>
-        <View style = {styles.button}>
-        <Text style={styles.buttonText}>Submit</Text>
-        </View>
-        </TouchableOpacity>
+                <View style = {styles.button}>
+                    <Text style={styles.buttonText}>Submit</Text>
+                </View>
+            </TouchableOpacity>
             
         
             </ScrollView>
