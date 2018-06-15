@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Text, Image, Button, Alert, ScrollView, TextInput, TouchableHighlight, Dimensions, Picker, StyleSheet, WebView, Platform, AsyncStorage } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 
+const {height, width} = Dimensions.get('window');
+
 export default class HelpScreen extends React.Component {
     static navigationOptions = {
         title: 'Help',
@@ -76,8 +78,9 @@ export default class HelpScreen extends React.Component {
                 <Text style={styles.subtitles}>Step 15</Text>
                 <Text style={styles.subtitles}>Step 16</Text>
                 <Text style={styles.subtitles}>Step 17</Text>
+        <Text style={styles.subtitles}> {width} </Text>
                 <Text style={styles.subtitles}>Step 18</Text>
-                <Text style={styles.subtitles}>Step 19</Text>
+                <Text style={styles.subtitles}> {width} </Text>
         
             </ScrollView>
         </View>
@@ -94,7 +97,7 @@ const styles = StyleSheet.create({
         //flexDirection: 'column'
     },
     videoContainer: {
-        height: 300,
+        height: (height>width)?width-(width/5.886):height-(height/5.886),
     },
     view: {
         marginTop: (Platform.OS == 'ios')?20:0,

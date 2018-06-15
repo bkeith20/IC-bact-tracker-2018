@@ -1,5 +1,5 @@
     import React from 'react';
-    import { AppRegistry,StyleSheet, Image, Text, View, Button, TouchableOpacity, TextInput, AsyncStorage } from 'react-native';
+    import { AppRegistry,StyleSheet, Image, Text, View, Button, TouchableOpacity, TextInput, AsyncStorage, Dimensions } from 'react-native';
     import { createStackNavigator, TabNavigator} from 'react-navigation';
 
     import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
@@ -11,6 +11,8 @@
       MenuTrigger,
         withMenuProvider,
     } from 'react-native-popup-menu';
+
+var {height, width} = Dimensions.get('window');
 
     const williams = {
             title: "Williams",
@@ -85,7 +87,7 @@
             <View>
               <Menu
                 name="menu-1" ref={this.onRef}>
-                <MenuTrigger text="Select option"/>
+                <MenuTrigger />
                 <MenuOptions>
                   <MenuOption onSelect={() => this.props.navigation.navigate('BactTracker',{inNetpass})} text="Sample" />
 
@@ -156,8 +158,8 @@
       },
         mapContainer: {
             ...StyleSheet.absoluteFillObject,
-        height: 400,
-        width: 370,
+        height: height-60,
+        width: width,
         justifyContent: 'flex-end',
         alignItems: 'center',
         }

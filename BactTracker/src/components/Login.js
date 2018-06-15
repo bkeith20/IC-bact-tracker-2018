@@ -29,15 +29,19 @@
         this.state = {userPass: '', } 
 
       }
-        
+        componentDidMount() {
+            AsyncStorage.multiSet([["Esteele","1234"],["Jbarr","5678"]]);
 
-        //this breaks if password is entered before netpass
+        }
+
         handleInput(inValue){
+            if(inValue.Netpass!=null){
             AsyncStorage.getItem(inValue.Netpass).then((value) => {
                 if(value!=null){
                     this.state.userPass = value;
                 }
             }).done();
+        }
         }
 
 
@@ -89,7 +93,7 @@
             </View>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress ={() => this.props.navigation.navigate('Map')}>
+            <TouchableOpacity onPress ={() => this.props.navigation.navigate('Tracker')}>
             <View style = {styles.button}>
             <Text style={styles.buttonText}>Forgot Password</Text>
             </View>
@@ -103,8 +107,7 @@
     }
     const styles = StyleSheet.create({
       button: {
-        borderRadius: 8,
-        marginBottom: 10,
+        marginBottom: 30,
         width: 250,
         alignItems: 'center',
         backgroundColor: '#003b71'
