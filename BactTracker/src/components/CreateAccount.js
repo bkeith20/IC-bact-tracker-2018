@@ -133,8 +133,8 @@ export default class ViewerScreen extends React.Component {
                     value={this.state.value}
                     onChange={this.onChange.bind(this)}
                 />
-            <TouchableOpacity style={styles.button} onPress={this.onPress.bind(this)} underlayColor='#99d9f4'>
-                <Text style={styles.buttonText}>Save</Text>
+            <TouchableOpacity style={styles.button} onPress={this.onPress.bind(this)} underlayColor='#003b71'>
+                <Text style={styles.buttonText}>Create Account</Text>
             </TouchableOpacity>
             </View>
         
@@ -163,8 +163,8 @@ const styles = StyleSheet.create({
   },
   button: {
     height: 36,
-    backgroundColor: '#48BBEC',
-    borderColor: '#48BBEC',
+    backgroundColor: '#003b71',
+    borderColor: '#003b71',
     borderWidth: 1,
     borderRadius: 8,
     marginBottom: 10,
