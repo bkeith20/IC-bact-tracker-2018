@@ -77,7 +77,7 @@ export default class enterSample extends React.Component{
             
             <Text style={styles.infoLabel}> Location: {this.state.location}  </Text>
             <Text style={styles.infoLabel}> Sample ID: {this.state.sampleID}</Text>
-            <View style={{width: 50, height: 30, backgroundColor: 'white'}} />
+            <View style={{ height: 30, backgroundColor: 'white'}} />
             <Form 
                 type={sample} options= {options}
                 ref={c => this._form = c}
@@ -106,21 +106,23 @@ const styles = StyleSheet.create({
         marginBottom: 30,
         width: 250,
         alignItems: 'center',
-        backgroundColor: '#003b71'
+        backgroundColor: '#003b71',
+        borderRadius: 8,
+        height: 40
       },
 
       buttonText: {
-        padding: 20,
+        padding: 10,
         color: 'white',
         fontWeight: 'bold'
       },
       infoLabel :{
-    color: '#003b71',
-    fontSize: 20,
-    paddingLeft: 10,
-    paddingRight: 10,
-    paddingTop: 10,
-    fontWeight: 'bold',
-  },
+          color: '#003b71',
+          fontSize: 20,
+          paddingLeft: 10,
+          paddingRight: 10,
+          paddingTop: 10,
+          fontWeight: 'bold',
+      },
 
     });

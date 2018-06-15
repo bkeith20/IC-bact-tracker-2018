@@ -72,7 +72,7 @@
 
         return (
 
-
+        
           <View style={{alignItems: 'center', backgroundColor: 'white', flex: 1 }}>
              <View style={{width: 50, height: 100, backgroundColor: 'white'}} />
 

@@ -32,27 +32,6 @@ const Student = t.subtype(t.struct({
     section: Section,
 }), samePasswords);
 
-const defaultOptions = {
-    //auto: 'placeholders',
-    fields: {
-        netpassUsername: {
-            help: 'Please be sure to use your Netpass username'
-        },
-        password: {
-            help: 'Restrictions on passwords if want any',
-            error: 'Password must meet restrictions',
-            secureTextEntry: true,
-        },
-        confirmPassword: {
-            error: 'Password must meet restrictions',
-            secureTextEntry: true
-        },
-        section: {
-            nullOption: {value: 'null', text: 'Choose your section'}
-        },
-    }
-};
-
 export default class ViewerScreen extends React.Component {
     static navigationOptions = {
         title: 'Create Account',
@@ -62,13 +41,54 @@ export default class ViewerScreen extends React.Component {
         super(props);
         this.state = {
             value: {},
-            options: defaultOptions
+            options: this.defaultOptions
         };
     };
- 
+    
+    defaultOptions = {
+    auto: 'placeholders',
+    fields: {
+        firstName: {
+            label: "First Name",
+            onSubmitEditing: () => this._accform.getComponent('lastName').refs.input.focus()
+        },
+        lastName: {
+            label: "Last Name",
+            onSubmitEditing: () => this._accform.getComponent('netpassUsername').refs.input.focus()
+        },
+        netpassUsername: {
+            label: "Netpass Username",
+            help: 'Please be sure to use your Netpass username',
+            onSubmitEditing: () => this._accform.getComponent('password').refs.input.focus()
+        },
+        password: {
+            label: "Password",
+            help: 'Restrictions on passwords if want any',
+            error: 'Password must meet restrictions',
+            secureTextEntry: true,
+            onSubmitEditing: () => this._accform.getComponent('confirmPassword').refs.input.focus()
+        },
+        confirmPassword: {
+            label: "Confirm Password",
+            error: 'Password must meet restrictions',
+            secureTextEntry: true,
+            onSubmitEditing: () => this._accform.getComponent('initials').refs.input.focus()
+        },
+        initials: {
+            label: "Initials",
+            onSubmitEditing: () => this._accform.getComponent('email').refs.input.focus()
+        },
+        email: {
+            label: "Email",
+        },
+        section: {
+            nullOption: {value: 'null', text: 'Choose your section'}
+        },
+    }
+}; 
     
     async onPress() {
-        this.setState({options: defaultOptions});
+        this.setState({options: this.defaultOptions});
         const val = this._accform.getValue();
         if(val){
             console.log(val);
