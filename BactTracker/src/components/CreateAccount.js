@@ -6,6 +6,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 
 const Form = t.form.Form;
 
+//this should be read from DB in the future
 const Section = t.enums({
     1: 'MWF 10am',
     2: 'MWF 1pm',
@@ -15,6 +16,10 @@ const Section = t.enums({
 
 const Password = t.refinement(t.String, function (s) {
   return s.length >= 2;
+});
+
+const Email = t.refinement(t.String, function (s) {
+  return /@/.test(s);
 });
 
 function samePasswords(x) {
@@ -28,7 +33,7 @@ const Student = t.subtype(t.struct({
     password: Password,
     confirmPassword: Password,
     initials: t.String,
-    email: t.String,
+    email: Email,
     section: Section,
 }), samePasswords);
 
@@ -80,6 +85,7 @@ export default class ViewerScreen extends React.Component {
         },
         email: {
             label: "Email",
+            error: 'Invalid Email',
         },
         section: {
             nullOption: {value: 'null', text: 'Choose your section'}
@@ -123,7 +129,7 @@ export default class ViewerScreen extends React.Component {
   render() {
       
     return (
-    <KeyboardAwareScrollView enableOnAndroid={true}>
+    <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false} >
       
             <View style={styles.container}>
                 <Form
