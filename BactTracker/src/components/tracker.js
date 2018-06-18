@@ -14,7 +14,7 @@
 
 var {height, width} = Dimensions.get('window');
 
-    const williams = {
+    var williams = {
             title: "Williams",
             latitude : 42.422691,
             longitude : -76.495041,
@@ -24,7 +24,7 @@ var {height, width} = Dimensions.get('window');
             pinColor: "yellow",
 
         }
-    const campusCenter = {
+    var campusCenter = {
             title: "Campus Center",
             latitude : 42.422115,
             longitude : -76.494273,
@@ -34,6 +34,17 @@ var {height, width} = Dimensions.get('window');
             pinColor: "blue",
 
         }
+    var bookStore = {
+        title: "Bookstore",
+            latitude : 42.422310,
+            longitude : -76.494984,
+            description: "There is one area that is available for sampling",
+            altDescription: "There is one area that is available for sampling. Get closer to take a sample",
+            displayDescription:"",
+            pinColor: "green",
+    }
+    
+    var descripton = "";
 
     export default class tracker extends React.Component {
 
@@ -42,19 +53,23 @@ var {height, width} = Dimensions.get('window');
 
         this.state = {
           latitude: 1,
-          longitude: 1,  
+          longitude: 1,
+          descriptionToDisplay: "",
         };
       }
 
         componentDidMount() {
         navigator.geolocation.getCurrentPosition(
            (position) => {
-
+            
              this.setState({
                latitude: position.coords.latitude,
                longitude: position.coords.longitude,
+                
              });
            },
+            
+
          );
        }
 
@@ -64,12 +79,17 @@ var {height, width} = Dimensions.get('window');
              this.componentDidMount();
              var latD = Math.abs(area.latitude - this.state.latitude);
              var lonD = Math.abs(area.longitude - this.state.longitude);
-             if(lonD < 3 && latD < 3){
-                 area.displayDescription = area.description;
+             var lonThres = 8/305775;
+             var latThres = 8/77136;
+             console.log(latD+" "+latThres)
+             console.log(lonD+" "+lonThres)
+             if(lonD <= lonThres && latD <= latThres){
+                this.setState({descriptionToDisplay : area.description});
                 this.menu.open();
              }
              else{
-                 area.displayDescription = area.altDescription;
+                 this.setState({descriptionToDisplay : area["altDescription"]});
+                 
              }
              AsyncStorage.setItem("clickedLocation",area.title);
       }
@@ -80,7 +100,7 @@ var {height, width} = Dimensions.get('window');
 
 
         render() {
-            const { region } = this.props;
+        const { region } = this.props;
 
         return (
             <MenuProvider style={styles.container}>  
@@ -117,7 +137,7 @@ var {height, width} = Dimensions.get('window');
 
                 }}
                 title="Williams"
-                description={williams.description}
+                description={this.state.descriptionToDisplay}
                 pinColor = {williams.pinColor}
                 id = {"Marker2"}
                 onPress={() => this.openMenu(williams)}
@@ -130,10 +150,24 @@ var {height, width} = Dimensions.get('window');
 
               }}
           title="Campus Center"
-          description={campusCenter.description}
+          description={this.state.descriptionToDisplay}
             pinColor = {campusCenter.pinColor}
             id = {"Marker1"}
             onPress={() => this.openMenu(campusCenter)}  
+
+        />
+                
+        <MapView.Marker 
+          coordinate={{
+                latitude: bookStore.latitude,
+                longitude: bookStore.longitude,
+
+              }}
+          title="Bookstore"
+          description={this.state.descriptionToDisplay}
+            pinColor = {bookStore.pinColor}
+            id = {"Marker3"}
+            onPress={() => this.openMenu(bookStore)}  
 
         />
             </MapView>
