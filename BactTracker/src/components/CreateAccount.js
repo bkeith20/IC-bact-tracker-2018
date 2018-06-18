@@ -6,6 +6,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 
 const Form = t.form.Form;
 
+//this should be read from DB in the future
 const Section = t.enums({
     1: 'MWF 10am',
     2: 'MWF 1pm',
@@ -15,6 +16,10 @@ const Section = t.enums({
 
 const Password = t.refinement(t.String, function (s) {
   return s.length >= 2;
+});
+
+const Email = t.refinement(t.String, function (s) {
+  return /@/.test(s);
 });
 
 function samePasswords(x) {
@@ -28,30 +33,9 @@ const Student = t.subtype(t.struct({
     password: Password,
     confirmPassword: Password,
     initials: t.String,
-    email: t.String,
+    email: Email,
     section: Section,
 }), samePasswords);
-
-const defaultOptions = {
-    //auto: 'placeholders',
-    fields: {
-        netpassUsername: {
-            help: 'Please be sure to use your Netpass username'
-        },
-        password: {
-            help: 'Restrictions on passwords if want any',
-            error: 'Password must meet restrictions',
-            secureTextEntry: true,
-        },
-        confirmPassword: {
-            error: 'Password must meet restrictions',
-            secureTextEntry: true
-        },
-        section: {
-            nullOption: {value: 'null', text: 'Choose your section'}
-        },
-    }
-};
 
 export default class ViewerScreen extends React.Component {
     static navigationOptions = {
@@ -62,13 +46,55 @@ export default class ViewerScreen extends React.Component {
         super(props);
         this.state = {
             value: {},
-            options: defaultOptions
+            options: this.defaultOptions
         };
     };
- 
+    
+    defaultOptions = {
+    auto: 'placeholders',
+    fields: {
+        firstName: {
+            label: "First Name",
+            onSubmitEditing: () => this._accform.getComponent('lastName').refs.input.focus()
+        },
+        lastName: {
+            label: "Last Name",
+            onSubmitEditing: () => this._accform.getComponent('netpassUsername').refs.input.focus()
+        },
+        netpassUsername: {
+            label: "Netpass Username",
+            help: 'Please be sure to use your Netpass username',
+            onSubmitEditing: () => this._accform.getComponent('password').refs.input.focus()
+        },
+        password: {
+            label: "Password",
+            help: 'Restrictions on passwords if want any',
+            error: 'Password must meet restrictions',
+            secureTextEntry: true,
+            onSubmitEditing: () => this._accform.getComponent('confirmPassword').refs.input.focus()
+        },
+        confirmPassword: {
+            label: "Confirm Password",
+            error: 'Password must meet restrictions',
+            secureTextEntry: true,
+            onSubmitEditing: () => this._accform.getComponent('initials').refs.input.focus()
+        },
+        initials: {
+            label: "Initials",
+            onSubmitEditing: () => this._accform.getComponent('email').refs.input.focus()
+        },
+        email: {
+            label: "Email",
+            error: 'Invalid Email',
+        },
+        section: {
+            nullOption: {value: 'null', text: 'Choose your section'}
+        },
+    }
+}; 
     
     async onPress() {
-        this.setState({options: defaultOptions});
+        this.setState({options: this.defaultOptions});
         const val = this._accform.getValue();
         if(val){
             console.log(val);
@@ -76,7 +102,9 @@ export default class ViewerScreen extends React.Component {
             const inpass = await AsyncStorage.getItem(val.netpassUsername);
             console.log(inpass);
             inNetpass = val.netpassUsername;
+            //save to DB here
             this.props.navigation.navigate('Home', {inNetpass});
+            
         }
         else{
             if(this.state.value.confirmPassword && !samePasswords(this.state.value)){
@@ -101,7 +129,7 @@ export default class ViewerScreen extends React.Component {
   render() {
       
     return (
-    <KeyboardAwareScrollView enableOnAndroid={true}>
+    <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false} >
       
             <View style={styles.container}>
                 <Form
@@ -111,8 +139,8 @@ export default class ViewerScreen extends React.Component {
                     value={this.state.value}
                     onChange={this.onChange.bind(this)}
                 />
-            <TouchableOpacity style={styles.button} onPress={this.onPress.bind(this)} underlayColor='#99d9f4'>
-                <Text style={styles.buttonText}>Save</Text>
+            <TouchableOpacity style={styles.button} onPress={this.onPress.bind(this)} underlayColor='#003b71'>
+                <Text style={styles.buttonText}>Create Account</Text>
             </TouchableOpacity>
             </View>
         
@@ -141,8 +169,8 @@ const styles = StyleSheet.create({
   },
   button: {
     height: 36,
-    backgroundColor: '#48BBEC',
-    borderColor: '#48BBEC',
+    backgroundColor: '#003b71',
+    borderColor: '#003b71',
     borderWidth: 1,
     borderRadius: 8,
     marginBottom: 10,

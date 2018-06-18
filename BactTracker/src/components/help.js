@@ -44,6 +44,7 @@ export default class HelpScreen extends React.Component {
       
     return (
         <View style={styles.containerOuter}>
+         <ScrollView showsVerticalScrollIndicator={false}>
             <View style={styles.videoContainer}>
                 <WebView
                     style={styles.view}
@@ -54,9 +55,8 @@ export default class HelpScreen extends React.Component {
                     //onLoadStart={() => this.toggleHelpSeen.bind(this)}
                 />
             </View>
-        
-            <ScrollView showsVerticalScrollIndicator={false} style={{padding: 20}}>
-        
+            
+            <View style={{padding: 10}}>
                 <Text style={styles.title}>This is the Help Screen</Text>
                 <Text style={styles.regularText}>These can be written instructions to accompany the video.</Text>
                 <Text style={styles.subtitles}>Step 1</Text>
@@ -78,10 +78,9 @@ export default class HelpScreen extends React.Component {
                 <Text style={styles.subtitles}>Step 15</Text>
                 <Text style={styles.subtitles}>Step 16</Text>
                 <Text style={styles.subtitles}>Step 17</Text>
-        <Text style={styles.subtitles}> {width} </Text>
                 <Text style={styles.subtitles}>Step 18</Text>
-                <Text style={styles.subtitles}> {width} </Text>
-        
+               
+            </View>
             </ScrollView>
         </View>
     );

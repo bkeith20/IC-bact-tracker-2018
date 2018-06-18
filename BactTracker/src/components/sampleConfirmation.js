@@ -1,11 +1,29 @@
 import React from 'react';
-import { View, Text, Image, Button, Alert, ScrollView, TextInput, TouchableHighlight, Dimensions, Picker, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Image, Button, Alert, ScrollView, TextInput, TouchableHighlight, Dimensions, Picker, StyleSheet, TouchableOpacity, AsyncStorage } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 
 export default class ConfirmScreen extends React.Component {
     static navigationOptions = {
         title: 'Confirmation',
     };
+    
+    onSubmit(myID){
+        console.log(myID);
+        Alert.alert(
+            'Please be sure to write the sample ID on your sample tube!',
+            'Sample ID: '+myID,
+            [
+                {text: 'OK', onPress: () => this.alertPress()},
+                {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+            ],
+        );
+    };
+            
+    async alertPress(){
+            //send info to DB
+            this.props.navigation.navigate('Tracker');
+        } 
+    
   render() {
       
     const { navigation } = this.props;
@@ -83,7 +101,7 @@ export default class ConfirmScreen extends React.Component {
         
                 <View style={styles.containerCol}>
                     <TouchableOpacity
-                        onPress={() => this.props.navigation.navigate('Tracker')}
+                        onPress={() => this.onSubmit(formInfo.SampleID)}
                         style={styles.button}
                         disabled={false}
                     >
@@ -128,8 +146,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#003b71',
     width: 130,
     height: 40,
-    //padding: 30
-    
+    //padding: 30,
+    borderRadius: 8,
   },
   buttonText: {
     alignSelf: 'center',
