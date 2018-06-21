@@ -73,8 +73,8 @@
         return (
 
         
-          <View style={{alignItems: 'center', backgroundColor: 'white', flex: 1 }}>
-             <View style={{width: 50, height: 100, backgroundColor: 'white'}} />
+          <View style={{alignItems: 'center',justifyContent: 'center', backgroundColor: 'white', flex: 1 }}>
+             
 
             <Form 
                     type={User} options = {options}
@@ -106,18 +106,20 @@
       }
     }
     const styles = StyleSheet.create({
-      button: {
-        marginBottom: 30,
-        width: 250,
-        alignItems: 'center',
-        backgroundColor: '#003b71'
-      },
 
-      buttonText: {
-        padding: 20,
-        color: 'white',
-        fontWeight: 'bold'
-      },
+      button: {
+    backgroundColor: '#003b71',
+    width: 180,
+    height: 40,
+    borderRadius: 8,
+    marginBottom: 10,
+  },
+  buttonText: {
+    alignSelf: 'center',
+    color: 'white',
+    fontWeight: 'bold',
+    padding: 10,
+  },
        
 
     });

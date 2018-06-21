@@ -13,36 +13,6 @@
     } from 'react-native-popup-menu';
 
 var {height, width} = Dimensions.get('window');
-
-    var williams = {
-            title: "Williams",
-            latitude : 42.422691,
-            longitude : -76.495041,
-            description: "There are three areas that are available for sampling",
-            altDescription: "There are three areas that are available for sampling. Get closer to take a sample",
-            displayDescription:"",
-            pinColor: "yellow",
-
-        }
-    var campusCenter = {
-            title: "Campus Center",
-            latitude : 42.422115,
-            longitude : -76.494273,
-            description: "There are five areas that are available for sampling",
-            altDescription: "There are five areas that are available for sampling. Get closer to take a sample",
-            displayDescription:"",
-            pinColor: "blue",
-
-        }
-    var bookStore = {
-        title: "Bookstore",
-            latitude : 42.422310,
-            longitude : -76.494984,
-            description: "There is one area that is available for sampling",
-            altDescription: "There is one area that is available for sampling. Get closer to take a sample",
-            displayDescription:"",
-            pinColor: "green",
-    }
     
     var descripton = "";
 
@@ -55,10 +25,48 @@ var {height, width} = Dimensions.get('window');
           latitude: 1,
           longitude: 1,
           descriptionToDisplay: "",
+          markers: [
+              {title: 'Williams',
+               coordinates: {
+                   latitude : 42.422691,
+                   longitude : -76.495041
+               },
+               samplesLeft: 1,
+               pinColor: "rgb(249, 31, 2)",
+               key: 0,
+              },
+              {title: 'Campus Center',
+               coordinates: {
+                   latitude : 42.422115,
+                   longitude : -76.494273,
+               },
+               samplesLeft: 5,
+               pinColor: "rgb(249, 166, 1)",
+               key: 1,
+              },
+              {title: 'Bookstore',
+               coordinates: {
+                   latitude : 42.422310,
+                   longitude : -76.494984
+               },
+               samplesLeft: 1,
+               pinColor: "rgb(0, 0, 0)",
+               key: 2,
+              },
+              {title: 'Williams 305',
+               coordinates: {
+                   latitude : 42.422545,
+                   longitude : -76.495117,
+               },
+               samplesLeft: 2,
+               pinColor: "rgb(249, 166, 1)",
+               key: 3,
+              },
+          ],
         };
       }
 
-        componentDidMount() {
+        async componentDidMount() {
         navigator.geolocation.getCurrentPosition(
            (position) => {
             
@@ -71,27 +79,28 @@ var {height, width} = Dimensions.get('window');
             
 
          );
+            //read sample locations for markers in from DB write them into state
        }
 
 
 
-         openMenu(area) {
+         openMenu(areaCoordinates, numSamples, area) {
              this.componentDidMount();
-             var latD = Math.abs(area.latitude - this.state.latitude);
-             var lonD = Math.abs(area.longitude - this.state.longitude);
+             var latD = Math.abs(areaCoordinates.latitude - this.state.latitude);
+             var lonD = Math.abs(areaCoordinates.longitude - this.state.longitude);
              var lonThres = 8/305775;
              var latThres = 8/77136;
              console.log(latD+" "+latThres)
              console.log(lonD+" "+lonThres)
              if(lonD <= lonThres && latD <= latThres){
-                this.setState({descriptionToDisplay : area.description});
+                this.setState({descriptionToDisplay : "This area needs "+ numSamples +" more samples!"});
                 this.menu.open();
              }
              else{
-                 this.setState({descriptionToDisplay : area["altDescription"]});
+                 this.setState({descriptionToDisplay : "This area needs "+ numSamples +" more samples! Get closer to take a sample!"});
                  
              }
-             AsyncStorage.setItem("clickedLocation",area.title);
+             AsyncStorage.setItem("clickedLocation",area);
       }
 
       onRef = r => {
@@ -130,46 +139,17 @@ var {height, width} = Dimensions.get('window');
             minZoomLevel = {16}
             >
 
-            <MapView.Marker 
-                coordinate={{
-                    latitude: williams.latitude,
-                    longitude: williams.longitude,
-
-                }}
-                title="Williams"
-                description={this.state.descriptionToDisplay}
-                pinColor = {williams.pinColor}
-                id = {"Marker2"}
-                onPress={() => this.openMenu(williams)}
-                />
-
-        <MapView.Marker 
-          coordinate={{
-                latitude: campusCenter.latitude,
-                longitude: campusCenter.longitude,
-
-              }}
-          title="Campus Center"
-          description={this.state.descriptionToDisplay}
-            pinColor = {campusCenter.pinColor}
-            id = {"Marker1"}
-            onPress={() => this.openMenu(campusCenter)}  
-
-        />
+                {this.state.markers.map(marker => (
+                            <MapView.Marker 
+                                coordinate={marker.coordinates}
+                                title={marker.title}
+                                key={marker.key}
+                                pinColor={marker.pinColor}
+                                description={this.state.descriptionToDisplay}
+                                onPress={() => this.openMenu(marker.coordinates, marker.samplesLeft, marker.title)}
+                            />
+                        ))}
                 
-        <MapView.Marker 
-          coordinate={{
-                latitude: bookStore.latitude,
-                longitude: bookStore.longitude,
-
-              }}
-          title="Bookstore"
-          description={this.state.descriptionToDisplay}
-            pinColor = {bookStore.pinColor}
-            id = {"Marker3"}
-            onPress={() => this.openMenu(bookStore)}  
-
-        />
             </MapView>
           </View>
         </MenuProvider>
