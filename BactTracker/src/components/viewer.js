@@ -144,6 +144,7 @@
         width: width,
         justifyContent: 'flex-end',
         alignItems: 'center',
+        margin: 5,
         },
         button: {
             backgroundColor: '#003b71',

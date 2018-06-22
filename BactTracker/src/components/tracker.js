@@ -10,9 +10,12 @@
       MenuOption,
       MenuTrigger,
         withMenuProvider,
+        renderers
     } from 'react-native-popup-menu';
 
 var {height, width} = Dimensions.get('window');
+
+const { SlideInMenu } = renderers;
     
     var descripton = "";
 
@@ -76,16 +79,33 @@ var {height, width} = Dimensions.get('window');
                 
              });
            },
-            
+              
 
          );
             //read sample locations for markers in from DB write them into state
+            const data = await fetch('http://ic-research.eastus.cloudapp.azure.com/barr/bio.php')
+            .then(function(response){
+                return response.text();
+            })
+            .catch(function(error) {
+            console.log('There has been a problem with your fetch operation: ' + error.message);
+            });
+            console.log(data);
        }
 
 
 
          openMenu(areaCoordinates, numSamples, area) {
-             this.componentDidMount();
+             navigator.geolocation.getCurrentPosition(
+                 (position) => {
+            
+                     this.setState({
+                         latitude: position.coords.latitude,
+                         longitude: position.coords.longitude,
+                 
+                     });
+                 },
+             );
              var latD = Math.abs(areaCoordinates.latitude - this.state.latitude);
              var lonD = Math.abs(areaCoordinates.longitude - this.state.longitude);
              var lonThres = 8/305775;
@@ -100,65 +120,78 @@ var {height, width} = Dimensions.get('window');
                  this.setState({descriptionToDisplay : "This area needs "+ numSamples +" more samples! Get closer to take a sample!"});
                  
              }
-             AsyncStorage.setItem("clickedLocation",area);
-      }
+            AsyncStorage.setItem("clickedLocation",area);
+        }
 
-      onRef = r => {
-        this.menu = r;
-      }
+            onRef = r => {
+                this.menu = r;
+            }
+            
 
+            render() {
+                const { region } = this.props;
 
-        render() {
-        const { region } = this.props;
+                return (
+                    <MenuProvider style={styles.container}>  
+                    <View>
+                    <Menu
+                    name="menu-1" ref={this.onRef}
+                    renderer={SlideInMenu}>
+                    <MenuTrigger />
+                    <MenuOptions>
+                    <MenuOption style={styles.menu} onSelect={() => this.props.navigation.navigate('BactTracker',{inNetpass})}>
+                        <Text style={styles.menuOption}> Click Here to Sample! </Text>
+                    </MenuOption>
 
-        return (
-            <MenuProvider style={styles.container}>  
-            <View>
-              <Menu
-                name="menu-1" ref={this.onRef}>
-                <MenuTrigger />
-                <MenuOptions>
-                  <MenuOption onSelect={() => this.props.navigation.navigate('BactTracker',{inNetpass})} text="Sample" />
+                    </MenuOptions>
+                    </Menu>
+                    </View>
+                    <View style ={styles.mapContainer}>
+                        <MapView
+                            provider={PROVIDER_GOOGLE}
+                            style={styles.map}
+                            region={{
+                                    latitude: this.state.latitude,
+                                    longitude: this.state.longitude,
+                                    latitudeDelta: 0.015,
+                                    longitudeDelta: 0.0121,
+                                   }}
+                            showsUserLocation={true}
+                            showsMyLocationButton={true}
+                            maxZoomLevel = {20}
+                            minZoomLevel = {16}
+                        >
 
-                </MenuOptions>
-              </Menu>
-            </View>
-            <View style ={styles.mapContainer}>
-            <MapView
-              provider={PROVIDER_GOOGLE}
-              style={styles.map}
-              region={{
-                latitude: this.state.latitude,
-                longitude: this.state.longitude,
-                latitudeDelta: 0.015,
-                longitudeDelta: 0.0121,
-              }}
-            showsUserLocation={true}
-            showsMyLocationButton={true}
-            maxZoomLevel = {20}
-            minZoomLevel = {16}
-            >
-
-                {this.state.markers.map(marker => (
-                            <MapView.Marker 
-                                coordinate={marker.coordinates}
-                                title={marker.title}
-                                key={marker.key}
-                                pinColor={marker.pinColor}
-                                description={this.state.descriptionToDisplay}
-                                onPress={() => this.openMenu(marker.coordinates, marker.samplesLeft, marker.title)}
-                            />
-                        ))}
+                                {this.state.markers.map(marker => (
+                                    <MapView.Marker 
+                                        coordinate={marker.coordinates}
+                                        title={marker.title}
+                                        key={marker.key}
+                                        pinColor={marker.pinColor}
+                                        description={this.state.descriptionToDisplay}
+                                        onPress={() => this.openMenu(marker.coordinates, marker.samplesLeft, marker.title)}
+                                    />
+                                    ))}
                 
-            </MapView>
-          </View>
-        </MenuProvider>
-        );
-      }
+                        </MapView>
+                    </View>
+                    </MenuProvider>
+            );
+        }
     }
 
     const styles = StyleSheet.create({
-        
+        menu: {
+            height: 80,
+            backgroundColor: '#003b71',
+            alignItems: 'center',
+            
+        },
+        menuOption: {
+            fontWeight: 'bold',
+            color: 'white',
+            fontSize: 30,
+        },
         container: {
         flex: 1,
         alignItems: 'center',

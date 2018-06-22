@@ -39,18 +39,29 @@ export default class enterSample extends React.Component{
         this.onSubmit = this.onSubmit.bind(this);
         this.state = {location : "", 
                       sampleID :this.props.navigation.state.params.inNetpass+""+sDate.getFullYear()+""+(sDate.getMonth()+1)+""+sDate.getDate()+""+sDate.getHours()+""+sDate.getMinutes()+""+sDate.getSeconds(),
-                      object: {
-                          Handrail: 'Handrail',
-                          DoorHandle: 'Door Handle',
-                          DoorPushPlate: 'Door Push Plate',
-                      },
+                      object: {},
                      }
     }
-    componentDidMount(){
-         AsyncStorage.getItem("clickedLocation").then((value) => {
+   async componentDidMount(){
+        await AsyncStorage.getItem("clickedLocation").then((value) => {
                 this.setState({"location": value});
-            }).done();
+            });
         //read in options for sample object from DB
+        console.log(this.state.location);
+        if(this.state.location==='Williams 305'){
+            this.setState({object: {
+                KeyBoard: 'Keyboard',
+                DoorHandle: 'Door Handle',
+                WhiteBoard: 'White Board'
+            }})
+        }
+       else{
+           this.setState({object: {
+                HandRail: 'Hand rail',
+                DoorHandle: 'Door Handle',
+                DoorPushPlate: 'Door Push Plate'
+            }})
+       }
     }
     
     
