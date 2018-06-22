@@ -5,32 +5,27 @@
 
     const Form = t.form.Form;
     
-    var type = t.enums({
+    const type = t.enums({
         Single: 'Single',
         Double: 'Double'
     });
-    
-    const sample = t.struct({
-      sampleType: type,
-      notes: t.maybe(t.String)
-   
 
-    });
-
-    var options = {
+     const options = {
         auto: 'placeholders',
         fields: {
             sampleType: {
                 label: "Sample Type",
-                help: "Tap field to select a different type"
-    },
+            },
+            sampleObject: {
+                label: "Object Sampled"
+            },
             notes: {
                 label: "Additional Notes"
+            }
         }
- }
 };
 
-var val = {
+const val = {
     sampleType: 'Single',
     
 };
@@ -42,7 +37,14 @@ export default class enterSample extends React.Component{
     constructor(props) {
         super(props);
         this.onSubmit = this.onSubmit.bind(this);
-        this.state = {location : "", sampleID :this.props.navigation.state.params.inNetpass+""+(sDate.getMonth()+1)+""+sDate.getHours()+""+sDate.getSeconds(),}
+        this.state = {location : "", 
+                      sampleID :this.props.navigation.state.params.inNetpass+""+sDate.getFullYear()+""+(sDate.getMonth()+1)+""+sDate.getDate()+""+sDate.getHours()+""+sDate.getMinutes()+""+sDate.getSeconds(),
+                      object: {
+                          Handrail: 'Handrail',
+                          DoorHandle: 'Door Handle',
+                          DoorPushPlate: 'Door Push Plate',
+                      },
+                     }
     }
     componentDidMount(){
          AsyncStorage.getItem("clickedLocation").then((value) => {
@@ -61,8 +63,9 @@ export default class enterSample extends React.Component{
                 SampleID: this.state.sampleID,
                 SampleType : Fvalue.sampleType,
                 SampleNotes: Fvalue.notes,
+                SampleObject: Fvalue.sampleObject,
                 User: inNetpass,
-                SampleDate: (sDate.getMonth()+1)+"/"+sDate.getDate()+"/"+sDate.getFullYear(),
+                SampleDate: (sDate.getMonth()+1)+"/"+sDate.getDate()+"/"+sDate.getFullYear()+" "+sDate.getHours+":"+sDate.getMinutes+"."+sDate.getSeconds,
             }
             this.props.navigation.navigate('Confirmation', {fInfo: formInfo});
         }
@@ -72,14 +75,19 @@ export default class enterSample extends React.Component{
     
     render () {
         return(
-            <View style = {{alignItems: 'center', backgroundColor: 'white', flex: 1,  }}>
+            <View style = {{alignItems: 'center', justifyContent: 'center', backgroundColor: 'white', flex: 1,  }}>
             <ScrollView>
             
-            <Text style={styles.infoLabel}> Location: {this.state.location}  </Text>
             <Text style={styles.infoLabel}> Sample ID: {this.state.sampleID}</Text>
+            <Text style={styles.infoLabel}> Location: {this.state.location}  </Text>
             <View style={{ height: 30, backgroundColor: 'white'}} />
             <Form 
-                type={sample} options= {options}
+                type={t.struct({
+                    sampleType: type,
+                    sampleObject: t.enums(this.state.object), 
+                    notes: t.maybe(t.String)
+                })}
+                options= {options}
                 ref={c => this._form = c}
                 value={val}
                 
