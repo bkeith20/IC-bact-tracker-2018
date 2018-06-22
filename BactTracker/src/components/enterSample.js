@@ -33,7 +33,7 @@ const val = {
 var sDate = new Date();
 
 export default class enterSample extends React.Component{
-    
+    //object will be an empty object {} and will be set in componentDidMount()
     constructor(props) {
         super(props);
         this.onSubmit = this.onSubmit.bind(this);
@@ -50,6 +50,7 @@ export default class enterSample extends React.Component{
          AsyncStorage.getItem("clickedLocation").then((value) => {
                 this.setState({"location": value});
             }).done();
+        //read in options for sample object from DB
     }
     
     

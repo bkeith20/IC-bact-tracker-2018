@@ -11,15 +11,6 @@
 
     });
 
-    var options = {
-      fields: {
-        Netpass: {
-          label: 'Netpass Username' // <= label for the name field
-        }
-      }
-    };
-
-
     export default class Login extends React.Component {
         
 
@@ -43,6 +34,20 @@
             }).done();
         }
         }
+        
+        options = {
+            fields: {
+                Netpass: {
+                    label: 'Netpass Username', // <= label for the name field
+                    onSubmitEditing: () => this._form.getComponent('Password').refs.input.focus()
+                },
+                Password: {
+                    label: 'Password',
+                    secureTextEntry: true,
+                    onSubmitEditing: () => this._onClick()
+                }
+            }
+        };
 
 
         _onClick(){
@@ -77,7 +82,7 @@
              
 
             <Form 
-                    type={User} options = {options}
+                    type={User} options = {this.options}
                     ref={c => this._form = c}
                     onChange={this.handleInput}
                 />
