@@ -89,7 +89,7 @@ const { SlideInMenu } = renderers;
                 console.log(responseJson);
                 let newMarker = {title: responseJson["building"],
                                  coordinates: {
-                                     latitude: (responseJson["lat"]+1),
+                                     latitude: (responseJson["lat"]*1),
                                      longitude: (responseJson["long"]*-1),
                                  },
                                  samplesLeft: 4,
