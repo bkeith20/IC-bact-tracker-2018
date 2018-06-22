@@ -1,7 +1,8 @@
-    import React from 'react';
-    import { AppRegistry,StyleSheet, Image, Text, View, Button, TouchableOpacity, TextInput, AsyncStorage, ScrollView} from 'react-native';
-    import { createStackNavigator, TabNavigator} from 'react-navigation';
-    import t from 'tcomb-form-native'; 
+import React from 'react';
+import { AppRegistry,StyleSheet, Image, Text, View, Button, TouchableOpacity, TextInput, AsyncStorage, ScrollView} from 'react-native';
+import { createStackNavigator, TabNavigator} from 'react-navigation';
+import t from 'tcomb-form-native'; 
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
     const Form = t.form.Form;
     
@@ -38,7 +39,7 @@ export default class enterSample extends React.Component{
         super(props);
         this.onSubmit = this.onSubmit.bind(this);
         this.state = {location : "", 
-                      sampleID :this.props.navigation.state.params.inNetpass+""+sDate.getFullYear()+""+(sDate.getMonth()+1)+""+sDate.getDate()+""+sDate.getHours()+""+sDate.getMinutes()+""+sDate.getSeconds(),
+                      sampleID :this.props.navigation.state.params.inNetpass+""+sDate.getFullYear()+"-"+(sDate.getMonth()+1)+"-"+sDate.getDate()+"-"+sDate.getHours()+"-"+sDate.getMinutes()+"-"+sDate.getSeconds(),
                       object: {},
                      }
     }
@@ -77,7 +78,7 @@ export default class enterSample extends React.Component{
                 SampleNotes: Fvalue.notes,
                 SampleObject: Fvalue.sampleObject,
                 User: inNetpass,
-                SampleDate: (sDate.getMonth()+1)+"/"+sDate.getDate()+"/"+sDate.getFullYear()+" "+sDate.getHours+":"+sDate.getMinutes+"."+sDate.getSeconds,
+                SampleDate: (sDate.getMonth()+1)+"/"+sDate.getDate()+"/"+sDate.getFullYear()+" "+sDate.getHours()+":"+sDate.getMinutes()+"."+sDate.getSeconds(),
             }
             this.props.navigation.navigate('Confirmation', {fInfo: formInfo});
         }
@@ -87,12 +88,12 @@ export default class enterSample extends React.Component{
     
     render () {
         return(
-            <View style = {{alignItems: 'center', justifyContent: 'center', backgroundColor: 'white', flex: 1,  }}>
-            <ScrollView>
+            <View style = {{justifyContent: 'center', backgroundColor: 'white', flex: 1,  }}>
+            <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false} >
             
             <Text style={styles.infoLabel}> Sample ID: {this.state.sampleID}</Text>
             <Text style={styles.infoLabel}> Location: {this.state.location}  </Text>
-            <View style={{ height: 30, backgroundColor: 'white'}} />
+            <View style={{padding: 20}}>
             <Form 
                 type={t.struct({
                     sampleType: type,
@@ -105,7 +106,7 @@ export default class enterSample extends React.Component{
                 
                 
             /> 
-            
+            </View>
         
             <TouchableOpacity onPress ={this.onSubmit}>
                 <View style = {styles.button}>
@@ -114,7 +115,7 @@ export default class enterSample extends React.Component{
             </TouchableOpacity>
             
         
-            </ScrollView>
+            </KeyboardAwareScrollView>
             </View>
         );
     }
@@ -128,7 +129,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#003b71',
         borderRadius: 8,
-        height: 40
+        height: 40,
+        alignSelf: 'center'
       },
 
       buttonText: {
@@ -139,10 +141,12 @@ const styles = StyleSheet.create({
       infoLabel :{
           color: '#003b71',
           fontSize: 20,
-          paddingLeft: 10,
-          paddingRight: 10,
-          paddingTop: 10,
+          paddingLeft: 20,
+          paddingRight: 20,
+          paddingTop: 20,
+          paddingBottom: 10,
           fontWeight: 'bold',
+          alignSelf: 'center'
       },
 
     });

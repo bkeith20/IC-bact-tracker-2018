@@ -83,14 +83,25 @@ const { SlideInMenu } = renderers;
 
          );
             //read sample locations for markers in from DB write them into state
-            const data = await fetch('http://ic-research.eastus.cloudapp.azure.com/barr/bio.php')
-            .then(function(response){
-                return response.text();
-            })
-            .catch(function(error) {
-            console.log('There has been a problem with your fetch operation: ' + error.message);
-            });
-            console.log(data);
+            try{
+                let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~barr/bio.php');
+                let responseJson = await response.json();
+                console.log(responseJson);
+                let newMarker = {title: responseJson["building"],
+                                 coordinates: {
+                                     latitude: (responseJson["lat"]+1),
+                                     longitude: (responseJson["long"]*-1),
+                                 },
+                                 samplesLeft: 4,
+                                 pinColor: "yellow",
+                                 key: 4,
+                                };
+                console.log(newMarker);
+                this.setState(prevState => ({ markers: [...prevState.markers, newMarker]}));
+                console.log(this.state.markers);
+            } catch (error){
+                console.error(error);
+            }
        }
 
 
