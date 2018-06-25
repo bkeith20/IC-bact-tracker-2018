@@ -8,7 +8,7 @@
     const User = t.struct({
       Netpass: t.String,
       Password: t.String,
-
+      RememberMe: t.Boolean,
     });
 
     export default class Login extends React.Component {
@@ -17,12 +17,29 @@
          constructor(props) {
         super(props);
         this.handleInput = this.handleInput.bind(this);
-        this.state = {userPass: '', } 
+        this.state = {userPass: '', 
+                      defaultVal:{
+                          Netpass: '',
+                          Password: '',
+                          RememberMe: false,
+                      }
+                     }
 
       }
-        componentDidMount() {
-            AsyncStorage.multiSet([["Esteele","1234"],["Jbarr","5678"]]);
-
+       
+        async componentDidMount() {
+            const remembered = await AsyncStorage.getItem('rememberMe');
+            console.log(remembered);
+            if(remembered){
+                const remPass = await AsyncStorage.getItem(remembered);
+                const vals = {
+                    Netpass: remembered,
+                    Password: remPass,
+                    RememberMe: true,
+                }
+                this.setState({defaultVal: vals});
+                this.setState({userPass: remPass})
+            }
         }
 
         handleInput(inValue){
@@ -36,6 +53,7 @@
         }
         
         options = {
+            auto: 'placeholders',
             fields: {
                 Netpass: {
                     label: 'Netpass Username', // <= label for the name field
@@ -50,23 +68,35 @@
         };
 
 
-        _onClick(){
+       async _onClick(){
 
           const Fvalue = this._form.getValue();
             if(Fvalue){
             inNetpass = Fvalue.Netpass;
             inPass = Fvalue.Password;
-            AsyncStorage.getItem(inNetpass).then((value) => {
+                console.log(inNetpass+": "+inPass)
+            await AsyncStorage.getItem(inNetpass).then((value) => {
                 this.setState({"userPass": value});
             }).done();
             console.log(this.state.userPass);
             if(this.state.userPass != null){
-            if(inPass == this.state.userPass){
-                this.props.navigation.navigate('Home', {inNetpass})
-            }
-            else{
-                Alert.alert("Your netpass and/or password were incorrect.")
-            }
+                if(inPass === this.state.userPass){
+                    if(Fvalue.RememberMe){
+                        await AsyncStorage.setItem('rememberMe', inNetpass);
+                    }
+                    else{
+                        await AsyncStorage.removeItem('rememberMe');
+                        const vals = {
+                            Netpass: '',
+                            Password: '',
+                            RememberMe: false,
+                        }
+                    }
+                    this.props.navigation.navigate('Home', {inNetpass})
+                }
+                else{
+                    Alert.alert("Your netpass and/or password were incorrect.")
+                }
             }
 
             }
@@ -80,12 +110,15 @@
         
           <View style={{alignItems: 'center',justifyContent: 'center', backgroundColor: 'white', flex: 1 }}>
              
-
+            <View style={{width: 180}}>
             <Form 
-                    type={User} options = {this.options}
+                    type={User} 
+                    options = {this.options}
+                    value={this.state.defaultVal}
                     ref={c => this._form = c}
                     onChange={this.handleInput}
                 />
+            </View>
             <TouchableOpacity onPress ={() => this._onClick()}>
             <View style = {styles.button}>
             <Text style={styles.buttonText}>Log in</Text>

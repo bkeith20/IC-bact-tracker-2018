@@ -86,7 +86,7 @@ const { SlideInMenu } = renderers;
             try{
                 let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~barr/bio.php');
                 let responseJson = await response.json();
-                console.log(responseJson);
+                //console.log(responseJson);
                 let newMarker = {title: responseJson["building"],
                                  coordinates: {
                                      latitude: (responseJson["lat"]*1),
@@ -96,9 +96,9 @@ const { SlideInMenu } = renderers;
                                  pinColor: "yellow",
                                  key: 4,
                                 };
-                console.log(newMarker);
+                //console.log(newMarker);
                 this.setState(prevState => ({ markers: [...prevState.markers, newMarker]}));
-                console.log(this.state.markers);
+                //console.log(this.state.markers);
             } catch (error){
                 console.error(error);
             }
@@ -106,7 +106,7 @@ const { SlideInMenu } = renderers;
 
 
 
-         openMenu(areaCoordinates, numSamples, area) {
+        async openMenu(areaCoordinates, numSamples, area) {
              navigator.geolocation.getCurrentPosition(
                  (position) => {
             
@@ -124,11 +124,11 @@ const { SlideInMenu } = renderers;
              console.log(latD+" "+latThres)
              console.log(lonD+" "+lonThres)
              if(lonD <= lonThres && latD <= latThres){
-                this.setState({descriptionToDisplay : "This area needs "+ numSamples +" more samples!"});
+                await this.setState({descriptionToDisplay : "This area needs "+ numSamples +" more samples!"});
                 this.menu.open();
              }
              else{
-                 this.setState({descriptionToDisplay : "This area needs "+ numSamples +" more samples! Get closer to take a sample!"});
+                 await this.setState({descriptionToDisplay : "This area needs "+ numSamples +" more samples! Get closer to take a sample!"});
                  
              }
             AsyncStorage.setItem("clickedLocation",area);
