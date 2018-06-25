@@ -11,21 +11,6 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
         Double: 'Double'
     });
 
-     const options = {
-        auto: 'placeholders',
-        fields: {
-            sampleType: {
-                label: "Sample Type",
-            },
-            sampleObject: {
-                label: "Object Sampled"
-            },
-            notes: {
-                label: "Additional Notes"
-            }
-        }
-};
-
 const val = {
     sampleType: 'Single',
     
@@ -41,12 +26,16 @@ export default class enterSample extends React.Component{
         this.state = {location : "", 
                       sampleID :this.props.navigation.state.params.inNetpass+""+sDate.getFullYear()+"-"+(sDate.getMonth()+1)+"-"+sDate.getDate()+"-"+sDate.getHours()+"-"+sDate.getMinutes()+"-"+sDate.getSeconds(),
                       object: {},
-                     }
+                      }
     }
+    
+    component 
+    
    async componentDidMount(){
         await AsyncStorage.getItem("clickedLocation").then((value) => {
                 this.setState({"location": value});
             });
+       console.log('did mount');
         //read in options for sample object from DB
         console.log(this.state.location);
         if(this.state.location==='Williams 305'){
@@ -66,11 +55,12 @@ export default class enterSample extends React.Component{
     }
     
     
+    
+    
     onSubmit(inNetpass){
     
         const Fvalue = this._form.getValue();
         if(Fvalue){
-            var loc = this.state.location;
             var formInfo = {
                 Location: this.state.location,
                 SampleID: this.state.sampleID,
@@ -79,6 +69,8 @@ export default class enterSample extends React.Component{
                 SampleObject: Fvalue.sampleObject,
                 User: inNetpass,
                 SampleDate: (sDate.getMonth()+1)+"/"+sDate.getDate()+"/"+sDate.getFullYear()+" "+sDate.getHours()+":"+sDate.getMinutes()+"."+sDate.getSeconds(),
+                Latitude: sampleLat,
+                Longitude: sampleLong
             }
             this.props.navigation.navigate('Confirmation', {fInfo: formInfo, inNetpass: inNetpass});
         }
@@ -90,6 +82,24 @@ export default class enterSample extends React.Component{
         
         const { navigation } = this.props;
         const inNetpass = navigation.getParam('inNetpass', 'NO-ID');
+        const sampleLat = navigation.getParam('samplelat', 'No-Lat');
+        const sampleLong = navigation.getParam('sampleLong', 'No-Long');
+        
+        const options = {
+                          auto: 'placeholders',
+                          fields: {
+                              sampleType: {
+                                  label: "Sample Type",
+                              },
+                              sampleObject: {
+                                  label: "Object Sampled"
+                              },
+                              notes: {
+                                  label: "Additional Notes",
+                                  onSubmitEditing: () => this.onSubmit(inNetpass),
+                              }
+                              }
+                          };
         
         return(
             <View style = {{justifyContent: 'center', backgroundColor: 'white', flex: 1,  }}>

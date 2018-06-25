@@ -26,8 +26,8 @@ const { SlideInMenu } = renderers;
 
         this.state = {
           latitude: 1,
-          longitude: 1,
-          descriptionToDisplay: "",
+          longitude: 1, 
+          selLocal: '',
           markers: [
               {title: 'Williams',
                coordinates: {
@@ -104,9 +104,11 @@ const { SlideInMenu } = renderers;
             }
        }
 
+        print(){
+            console.log(this.state.selLocal);
+        }
 
-
-        async openMenu(areaCoordinates, numSamples, area) {
+        async openMenu(areaCoordinates, area) {
              navigator.geolocation.getCurrentPosition(
                  (position) => {
             
@@ -124,14 +126,9 @@ const { SlideInMenu } = renderers;
              console.log(latD+" "+latThres)
              console.log(lonD+" "+lonThres)
              if(lonD <= lonThres && latD <= latThres){
-                await this.setState({descriptionToDisplay : "This area needs "+ numSamples +" more samples!"});
                 this.menu.open();
              }
-             else{
-                 await this.setState({descriptionToDisplay : "This area needs "+ numSamples +" more samples! Get closer to take a sample!"});
-                 
-             }
-            AsyncStorage.setItem("clickedLocation",area);
+            this.setState({selLocal: area},this.print);
         }
 
             onRef = r => {
@@ -153,7 +150,7 @@ const { SlideInMenu } = renderers;
                     renderer={SlideInMenu}>
                     <MenuTrigger />
                     <MenuOptions>
-                    <MenuOption style={styles.menu} onSelect={() => this.props.navigation.navigate('BactTracker',{inNetpass: inNetpass})}>
+                    <MenuOption style={styles.menu} onSelect={() => this.props.navigation.navigate('BactTracker',{inNetpass: inNetpass, sampleLat: this.state.latitude, sampleLong: this.state.longitude})}>
                         <Text style={styles.menuOption}> Click Here to Sample! </Text>
                     </MenuOption>
 
@@ -182,8 +179,8 @@ const { SlideInMenu } = renderers;
                                         title={marker.title}
                                         key={marker.key}
                                         pinColor={marker.pinColor}
-                                        description={this.state.descriptionToDisplay}
-                                        onPress={() => this.openMenu(marker.coordinates, marker.samplesLeft, marker.title)}
+                                        description={"This area needs "+ marker.samplesLeft +" more samples!"}
+                                        onPress={() => this.openMenu(marker.coordinates, marker.title)}
                                     />
                                     ))}
                 
