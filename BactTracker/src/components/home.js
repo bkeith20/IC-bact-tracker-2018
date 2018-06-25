@@ -1,13 +1,23 @@
 import React from 'react';
-import { View, Text, Image, Button, Alert, ScrollView, TextInput, TouchableOpacity, Dimensions, Picker, StyleSheet } from 'react-native';
+import { View, Text, Image, Button, Alert, ScrollView, TextInput, TouchableOpacity, Dimensions, Picker, StyleSheet, BackHandler } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 
 export default class HomeScreen extends React.Component {
-    static navigationOptions = {
-        title: 'Home',
+    static navigationOptions = ({navigation}) => {
+        return {
+            headerLeft: (
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('Login')}
+                    style={{paddingLeft: 10}}
+                >
+                    <Text style={{fontWeight: 'bold', color: 'white', padding: 10, fontSize: 16, borderColor: 'white', borderRadius: 8, borderWidth: 1 }}>Logout</Text>
+                </TouchableOpacity>
+            ),
+        };
     };
   render() {
-      
+      const { navigation } = this.props;
+      const inNetpass = navigation.getParam('inNetpass', 'NO-ID');
     return (
       <View style={styles.containerOuter}>
         
@@ -31,7 +41,7 @@ export default class HomeScreen extends React.Component {
         
                 <View style={styles.containerCol}>
                     <TouchableOpacity
-                        onPress={() => this.props.navigation.navigate('Tracker')}
+                        onPress={() => this.props.navigation.navigate('Tracker', {inNetpass: inNetpass})}
                         style={styles.button}
                         disabled={false}
                     >

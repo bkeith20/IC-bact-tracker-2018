@@ -66,7 +66,7 @@ export default class enterSample extends React.Component{
     }
     
     
-    onSubmit(){
+    onSubmit(inNetpass){
     
         const Fvalue = this._form.getValue();
         if(Fvalue){
@@ -80,13 +80,17 @@ export default class enterSample extends React.Component{
                 User: inNetpass,
                 SampleDate: (sDate.getMonth()+1)+"/"+sDate.getDate()+"/"+sDate.getFullYear()+" "+sDate.getHours()+":"+sDate.getMinutes()+"."+sDate.getSeconds(),
             }
-            this.props.navigation.navigate('Confirmation', {fInfo: formInfo});
+            this.props.navigation.navigate('Confirmation', {fInfo: formInfo, inNetpass: inNetpass});
         }
     }
 
     
     
     render () {
+        
+        const { navigation } = this.props;
+        const inNetpass = navigation.getParam('inNetpass', 'NO-ID');
+        
         return(
             <View style = {{justifyContent: 'center', backgroundColor: 'white', flex: 1,  }}>
             <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false} >
@@ -108,7 +112,7 @@ export default class enterSample extends React.Component{
             /> 
             </View>
         
-            <TouchableOpacity onPress ={this.onSubmit}>
+            <TouchableOpacity onPress ={() => this.onSubmit(inNetpass)}>
                 <View style = {styles.button}>
                     <Text style={styles.buttonText}>Submit</Text>
                 </View>

@@ -5,10 +5,6 @@ import { createStackNavigator } from 'react-navigation';
 const {height, width} = Dimensions.get('window');
 
 export default class HelpScreen extends React.Component {
-    static navigationOptions = {
-        title: 'Help',
-    };
-    
     constructor(props) {
         super(props);
         this.state = {

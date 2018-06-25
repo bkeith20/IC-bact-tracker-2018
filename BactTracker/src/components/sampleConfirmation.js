@@ -28,6 +28,7 @@ export default class ConfirmScreen extends React.Component {
       
     const { navigation } = this.props;
     const formInfo = navigation.getParam('fInfo', 'NO-ID');
+    const inNetpass = navigation.getParam('inNetpass', 'NO-ID');
       
     return (
         

@@ -141,6 +141,9 @@ const { SlideInMenu } = renderers;
 
             render() {
                 const { region } = this.props;
+                
+                const { navigation } = this.props;
+                const inNetpass = navigation.getParam('inNetpass', 'NO-ID');
 
                 return (
                     <MenuProvider style={styles.container}>  
@@ -150,7 +153,7 @@ const { SlideInMenu } = renderers;
                     renderer={SlideInMenu}>
                     <MenuTrigger />
                     <MenuOptions>
-                    <MenuOption style={styles.menu} onSelect={() => this.props.navigation.navigate('BactTracker',{inNetpass})}>
+                    <MenuOption style={styles.menu} onSelect={() => this.props.navigation.navigate('BactTracker',{inNetpass: inNetpass})}>
                         <Text style={styles.menuOption}> Click Here to Sample! </Text>
                     </MenuOption>
 

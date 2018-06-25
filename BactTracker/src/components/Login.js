@@ -72,8 +72,8 @@
 
           const Fvalue = this._form.getValue();
             if(Fvalue){
-            inNetpass = Fvalue.Netpass;
-            inPass = Fvalue.Password;
+            const inNetpass = Fvalue.Netpass;
+            const inPass = Fvalue.Password;
                 console.log(inNetpass+": "+inPass)
             await AsyncStorage.getItem(inNetpass).then((value) => {
                 this.setState({"userPass": value});
@@ -92,7 +92,7 @@
                             RememberMe: false,
                         }
                     }
-                    this.props.navigation.navigate('Home', {inNetpass})
+                    this.props.navigation.navigate('Home', {inNetpass: inNetpass});
                 }
                 else{
                     Alert.alert("Your netpass and/or password were incorrect.")
