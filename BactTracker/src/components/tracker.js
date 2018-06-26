@@ -150,7 +150,7 @@ const { SlideInMenu } = renderers;
                     renderer={SlideInMenu}>
                     <MenuTrigger />
                     <MenuOptions>
-                    <MenuOption style={styles.menu} onSelect={() => this.props.navigation.navigate('BactTracker',{inNetpass: inNetpass, sampleLat: this.state.latitude, sampleLong: this.state.longitude})}>
+                    <MenuOption style={styles.menu} onSelect={() => this.props.navigation.navigate('BactTracker',{inNetpass: inNetpass, sampleLat: this.state.latitude, sampleLong: this.state.longitude, sampleLocation: this.state.selLocal})}>
                         <Text style={styles.menuOption}> Click Here to Sample! </Text>
                     </MenuOption>
 
