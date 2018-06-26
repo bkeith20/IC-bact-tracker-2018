@@ -10,39 +10,12 @@
       MenuOption,
       MenuTrigger,
         withMenuProvider,
+        renderers
     } from 'react-native-popup-menu';
 
 var {height, width} = Dimensions.get('window');
 
-    var williams = {
-            title: "Williams",
-            latitude : 42.422691,
-            longitude : -76.495041,
-            description: "There are three areas that are available for sampling",
-            altDescription: "There are three areas that are available for sampling. Get closer to take a sample",
-            displayDescription:"",
-            pinColor: "yellow",
-
-        }
-    var campusCenter = {
-            title: "Campus Center",
-            latitude : 42.422115,
-            longitude : -76.494273,
-            description: "There are five areas that are available for sampling",
-            altDescription: "There are five areas that are available for sampling. Get closer to take a sample",
-            displayDescription:"",
-            pinColor: "blue",
-
-        }
-    var bookStore = {
-        title: "Bookstore",
-            latitude : 42.422310,
-            longitude : -76.494984,
-            description: "There is one area that is available for sampling",
-            altDescription: "There is one area that is available for sampling. Get closer to take a sample",
-            displayDescription:"",
-            pinColor: "green",
-    }
+const { SlideInMenu } = renderers;
     
     var descripton = "";
 
@@ -53,12 +26,50 @@ var {height, width} = Dimensions.get('window');
 
         this.state = {
           latitude: 1,
-          longitude: 1,
-          descriptionToDisplay: "",
+          longitude: 1, 
+          selLocal: '',
+          markers: [
+              {title: 'Williams',
+               coordinates: {
+                   latitude : 42.422691,
+                   longitude : -76.495041
+               },
+               samplesLeft: 1,
+               pinColor: "red",
+               key: 0,
+              },
+              {title: 'Campus Center',
+               coordinates: {
+                   latitude : 42.422115,
+                   longitude : -76.494273,
+               },
+               samplesLeft: 5,
+               pinColor: "orange",
+               key: 1,
+              },
+              {title: 'Bookstore',
+               coordinates: {
+                   latitude : 42.422310,
+                   longitude : -76.494984
+               },
+               samplesLeft: 1,
+               pinColor: "yellow",
+               key: 2,
+              },
+              {title: 'Williams 305',
+               coordinates: {
+                   latitude : 42.422545,
+                   longitude : -76.495117,
+               },
+               samplesLeft: 2,
+               pinColor: "orange",
+               key: 3,
+              },
+          ],
         };
       }
 
-        componentDidMount() {
+        async componentDidMount() {
         navigator.geolocation.getCurrentPosition(
            (position) => {
             
@@ -68,117 +79,130 @@ var {height, width} = Dimensions.get('window');
                 
              });
            },
-            
+              
 
          );
+            //read sample locations for markers in from DB write them into state
+            try{
+                let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~barr/bio.php');
+                let responseJson = await response.json();
+                //console.log(responseJson);
+                let newMarker = {title: responseJson["building"],
+                                 coordinates: {
+                                     latitude: (responseJson["lat"]*1),
+                                     longitude: (responseJson["long"]*-1),
+                                 },
+                                 samplesLeft: 4,
+                                 pinColor: "yellow",
+                                 key: 4,
+                                };
+                //console.log(newMarker);
+                this.setState(prevState => ({ markers: [...prevState.markers, newMarker]}));
+                //console.log(this.state.markers);
+            } catch (error){
+                console.error(error);
+            }
        }
 
+        print(){
+            console.log(this.state.selLocal);
+        }
 
-
-         openMenu(area) {
-             this.componentDidMount();
-             var latD = Math.abs(area.latitude - this.state.latitude);
-             var lonD = Math.abs(area.longitude - this.state.longitude);
+        async openMenu(areaCoordinates, area) {
+             navigator.geolocation.getCurrentPosition(
+                 (position) => {
+            
+                     this.setState({
+                         latitude: position.coords.latitude,
+                         longitude: position.coords.longitude,
+                 
+                     });
+                 },
+             );
+             var latD = Math.abs(areaCoordinates.latitude - this.state.latitude);
+             var lonD = Math.abs(areaCoordinates.longitude - this.state.longitude);
              var lonThres = 8/305775;
              var latThres = 8/77136;
              console.log(latD+" "+latThres)
              console.log(lonD+" "+lonThres)
              if(lonD <= lonThres && latD <= latThres){
-                this.setState({descriptionToDisplay : area.description});
                 this.menu.open();
              }
-             else{
-                 this.setState({descriptionToDisplay : area["altDescription"]});
-                 
-             }
-             AsyncStorage.setItem("clickedLocation",area.title);
-      }
+            this.setState({selLocal: area},this.print);
+        }
 
-      onRef = r => {
-        this.menu = r;
-      }
+            onRef = r => {
+                this.menu = r;
+            }
+            
 
-
-        render() {
-        const { region } = this.props;
-
-        return (
-            <MenuProvider style={styles.container}>  
-            <View>
-              <Menu
-                name="menu-1" ref={this.onRef}>
-                <MenuTrigger />
-                <MenuOptions>
-                  <MenuOption onSelect={() => this.props.navigation.navigate('BactTracker',{inNetpass})} text="Sample" />
-
-                </MenuOptions>
-              </Menu>
-            </View>
-            <View style ={styles.mapContainer}>
-            <MapView
-              provider={PROVIDER_GOOGLE}
-              style={styles.map}
-              region={{
-                latitude: this.state.latitude,
-                longitude: this.state.longitude,
-                latitudeDelta: 0.015,
-                longitudeDelta: 0.0121,
-              }}
-            showsUserLocation={true}
-            showsMyLocationButton={true}
-            maxZoomLevel = {20}
-            minZoomLevel = {16}
-            >
-
-            <MapView.Marker 
-                coordinate={{
-                    latitude: williams.latitude,
-                    longitude: williams.longitude,
-
-                }}
-                title="Williams"
-                description={this.state.descriptionToDisplay}
-                pinColor = {williams.pinColor}
-                id = {"Marker2"}
-                onPress={() => this.openMenu(williams)}
-                />
-
-        <MapView.Marker 
-          coordinate={{
-                latitude: campusCenter.latitude,
-                longitude: campusCenter.longitude,
-
-              }}
-          title="Campus Center"
-          description={this.state.descriptionToDisplay}
-            pinColor = {campusCenter.pinColor}
-            id = {"Marker1"}
-            onPress={() => this.openMenu(campusCenter)}  
-
-        />
+            render() {
+                const { region } = this.props;
                 
-        <MapView.Marker 
-          coordinate={{
-                latitude: bookStore.latitude,
-                longitude: bookStore.longitude,
+                const { navigation } = this.props;
+                const inNetpass = navigation.getParam('inNetpass', 'NO-ID');
 
-              }}
-          title="Bookstore"
-          description={this.state.descriptionToDisplay}
-            pinColor = {bookStore.pinColor}
-            id = {"Marker3"}
-            onPress={() => this.openMenu(bookStore)}  
+                return (
+                    <MenuProvider style={styles.container}>  
+                    <View>
+                    <Menu
+                    name="menu-1" ref={this.onRef}
+                    renderer={SlideInMenu}>
+                    <MenuTrigger />
+                    <MenuOptions>
+                    <MenuOption style={styles.menu} onSelect={() => this.props.navigation.navigate('BactTracker',{inNetpass: inNetpass, sampleLat: this.state.latitude, sampleLong: this.state.longitude, sampleLocation: this.state.selLocal})}>
+                        <Text style={styles.menuOption}> Click Here to Sample! </Text>
+                    </MenuOption>
 
-        />
-            </MapView>
-          </View>
-        </MenuProvider>
-        );
-      }
+                    </MenuOptions>
+                    </Menu>
+                    </View>
+                    <View style ={styles.mapContainer}>
+                        <MapView
+                            provider={PROVIDER_GOOGLE}
+                            style={styles.map}
+                            region={{
+                                    latitude: this.state.latitude,
+                                    longitude: this.state.longitude,
+                                    latitudeDelta: 0.015,
+                                    longitudeDelta: 0.0121,
+                                   }}
+                            showsUserLocation={true}
+                            showsMyLocationButton={true}
+                            maxZoomLevel = {20}
+                            minZoomLevel = {16}
+                        >
+
+                                {this.state.markers.map(marker => (
+                                    <MapView.Marker 
+                                        coordinate={marker.coordinates}
+                                        title={marker.title}
+                                        key={marker.key}
+                                        pinColor={marker.pinColor}
+                                        description={"This area needs "+ marker.samplesLeft +" more samples!"}
+                                        onPress={() => this.openMenu(marker.coordinates, marker.title)}
+                                    />
+                                    ))}
+                
+                        </MapView>
+                    </View>
+                    </MenuProvider>
+            );
+        }
     }
 
     const styles = StyleSheet.create({
-        
+        menu: {
+            height: 80,
+            backgroundColor: '#003b71',
+            alignItems: 'center',
+            
+        },
+        menuOption: {
+            fontWeight: 'bold',
+            color: 'white',
+            fontSize: 30,
+        },
         container: {
         flex: 1,
         alignItems: 'center',

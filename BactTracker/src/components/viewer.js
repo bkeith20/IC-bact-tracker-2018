@@ -13,8 +13,8 @@
         super(props);
 
         this.state = {
-          latitude: 1,
-          longitude: 1,
+          latitude: 42.422974,
+          longitude: -76.494089,
             opacityM: 1,
             mapImage: 'https://thewhole94.files.wordpress.com/2015/03/russell-westbrook-heatmap.png',
             markers: [
@@ -42,18 +42,6 @@
             ],
         };
       }
-
-        componentDidMount() {
-        navigator.geolocation.getCurrentPosition(
-           (position) => {
-
-             this.setState({
-               latitude: position.coords.latitude,
-               longitude: position.coords.longitude,
-             });
-           },
-         );
-       }
             
         toggleOpacity(){
             if(this.state.opacityM>0){
@@ -156,6 +144,7 @@
         width: width,
         justifyContent: 'flex-end',
         alignItems: 'center',
+        margin: 5,
         },
         button: {
             backgroundColor: '#003b71',

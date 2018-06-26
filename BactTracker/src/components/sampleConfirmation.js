@@ -28,6 +28,7 @@ export default class ConfirmScreen extends React.Component {
       
     const { navigation } = this.props;
     const formInfo = navigation.getParam('fInfo', 'NO-ID');
+    const inNetpass = navigation.getParam('inNetpass', 'NO-ID');
       
     return (
         
@@ -71,7 +72,7 @@ export default class ConfirmScreen extends React.Component {
             </View>
         
             <View style={styles.containerRow}>
-                <Text style={styles.infoLabel}> User initials: </Text>
+                <Text style={styles.infoLabel}> Username: </Text>
             </View>
             <View style={styles.containerRow}>
                 <Text style={styles.info}> {formInfo.User} </Text>
