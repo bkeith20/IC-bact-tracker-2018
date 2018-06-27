@@ -70,7 +70,7 @@ export default class enterSample extends React.Component{
         
         const { navigation } = this.props;
         const inNetpass = navigation.getParam('inNetpass', 'NO-ID');
-        const sampleLat = navigation.getParam('samplelat', 'No-Lat');
+        const sampleLat = navigation.getParam('sampleLat', 'No-Lat');
         const sampleLong = navigation.getParam('sampleLong', 'No-Long');
         const sampleLocation = navigation.getParam('sampleLocation', 'No-Location');
         const sampleID = inNetpass+""+sDate.getFullYear()+"-"+(sDate.getMonth()+1)+"-"+sDate.getDate()+"-"+sDate.getHours()+"-"+sDate.getMinutes()+"-"+sDate.getSeconds();
