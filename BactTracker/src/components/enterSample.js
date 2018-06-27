@@ -11,20 +11,6 @@ const type = t.enums({
     Double: 'Double'
 });
 
-const object = t.enums({
-    null: 'Choose object sampled',
-    HandRail: 'Hand rail',
-    DoorHandle: 'Door Handle',
-    DoorPushPlate: 'Door Push Plate'
-});
-
-const object1 = t.enums({
-    null: 'Choose object sampled',
-    keyboard: 'Keyboard',
-    whiteBoard: 'WhiteBoard',
-    doorHandle: 'Door Handle',
-});
-
 var sDate = new Date();
 
 var options = {
@@ -52,6 +38,9 @@ export default class enterSample extends React.Component{
                 sampleType: 'Single',
                 sampleObject: null,
                 notes: ''
+            },
+            object: {
+                
             }
         };
     }
@@ -85,10 +74,13 @@ export default class enterSample extends React.Component{
         const sampleLong = navigation.getParam('sampleLong', 'No-Long');
         const sampleLocation = navigation.getParam('sampleLocation', 'No-Location');
         const sampleID = inNetpass+""+sDate.getFullYear()+"-"+(sDate.getMonth()+1)+"-"+sDate.getDate()+"-"+sDate.getHours()+"-"+sDate.getMinutes()+"-"+sDate.getSeconds();
+        const object = t.enums( navigation.getParam('options'));
+        console.log(object);
+        
         
         const sample = t.struct({
             sampleType: type,
-            sampleObject: (sampleLocation=='Williams 305')?object1:object, 
+            sampleObject: object, 
             notes: t.maybe(t.String)
         });
  

@@ -72,10 +72,31 @@ export default class ConfirmScreen extends React.Component {
             </View>
         
             <View style={styles.containerRow}>
+                <Text style={styles.infoLabel}> Object: </Text>
+            </View>
+            <View style={styles.containerRow}>
+                <Text style={styles.info}> {formInfo.SampleObject} </Text>
+            </View>
+        
+            <View style={styles.containerRow}>
                 <Text style={styles.infoLabel}> Username: </Text>
             </View>
             <View style={styles.containerRow}>
                 <Text style={styles.info}> {formInfo.User} </Text>
+            </View>
+        
+            <View style={styles.containerRow}>
+                <Text style={styles.infoLabel}> Latitude: </Text>
+            </View>
+            <View style={styles.containerRow}>
+                <Text style={styles.info}> {formInfo.Latitude} </Text>
+            </View>
+        
+            <View style={styles.containerRow}>
+                <Text style={styles.infoLabel}> Longitude: </Text>
+            </View>
+            <View style={styles.containerRow}>
+                <Text style={styles.info}> {formInfo.Longitude} </Text>
             </View>
         
             <View style={styles.containerRow}>

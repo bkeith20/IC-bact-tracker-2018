@@ -103,6 +103,8 @@ export default class ViewerScreen extends React.Component {
             console.log(inpass);
             const inNetpass = val.netpassUsername;
             //save to DB here
+            //check account does not already exist
+            
             this.props.navigation.navigate('Home', {inNetpass: inNetpass});
             
         }

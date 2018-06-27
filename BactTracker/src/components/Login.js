@@ -131,7 +131,7 @@
             </View>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress ={() => this.props.navigation.navigate('Tracker')}>
+            <TouchableOpacity onPress ={() => this.props.navigation.navigate('ForgotPassword')}>
             <View style = {styles.button}>
             <Text style={styles.buttonText}>Forgot Password</Text>
             </View>
