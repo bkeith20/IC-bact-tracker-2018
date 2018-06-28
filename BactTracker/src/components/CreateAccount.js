@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, Image, Button, Alert, ScrollView, TextInput, TouchableOpacity, Dimensions, Picker, StyleSheet, AsyncStorage } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 import t from 'tcomb-form-native';
+import {SecureStore} from 'expo';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const Form = t.form.Form;
@@ -98,10 +99,17 @@ export default class ViewerScreen extends React.Component {
         const val = this._accform.getValue();
         if(val){
             console.log(val);
-            await AsyncStorage.setItem(val.netpassUsername, val.password);
-            const inpass = await AsyncStorage.getItem(val.netpassUsername);
-            console.log(inpass);
             const inNetpass = val.netpassUsername;
+            const toSave = {
+                userName: inNetpass,
+                password: val.password,
+                rememberMe: false,
+            };
+            const toSaveStr = JSON.stringify(toSave);
+            console.log(toSaveStr);
+            await SecureStore.setItemAsync('deviceUser', toSaveStr);
+            const retrieved = await SecureStore.getItemAsync('deviceUser');
+            console.log(retrieved);
             //save to DB here
             //check account does not already exist
             
