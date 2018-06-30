@@ -7,20 +7,38 @@ export default class ConfirmScreen extends React.Component {
         title: 'Confirmation',
     };
     
-    onSubmit(myID){
+    onSubmit(myID, info){
         console.log(myID);
         Alert.alert(
             'Please be sure to write the sample ID on your sample tube!',
             'Sample ID: '+myID,
             [
-                {text: 'OK', onPress: () => this.alertPress()},
+                {text: 'OK', onPress: () => this.alertPress(info)},
                 {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
             ],
         );
     };
             
-    async alertPress(){
+    async alertPress(info){
             //send info to DB
+            try{
+                const sample = info;
+                const sampleStr = JSON.stringify(sample);
+                console.log(sampleStr)
+                let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioDB4.php',{
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: sampleStr,
+                });
+                console.log(response);
+                let rJSON = await response.json();
+                console.log(rJSON);
+            }catch(error) {
+                console.log(error);
+            }
             this.props.navigation.navigate('Tracker');
         } 
     
@@ -123,7 +141,7 @@ export default class ConfirmScreen extends React.Component {
         
                 <View style={styles.containerCol}>
                     <TouchableOpacity
-                        onPress={() => this.onSubmit(formInfo.SampleID)}
+                        onPress={() => this.onSubmit(formInfo.SampleID, formInfo)}
                         style={styles.button}
                         disabled={false}
                     >

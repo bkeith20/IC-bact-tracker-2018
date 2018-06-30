@@ -111,7 +111,23 @@ export default class ViewerScreen extends React.Component {
             const retrieved = await SecureStore.getItemAsync('deviceUser');
             console.log(retrieved);
             //save to DB here
-            //check account does not already exist
+            //check account does not already exist!!!!!!!
+            try{
+                const toSend = this._accform.getValue();
+                const toSendStr = JSON.stringify(toSend);
+                let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioDB3.php',{
+                   method: 'POST',
+                   headers: {
+                       Accept: 'application/json',
+                       'Content-Type': 'application/json',
+                   },
+                    body: toSendStr,
+                });
+                let rJSON = await response.json();
+                console.log(rJSON);
+            } catch(error){
+                console.log(error);
+            }
             
             this.props.navigation.navigate('Home', {inNetpass: inNetpass});
             
