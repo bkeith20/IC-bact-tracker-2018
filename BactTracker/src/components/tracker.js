@@ -1,7 +1,7 @@
     import React from 'react';
     import { AppRegistry,StyleSheet, Image, Text, View, Button, TouchableOpacity, TextInput, AsyncStorage, Dimensions } from 'react-native';
     import { createStackNavigator, TabNavigator} from 'react-navigation';
-
+    import FormData from 'FormData';
     import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
     import {
       MenuProvider,
@@ -28,44 +28,9 @@ const { SlideInMenu } = renderers;
           latitude: 1,
           longitude: 1, 
           selLocal: '',
-          markers: [
-              {title: 'Williams',
-               coordinates: {
-                   latitude : 42.422691,
-                   longitude : -76.495041
-               },
-               samplesLeft: 1,
-               pinColor: "red",
-               key: 0,
-              },
-              {title: 'Campus Center',
-               coordinates: {
-                   latitude : 42.422115,
-                   longitude : -76.494273,
-               },
-               samplesLeft: 5,
-               pinColor: "orange",
-               key: 1,
-              },
-              {title: 'Bookstore',
-               coordinates: {
-                   latitude : 42.422310,
-                   longitude : -76.494984
-               },
-               samplesLeft: 1,
-               pinColor: "yellow",
-               key: 2,
-              },
-              {title: 'Williams 305',
-               coordinates: {
-                   latitude : 42.422545,
-                   longitude : -76.495117,
-               },
-               samplesLeft: 2,
-               pinColor: "orange",
-               key: 3,
-              },
-          ],
+          key: 0,
+          markers: [],
+          options: [],
         };
       }
 
@@ -84,9 +49,34 @@ const { SlideInMenu } = renderers;
          );
             //read sample locations for markers in from DB write them into state
             try{
-                let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~barr/bio.php');
-                let responseJson = await response.json();
-                //console.log(responseJson);
+                let name = {name: "bill"};
+                let req = JSON.stringify(name);
+                let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioDB.php',{
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: req
+                });
+            
+                let responsejson = await response.json();
+                console.log(responsejson+" "+responsejson.length);
+                for (let i =0; i<responsejson.length; i++){
+                    let newMarker = {title: responsejson[i]["building"],
+                                 coordinates: {
+                                     latitude: (responsejson[i]["lat"]*1),
+                                     longitude: (responsejson[i]["long"]*1),
+                                 },
+                                 samplesLeft: (responsejson[i]["sleft"]),
+                                 pinColor: (responsejson[i]["color"]),
+                                 key: i,
+                                };
+                     this.setState(prevState => ({ markers: [...prevState.markers, newMarker]}));
+                     this.setState(prevState => ({ options: [...prevState.options, responsejson[i]["options"]]}));
+                     //console.log(this.state.options);
+                };
+            /*
                 let newMarker = {title: responseJson["building"],
                                  coordinates: {
                                      latitude: (responseJson["lat"]*1),
@@ -99,6 +89,7 @@ const { SlideInMenu } = renderers;
                 //console.log(newMarker);
                 this.setState(prevState => ({ markers: [...prevState.markers, newMarker]}));
                 //console.log(this.state.markers);
+                */
             } catch (error){
                 console.error(error);
             }
@@ -108,7 +99,8 @@ const { SlideInMenu } = renderers;
             console.log(this.state.selLocal);
         }
 
-        async openMenu(areaCoordinates, area) {
+        async openMenu(areaCoordinates, area, key) {
+            console.log(this.state.options[key]);
              navigator.geolocation.getCurrentPosition(
                  (position) => {
             
@@ -129,6 +121,7 @@ const { SlideInMenu } = renderers;
                 this.menu.open();
              }
             this.setState({selLocal: area},this.print);
+            this.setState({key: key},this.print);
         }
 
             onRef = r => {
@@ -150,7 +143,7 @@ const { SlideInMenu } = renderers;
                     renderer={SlideInMenu}>
                     <MenuTrigger />
                     <MenuOptions>
-                    <MenuOption style={styles.menu} onSelect={() => this.props.navigation.navigate('BactTracker',{inNetpass: inNetpass, sampleLat: this.state.latitude, sampleLong: this.state.longitude, sampleLocation: this.state.selLocal})}>
+                    <MenuOption style={styles.menu} onSelect={() => this.props.navigation.navigate('BactTracker',{inNetpass: inNetpass, sampleLat: this.state.latitude, sampleLong: this.state.longitude, sampleLocation: this.state.selLocal, options: this.state.options[this.state.key]})}>
                         <Text style={styles.menuOption}> Click Here to Sample! </Text>
                     </MenuOption>
 
@@ -170,7 +163,7 @@ const { SlideInMenu } = renderers;
                             showsUserLocation={true}
                             showsMyLocationButton={true}
                             maxZoomLevel = {20}
-                            minZoomLevel = {16}
+                            minZoomLevel = {15}
                         >
 
                                 {this.state.markers.map(marker => (
@@ -180,7 +173,7 @@ const { SlideInMenu } = renderers;
                                         key={marker.key}
                                         pinColor={marker.pinColor}
                                         description={"This area needs "+ marker.samplesLeft +" more samples!"}
-                                        onPress={() => this.openMenu(marker.coordinates, marker.title)}
+                                        onPress={() => this.openMenu(marker.coordinates, marker.title, marker.key)}
                                     />
                                     ))}
                 

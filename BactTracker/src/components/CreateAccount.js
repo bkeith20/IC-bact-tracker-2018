@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, Image, Button, Alert, ScrollView, TextInput, TouchableOpacity, Dimensions, Picker, StyleSheet, AsyncStorage } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 import t from 'tcomb-form-native';
+import {SecureStore} from 'expo';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const Form = t.form.Form;
@@ -97,14 +98,41 @@ export default class ViewerScreen extends React.Component {
         this.setState({options: this.defaultOptions});
         const val = this._accform.getValue();
         if(val){
-            console.log(val);
-            await AsyncStorage.setItem(val.netpassUsername, val.password);
-            const inpass = await AsyncStorage.getItem(val.netpassUsername);
-            console.log(inpass);
-            const inNetpass = val.netpassUsername;
             //save to DB here
-            this.props.navigation.navigate('Home', {inNetpass: inNetpass});
-            
+            //check account does not already exist!!!!!!!
+            try{
+                const toSend = this._accform.getValue();
+                const toSendStr = JSON.stringify(toSend);
+                let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioDB3.php',{
+                   method: 'POST',
+                   headers: {
+                       Accept: 'application/json',
+                       'Content-Type': 'application/json',
+                   },
+                    body: toSendStr,
+                });
+                //console.log(response);
+                let rJSON = await response.json();
+                console.log(rJSON["submitted"]);
+                if(rJSON["submitted"]==="true"){
+                    const toSave = {
+                        userName: toSend.netpassUsername,
+                        password: toSend.password,
+                        rememberMe: false,
+                    };
+                    const inNetpass = toSend.netpassUsername;
+                    const toSaveStr = JSON.stringify(toSave);
+                    await SecureStore.setItemAsync('deviceUser', toSaveStr);
+                    const retrieved = await SecureStore.getItemAsync('deviceUser');
+                    console.log(retrieved);
+                    this.props.navigation.navigate('Home', {inNetpass: inNetpass});
+                }
+                else{
+                    Alert.alert("Account already exists!")
+                }
+            } catch(error){
+                console.log(error);
+            }  
         }
         else{
             if(this.state.value.confirmPassword && !samePasswords(this.state.value)){

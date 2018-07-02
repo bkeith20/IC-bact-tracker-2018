@@ -15,6 +15,7 @@ export default class HomeScreen extends React.Component {
             ),
         };
     };
+
   render() {
       const { navigation } = this.props;
       const inNetpass = navigation.getParam('inNetpass', 'NO-ID');

@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, Image, Button, Alert, ScrollView, TextInput, TouchableHighlight, Dimensions, Picker, StyleSheet, WebView, Platform, AsyncStorage } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
+import {SecureStore, ScreenOrientation} from 'expo';
 
 const {height, width} = Dimensions.get('window');
 
@@ -14,27 +15,30 @@ export default class HelpScreen extends React.Component {
     
     //just before screen is rendered this function checks if the help screen has been visited before(value stored in async), if it has not: the value is set in async and the value is changed in the database
     async componentDidMount(){
+        ScreenOrientation.allow(ScreenOrientation.Orientation.ALL);
          //console.log("function running");
         try{
-        const value = await AsyncStorage.getItem('@MySuperStore:helpScreenSeen');
-        this.setState({hasVisited: value});
-        console.log('1 '+this.state.hasVisited);
-        if(this.state.hasVisited==null){
-            console.log("got here");
-            //save that this screen has been visited
-            await AsyncStorage.setItem('@MySuperStore:helpScreenSeen', 'true');
-            const value1 = await AsyncStorage.getItem('@MySuperStore:helpScreenSeen');
-            this.setState({hasVisited: value1});
-            console.log('2 '+this.state.hasVisited);
-            //set value in database
-            //TODO 
-        }
-        console.log('3 '+this.state.hasVisited);
-        //Alert.alert("Help screen has been visited "+this.state.hasVisited);
+            const value = await SecureStore.getItemAsync('videoWatched');
+            console.log('1 '+value);
+            if(value==null){
+                console.log("got here");
+                //save that this screen has been visited
+                await SecureStore.setItemAsync('videoWatched', 'true');
+                const value1 = await SecureStore.getItemAsync('videoWatched');
+                console.log('2 '+value1);
+                //set value in database
+                //TODO 
+                
+            }
+            console.log('3 '+value);
         }catch (error) {
             console.log("Error accessing data " + error);
         }
     } 
+    
+    componentWillUnmount(){
+        ScreenOrientation.allow(ScreenOrientation.Orientation.PORTRAIT_UP);
+    }
     
   render() {
       
@@ -46,8 +50,6 @@ export default class HelpScreen extends React.Component {
                     javaScriptEnabled={true}
                     domStorageEnabled={true}
                     source={{uri: 'https://www.youtube.com/embed/D86RtevtfrA'}}
-                    //this is where variable telling video has been watched is set
-                    //onLoadStart={() => this.toggleHelpSeen.bind(this)}
                 />
             </View>
             <ScrollView showsVerticalScrollIndicator={false}>
