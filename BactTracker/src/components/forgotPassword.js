@@ -49,19 +49,17 @@ const styles = StyleSheet.create({
     fontSize: 20,
     padding: 10
   },
-  buttonText: {
-    fontSize: 18,
-    color: 'white',
-    alignSelf: 'center'
-  },
-  button: {
-    height: 36,
+    button: {
     backgroundColor: '#003b71',
-    borderColor: '#003b71',
-    borderWidth: 1,
+    width: 180,
+    height: 40,
     borderRadius: 8,
     marginBottom: 10,
-    alignSelf: 'stretch',
-    justifyContent: 'center'
-  }
+  },
+  buttonText: {
+    alignSelf: 'center',
+    color: 'white',
+    fontWeight: 'bold',
+    padding: 10,
+  },
 });
