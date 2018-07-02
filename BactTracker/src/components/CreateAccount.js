@@ -98,18 +98,6 @@ export default class ViewerScreen extends React.Component {
         this.setState({options: this.defaultOptions});
         const val = this._accform.getValue();
         if(val){
-            console.log(val);
-            const inNetpass = val.netpassUsername;
-            const toSave = {
-                userName: inNetpass,
-                password: val.password,
-                rememberMe: false,
-            };
-            const toSaveStr = JSON.stringify(toSave);
-            console.log(toSaveStr);
-            await SecureStore.setItemAsync('deviceUser', toSaveStr);
-            const retrieved = await SecureStore.getItemAsync('deviceUser');
-            console.log(retrieved);
             //save to DB here
             //check account does not already exist!!!!!!!
             try{
@@ -123,14 +111,28 @@ export default class ViewerScreen extends React.Component {
                    },
                     body: toSendStr,
                 });
+                //console.log(response);
                 let rJSON = await response.json();
-                console.log(rJSON);
+                console.log(rJSON["submitted"]);
+                if(rJSON["submitted"]==="true"){
+                    const toSave = {
+                        userName: toSend.netpassUsername,
+                        password: toSend.password,
+                        rememberMe: false,
+                    };
+                    const inNetpass = toSend.netpassUsername;
+                    const toSaveStr = JSON.stringify(toSave);
+                    await SecureStore.setItemAsync('deviceUser', toSaveStr);
+                    const retrieved = await SecureStore.getItemAsync('deviceUser');
+                    console.log(retrieved);
+                    this.props.navigation.navigate('Home', {inNetpass: inNetpass});
+                }
+                else{
+                    Alert.alert("Account already exists!")
+                }
             } catch(error){
                 console.log(error);
-            }
-            
-            this.props.navigation.navigate('Home', {inNetpass: inNetpass});
-            
+            }  
         }
         else{
             if(this.state.value.confirmPassword && !samePasswords(this.state.value)){
