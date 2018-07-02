@@ -93,16 +93,100 @@
                         }
                         else{
                             //check database here
+                            //send username entered and if in DB return password 
+                            //if not in database return "false" and show alert
                             //if in database and correct save to 'deviceUser'
                             //else show this alert
-                            Alert.alert("Account Does not exist!!");
+                            try{
+                                const finfo = this._form.getValue();
+                                const uname = finfo.Netpass;
+                                const toSendStr = JSON.stringify({uname: uname});
+                                console.log(toSendStr);
+                                let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioLogin.php',{
+                                    method: 'POST',
+                                    headers: {
+                                        Accept: 'application/json',
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: toSendStr,
+                                });
+                                //console.log(response);
+                                let rJSON = await response.json();
+                                console.log(rJSON["pass"]);
+                                if(rJSON["pass"]!=="false"){
+                                    //here
+                                    const toSave = {
+                                        userName: uname,
+                                        password: rJSON["pass"],
+                                        rememberMe: false,
+                                    };
+                                    const inNetpass = finfo.netpassUsername;
+                                    const toSaveStr = JSON.stringify(toSave);
+                                    await SecureStore.setItemAsync('deviceUser', toSaveStr);
+                                    const retrieved = await SecureStore.getItemAsync('deviceUser');
+                                    console.log(retrieved);
+                                    if(finfo.Password===toSave.password){
+                                        this.props.navigation.navigate('Home', {inNetpass: inNetpass});
+                                    }
+                                    else{
+                                       Alert.alert("Password Incorrect!"); 
+                                    }
+                                }
+                                else{
+                                    Alert.alert("Account Does not exist!!");
+                                }
+                            } catch(error){
+                                console.log(error);
+                            }  
                         }
                     }
                     else{
                         //check database here
-                        //if in database and correct save to 'deviceUser'
-                        //else show this alert
-                        Alert.alert("Account Does not exist!!");
+                            //send username entered and if in DB return password 
+                            //if not in database return "false" and show alert
+                            //if in database and correct save to 'deviceUser'
+                            //else show this alert
+                            try{
+                                const finfo = this._form.getValue();
+                                const uname = finfo.Netpass;
+                                const toSendStr = JSON.stringify({uname: uname});
+                                console.log(toSendStr);
+                                let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioLogin.php',{
+                                    method: 'POST',
+                                    headers: {
+                                        Accept: 'application/json',
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: toSendStr,
+                                });
+                                //console.log(response);
+                                let rJSON = await response.json();
+                                console.log(rJSON["pass"]);
+                                if(rJSON["pass"]!=="false"){
+                                    //here
+                                    const toSave = {
+                                        userName: uname,
+                                        password: rJSON["pass"],
+                                        rememberMe: false,
+                                    };
+                                    const inNetpass = finfo.netpassUsername;
+                                    const toSaveStr = JSON.stringify(toSave);
+                                    await SecureStore.setItemAsync('deviceUser', toSaveStr);
+                                    const retrieved = await SecureStore.getItemAsync('deviceUser');
+                                    console.log(retrieved);
+                                    if(finfo.Password===toSave.password){
+                                        this.props.navigation.navigate('Home', {inNetpass: inNetpass});
+                                    }
+                                    else{
+                                       Alert.alert("Password Incorrect!"); 
+                                    }
+                                }
+                                else{
+                                    Alert.alert("Account Does not exist!!");
+                                }
+                            } catch(error){
+                                console.log(error);
+                            } 
                     }
                 } catch (error){
                     console.log(error);
