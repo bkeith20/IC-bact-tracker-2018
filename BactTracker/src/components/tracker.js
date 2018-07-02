@@ -49,9 +49,17 @@ const { SlideInMenu } = renderers;
          );
             //read sample locations for markers in from DB write them into state
             try{
-                let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioDB.php?name=bill',{
-                        method: 'Get',
-                    });
+                let name = {name: "bill"};
+                let req = JSON.stringify(name);
+                let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioDB.php',{
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: req
+                });
+            
                 let responsejson = await response.json();
                 console.log(responsejson+" "+responsejson.length);
                 for (let i =0; i<responsejson.length; i++){
