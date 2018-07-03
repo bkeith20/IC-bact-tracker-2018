@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, Button, Alert, ScrollView, TextInput, TouchableOpacity, Dimensions, Picker, StyleSheet, BackHandler } from 'react-native';
+import { View, Text, Image, Button, Alert, ScrollView, TextInput, TouchableOpacity, Dimensions, Picker, StyleSheet, BackHandler, AsyncStorage } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 
 export default class HomeScreen extends React.Component {
@@ -15,6 +15,33 @@ export default class HomeScreen extends React.Component {
             ),
         };
     };
+
+    async componentDidMount(){
+        let numSaved = await AsyncStorage.getItem('numSavedSamples');
+        numsaved = numSaved*1;
+        if(numSaved!==null && numSaved>0){
+            for (i = 0; i < numSaved; i++){
+                try{
+                    let currSample = await AsyncStorage.getItem('savedSample'+i);
+                    let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioDB4.php', {
+                        method: 'POST',
+                        headers: {
+                            Accept: 'application/json',
+                            'Content-Type': 'application/json',
+                        },
+                        body: currSample,
+                    });
+                    console.log(response);
+                    let rJSON = await response.json();
+                    console.log(rJSON);
+                } catch(error){
+                    console.log(error);
+                }
+            }
+            numsaved = 0;
+            await AsyncStorage.setItem('numSavedSamples', numsaved.toString());
+        }
+    }
 
   render() {
       const { navigation } = this.props;
