@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, Button, Alert, ScrollView, TextInput, TouchableOpacity, Dimensions, Picker, StyleSheet, AsyncStorage } from 'react-native';
+import { View, Text, Image, Button, Alert, ScrollView, TextInput, TouchableOpacity, Dimensions, Picker, StyleSheet, AsyncStorage, NetInfo } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 import t from 'tcomb-form-native';
 import {SecureStore} from 'expo';
@@ -100,39 +100,47 @@ export default class ViewerScreen extends React.Component {
         if(val){
             //save to DB here
             //check account does not already exist!!!!!!!
-            try{
-                const toSend = this._accform.getValue();
-                const toSendStr = JSON.stringify(toSend);
-                let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioDB3.php',{
-                   method: 'POST',
-                   headers: {
-                       Accept: 'application/json',
-                       'Content-Type': 'application/json',
-                   },
-                    body: toSendStr,
-                });
-                //console.log(response);
-                let rJSON = await response.json();
-                console.log(rJSON["submitted"]);
-                if(rJSON["submitted"]==="true"){
-                    const toSave = {
-                        userName: toSend.netpassUsername,
-                        password: toSend.password,
-                        rememberMe: false,
-                    };
-                    const inNetpass = toSend.netpassUsername;
-                    const toSaveStr = JSON.stringify(toSave);
-                    await SecureStore.setItemAsync('deviceUser', toSaveStr);
-                    const retrieved = await SecureStore.getItemAsync('deviceUser');
-                    console.log(retrieved);
-                    this.props.navigation.navigate('Home', {inNetpass: inNetpass});
+            const netInfo = await NetInfo.getConnectionInfo();
+            const connection = netInfo.type;
+            //check if connected to internet
+            if (connection!=="none" && connection!=="unknown"){
+                try{
+                    const toSend = this._accform.getValue();
+                    const toSendStr = JSON.stringify(toSend);
+                    let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioDB3.php',{
+                       method: 'POST',
+                       headers: {
+                           Accept: 'application/json',
+                           'Content-Type': 'application/json',
+                       },
+                        body: toSendStr,
+                    });
+                    //console.log(response);
+                    let rJSON = await response.json();
+                    console.log(rJSON["submitted"]);
+                    if(rJSON["submitted"]==="true"){
+                        const toSave = {
+                            userName: toSend.netpassUsername,
+                            password: toSend.password,
+                            rememberMe: false,
+                        };
+                        const inNetpass = toSend.netpassUsername;
+                        const toSaveStr = JSON.stringify(toSave);
+                        await SecureStore.setItemAsync('deviceUser', toSaveStr);
+                        const retrieved = await SecureStore.getItemAsync('deviceUser');
+                        console.log(retrieved);
+                        this.props.navigation.navigate('Home', {inNetpass: inNetpass});
+                    }
+                    else{
+                        Alert.alert("Account already exists!")
+                    }
+                } catch(error){
+                    console.log(error);
                 }
-                else{
-                    Alert.alert("Account already exists!")
-                }
-            } catch(error){
-                console.log(error);
-            }  
+            }
+            else{
+                Alert.alert("No internet connection! Please turn on mobile data or wifi and retry.");
+            }
         }
         else{
             if(this.state.value.confirmPassword && !samePasswords(this.state.value)){

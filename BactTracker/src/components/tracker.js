@@ -1,5 +1,5 @@
     import React from 'react';
-    import { AppRegistry,StyleSheet, Image, Text, View, Button, TouchableOpacity, TextInput, AsyncStorage, Dimensions } from 'react-native';
+    import { AppRegistry,StyleSheet, Image, Text, View, Button, TouchableOpacity, TextInput, AsyncStorage, Dimensions, NetInfo, Alert } from 'react-native';
     import { createStackNavigator, TabNavigator} from 'react-navigation';
     import FormData from 'FormData';
     import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
@@ -48,50 +48,44 @@ const { SlideInMenu } = renderers;
 
          );
             //read sample locations for markers in from DB write them into state
-            try{
-                let name = {name: "bill"};
-                let req = JSON.stringify(name);
-                let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioDB.php',{
-                    method: 'POST',
-                    headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json',
-                    },
-                    body: req
-                });
-            
-                let responsejson = await response.json();
-                console.log(responsejson+" "+responsejson.length);
-                for (let i =0; i<responsejson.length; i++){
-                    let newMarker = {title: responsejson[i]["building"],
-                                 coordinates: {
-                                     latitude: (responsejson[i]["lat"]*1),
-                                     longitude: (responsejson[i]["long"]*1),
-                                 },
-                                 samplesLeft: (responsejson[i]["sleft"]),
-                                 pinColor: (responsejson[i]["color"]),
-                                 key: i,
-                                };
-                     this.setState(prevState => ({ markers: [...prevState.markers, newMarker]}));
-                     this.setState(prevState => ({ options: [...prevState.options, responsejson[i]["options"]]}));
-                     //console.log(this.state.options);
-                };
-            /*
-                let newMarker = {title: responseJson["building"],
-                                 coordinates: {
-                                     latitude: (responseJson["lat"]*1),
-                                     longitude: (responseJson["long"]*-1),
-                                 },
-                                 samplesLeft: 4,
-                                 pinColor: "yellow",
-                                 key: 4,
-                                };
-                //console.log(newMarker);
-                this.setState(prevState => ({ markers: [...prevState.markers, newMarker]}));
-                //console.log(this.state.markers);
-                */
-            } catch (error){
-                console.error(error);
+            const netInfo = await NetInfo.getConnectionInfo();
+            const connection = netInfo.type;
+            //check if connected to internet
+            if (connection!=="none" && connection!=="unknown"){  
+                try{
+                    let name = {name: "bill"};
+                    let req = JSON.stringify(name);
+                    let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioDB.php',{
+                        method: 'POST',
+                        headers: {
+                            Accept: 'application/json',
+                            'Content-Type': 'application/json',
+                        },
+                        body: req
+                    });
+
+                    let responsejson = await response.json();
+                    console.log(responsejson+" "+responsejson.length);
+                    for (let i =0; i<responsejson.length; i++){
+                        let newMarker = {title: responsejson[i]["building"],
+                                     coordinates: {
+                                         latitude: (responsejson[i]["lat"]*1),
+                                         longitude: (responsejson[i]["long"]*1),
+                                     },
+                                     samplesLeft: (responsejson[i]["sleft"]),
+                                     pinColor: (responsejson[i]["color"]),
+                                     key: i,
+                                    };
+                         this.setState(prevState => ({ markers: [...prevState.markers, newMarker]}));
+                         this.setState(prevState => ({ options: [...prevState.options, responsejson[i]["options"]]}));
+                         //console.log(this.state.options);
+                    };
+                } catch (error){
+                    console.error(error);
+                }
+            }
+            else{
+                Alert.alert("No internet connection! Please turn on mobile data or wifi and retry.");
             }
        }
 

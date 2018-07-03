@@ -1,5 +1,5 @@
     import React from 'react';
-    import { AppRegistry,StyleSheet, Image, Text, View, Button, TouchableOpacity, TextInput, AsyncStorage, Alert} from 'react-native';
+    import { AppRegistry,StyleSheet, Image, Text, View, Button, TouchableOpacity, TextInput, AsyncStorage, Alert, NetInfo} from 'react-native';
     import { createStackNavigator, TabNavigator} from 'react-navigation';
     import {SecureStore} from 'expo';
     import t from 'tcomb-form-native'; 
@@ -97,47 +97,56 @@
                             //if not in database return "false" and show alert
                             //if in database and correct save to 'deviceUser'
                             //else show this alert
-                            try{
-                                const finfo = this._form.getValue();
-                                const uname = finfo.Netpass;
-                                const toSendStr = JSON.stringify({uname: uname});
-                                console.log(toSendStr);
-                                let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioLogin.php',{
-                                    method: 'POST',
-                                    headers: {
-                                        Accept: 'application/json',
-                                        'Content-Type': 'application/json',
-                                    },
-                                    body: toSendStr,
-                                });
-                                //console.log(response);
-                                let rJSON = await response.json();
-                                console.log(rJSON["pass"]);
-                                if(rJSON["pass"]!=="false"){
-                                    //here
-                                    const toSave = {
-                                        userName: uname,
-                                        password: rJSON["pass"],
-                                        rememberMe: false,
-                                    };
-                                    const inNetpass = finfo.netpassUsername;
-                                    const toSaveStr = JSON.stringify(toSave);
-                                    await SecureStore.setItemAsync('deviceUser', toSaveStr);
-                                    const retrieved = await SecureStore.getItemAsync('deviceUser');
-                                    console.log(retrieved);
-                                    if(finfo.Password===toSave.password){
-                                        this.props.navigation.navigate('Home', {inNetpass: inNetpass});
+                            
+                            const netInfo = await NetInfo.getConnectionInfo();
+                            const connection = netInfo.type;
+                            //check if connected to internet
+                            if (connection!=="none" && connection!=="unknown"){    
+                                try{
+                                    const finfo = this._form.getValue();
+                                    const uname = finfo.Netpass;
+                                    const toSendStr = JSON.stringify({uname: uname});
+                                    console.log(toSendStr);
+                                    let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioLogin.php',{
+                                        method: 'POST',
+                                        headers: {
+                                            Accept: 'application/json',
+                                            'Content-Type': 'application/json',
+                                        },
+                                        body: toSendStr,
+                                    });
+                                    //console.log(response);
+                                    let rJSON = await response.json();
+                                    console.log(rJSON["pass"]);
+                                    if(rJSON["pass"]!=="false"){
+                                        //here
+                                        const toSave = {
+                                            userName: uname,
+                                            password: rJSON["pass"],
+                                            rememberMe: false,
+                                        };
+                                        const inNetpass = finfo.netpassUsername;
+                                        const toSaveStr = JSON.stringify(toSave);
+                                        await SecureStore.setItemAsync('deviceUser', toSaveStr);
+                                        const retrieved = await SecureStore.getItemAsync('deviceUser');
+                                        console.log(retrieved);
+                                        if(finfo.Password===toSave.password){
+                                            this.props.navigation.navigate('Home', {inNetpass: inNetpass});
+                                        }
+                                        else{
+                                           Alert.alert("Password Incorrect!"); 
+                                        }
                                     }
                                     else{
-                                       Alert.alert("Password Incorrect!"); 
+                                        Alert.alert("Account Does not exist!!");
                                     }
+                                } catch(error){
+                                    console.log(error);
                                 }
-                                else{
-                                    Alert.alert("Account Does not exist!!");
-                                }
-                            } catch(error){
-                                console.log(error);
-                            }  
+                            }
+                            else{
+                                Alert.alert("No internet connection! Please turn on mobile data or wifi and retry.");
+                            }
                         }
                     }
                     else{
@@ -146,6 +155,10 @@
                             //if not in database return "false" and show alert
                             //if in database and correct save to 'deviceUser'
                             //else show this alert
+                        const netInfo = await NetInfo.getConnectionInfo();
+                        const connection = netInfo.type;
+                        //check if connected to internet
+                        if (connection!=="none" && connection!=="unknown"){ 
                             try{
                                 const finfo = this._form.getValue();
                                 const uname = finfo.Netpass;
@@ -187,6 +200,10 @@
                             } catch(error){
                                 console.log(error);
                             } 
+                        }
+                        else{
+                            Alert.alert("No internet connection! Please turn on mobile data or wifi and retry.");
+                        }
                     }
                 } catch (error){
                     console.log(error);
