@@ -65,7 +65,7 @@ const { SlideInMenu } = renderers;
                     });
 
                     let responsejson = await response.json();
-                    console.log(responsejson+" "+responsejson.length);
+                    //console.log(responsejson+" "+responsejson.length);
                     for (let i =0; i<responsejson.length; i++){
                         let newMarker = {title: responsejson[i]["building"],
                                      coordinates: {
