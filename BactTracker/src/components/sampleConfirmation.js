@@ -49,6 +49,7 @@ export default class ConfirmScreen extends React.Component {
                 if(numSaved!==null && numSaved>0){
                     for (i = 0; i < numSaved; i++){
                         try{
+                            //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!MAKE SURE SAMPLE NUMBER IN DB IS UPDATED WHEN A NEW SAMPLE FOR A LOCTION IS SUBMITTED!!!!!!!11
                             let currSample = await AsyncStorage.getItem('savedSample'+i);
                             let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioDB4.php', {
                                 method: 'POST',

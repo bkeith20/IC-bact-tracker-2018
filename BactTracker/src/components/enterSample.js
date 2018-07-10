@@ -3,7 +3,7 @@ import { AppRegistry,StyleSheet, Image, Text, View, Button, TouchableOpacity, Te
 import { createStackNavigator } from 'react-navigation';
 import t from 'tcomb-form-native'; 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import moment from 'moment';
+
 
 const Form = t.form.Form;
     
@@ -57,7 +57,7 @@ export default class enterSample extends React.Component{
                 SampleNotes: Fvalue.notes,
                 SampleObject: Fvalue.sampleObject,
                 User: inNetpass,
-                SampleDate: moment().format('YYYY-MM-DD hh:mm:ss'),
+                SampleDate: sDate.getFullYear()+"-"+(sDate.getMonth()+1)+"-"+sDate.getDate()+" "+sDate.getHours()+":"+sDate.getMinutes()+":"+sDate.getSeconds(),
                 Latitude: sampleLat,
                 Longitude: sampleLong
             }

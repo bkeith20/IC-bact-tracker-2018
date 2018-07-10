@@ -174,7 +174,7 @@ export default class ViewerScreen extends React.Component {
   render() {
       
     return (
-    <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}  >
+    <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled" >
       
             <View style={styles.container}>
                 <Form
