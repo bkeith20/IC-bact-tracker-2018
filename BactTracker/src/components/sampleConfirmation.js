@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, Button, Alert, ScrollView, TextInput, TouchableHighlight, Dimensions, Picker, StyleSheet, TouchableOpacity, AsyncStorage } from 'react-native';
+import { View, Text, Image, Button, Alert, ScrollView, TextInput, TouchableHighlight, Dimensions, Picker, StyleSheet, TouchableOpacity, AsyncStorage, NetInfo } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 
 export default class ConfirmScreen extends React.Component {
@@ -21,23 +21,67 @@ export default class ConfirmScreen extends React.Component {
             
     async alertPress(info){
             //send info to DB
-            try{
-                const sample = info;
-                const sampleStr = JSON.stringify(sample);
-                console.log(sampleStr)
-                let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioDB4.php',{
-                    method: 'POST',
-                    headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json',
-                    },
-                    body: sampleStr,
-                });
-                console.log(response);
-                let rJSON = await response.json();
-                console.log(rJSON);
-            }catch(error) {
-                console.log(error);
+            const netInfo = await NetInfo.getConnectionInfo();
+            const connection = netInfo.type;
+            //check if connected to internet
+            if (connection!=="none" && connection!=="unknown"){
+                //if connected send sample to DB
+                try{
+                    const sample = info;
+                    const sampleStr = JSON.stringify(sample);
+                    console.log(sampleStr);
+                    let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioDB4.php',{
+                        method: 'POST',
+                        headers: {
+                            Accept: 'application/json',
+                            'Content-Type': 'application/json',
+                        },
+                        body: sampleStr,
+                    });
+                    console.log(response);
+                    let rJSON = await response.json();
+                    console.log(rJSON);
+                }catch(error) {
+                    console.log(error);
+                }
+                let numSaved = await AsyncStorage.getItem('numSavedSamples');
+                numsaved = numSaved*1;
+                if(numSaved!==null && numSaved>0){
+                    for (i = 0; i < numSaved; i++){
+                        try{
+                            let currSample = await AsyncStorage.getItem('savedSample'+i);
+                            let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioDB4.php', {
+                                method: 'POST',
+                                headers: {
+                                    Accept: 'application/json',
+                                    'Content-Type': 'application/json',
+                                },
+                                body: currSample,
+                            });
+                            console.log(response);
+                            let rJSON = await response.json();
+                            console.log(rJSON);
+                        } catch(error){
+                            console.log(error);
+                        }
+                    }
+                    numSaved = 0;
+                    await AsyncStorage.setItem('numSavedSamples', numSaved.toString());
+                }
+            }
+            else{
+                //if not connected save locally to be sent later
+                console.log("offline save")
+                const sampleStr = JSON.stringify(info);
+                console.log(sampleStr);
+                let numSaved = await AsyncStorage.getItem('numSavedSamples');
+                if(numSaved===null){
+                    numsaved=0;
+                }
+                numsaved = numSaved*1;
+                await AsyncStorage.setItem('savedSample'+numsaved,sampleStr);
+                numSaved+=1;
+                await AsyncStorage.setItem('numSavedSamples', numSaved.toString());
             }
             this.props.navigation.navigate('Tracker');
         } 

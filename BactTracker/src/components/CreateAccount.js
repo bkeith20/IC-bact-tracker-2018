@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, Button, Alert, ScrollView, TextInput, TouchableOpacity, Dimensions, Picker, StyleSheet, AsyncStorage } from 'react-native';
+import { View, Text, Image, Button, Alert, ScrollView, TextInput, TouchableOpacity, Dimensions, Picker, StyleSheet, AsyncStorage, NetInfo } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 import t from 'tcomb-form-native';
 import {SecureStore} from 'expo';
@@ -16,11 +16,19 @@ const Section = t.enums({
 });
 
 const Password = t.refinement(t.String, function (s) {
-  return s.length >= 2;
+  return (s.length >= 4)&&(s.length<50);
 });
 
 const Email = t.refinement(t.String, function (s) {
-  return /@/.test(s);
+  return (/@ithaca.edu/.test(s))&&(s.length<100);
+});
+
+const Name = t.refinement(t.String, function (s) {
+  return (s.length >= 2)&&(s.length<50);
+});
+
+const Initials = t.refinement(t.String, function (s) {
+  return (s.length >= 2)&&(s.length<10);
 });
 
 function samePasswords(x) {
@@ -28,9 +36,9 @@ function samePasswords(x) {
 }
 
 const Student = t.subtype(t.struct({
-    firstName: t.String,
-    lastName: t.String,
-    netpassUsername: t.String,
+    firstName: Name,
+    lastName: Name,
+    netpassUsername: Name,
     password: Password,
     confirmPassword: Password,
     initials: t.String,
@@ -86,6 +94,7 @@ export default class ViewerScreen extends React.Component {
         },
         email: {
             label: "Email",
+            help: 'Please be sure to use your Ithaca email',
             error: 'Invalid Email',
         },
         section: {
@@ -100,39 +109,47 @@ export default class ViewerScreen extends React.Component {
         if(val){
             //save to DB here
             //check account does not already exist!!!!!!!
-            try{
-                const toSend = this._accform.getValue();
-                const toSendStr = JSON.stringify(toSend);
-                let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioDB3.php',{
-                   method: 'POST',
-                   headers: {
-                       Accept: 'application/json',
-                       'Content-Type': 'application/json',
-                   },
-                    body: toSendStr,
-                });
-                //console.log(response);
-                let rJSON = await response.json();
-                console.log(rJSON["submitted"]);
-                if(rJSON["submitted"]==="true"){
-                    const toSave = {
-                        userName: toSend.netpassUsername,
-                        password: toSend.password,
-                        rememberMe: false,
-                    };
-                    const inNetpass = toSend.netpassUsername;
-                    const toSaveStr = JSON.stringify(toSave);
-                    await SecureStore.setItemAsync('deviceUser', toSaveStr);
-                    const retrieved = await SecureStore.getItemAsync('deviceUser');
-                    console.log(retrieved);
-                    this.props.navigation.navigate('Home', {inNetpass: inNetpass});
+            const netInfo = await NetInfo.getConnectionInfo();
+            const connection = netInfo.type;
+            //check if connected to internet
+            if (connection!=="none" && connection!=="unknown"){
+                try{
+                    const toSend = this._accform.getValue();
+                    const toSendStr = JSON.stringify(toSend);
+                    let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioDB3.php',{
+                       method: 'POST',
+                       headers: {
+                           Accept: 'application/json',
+                           'Content-Type': 'application/json',
+                       },
+                        body: toSendStr,
+                    });
+                    console.log(response);
+                    let rJSON = await response.json();
+                    console.log(rJSON["submitted"]);
+                    if(rJSON["submitted"]==="true"){
+                        const toSave = {
+                            userName: toSend.netpassUsername,
+                            password: toSend.password,
+                            rememberMe: false,
+                        };
+                        const inNetpass = toSend.netpassUsername;
+                        const toSaveStr = JSON.stringify(toSave);
+                        await SecureStore.setItemAsync('deviceUser', toSaveStr);
+                        const retrieved = await SecureStore.getItemAsync('deviceUser');
+                        console.log(retrieved);
+                        this.props.navigation.navigate('Home', {inNetpass: inNetpass});
+                    }
+                    else{
+                        Alert.alert(rJSON["message"]);
+                    }
+                } catch(error){
+                    console.log(error);
                 }
-                else{
-                    Alert.alert("Account already exists!")
-                }
-            } catch(error){
-                console.log(error);
-            }  
+            }
+            else{
+                Alert.alert("No internet connection! Please turn on mobile data or wifi and retry.");
+            }
         }
         else{
             if(this.state.value.confirmPassword && !samePasswords(this.state.value)){
@@ -157,7 +174,7 @@ export default class ViewerScreen extends React.Component {
   render() {
       
     return (
-    <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false} >
+    <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}  >
       
             <View style={styles.container}>
                 <Form
