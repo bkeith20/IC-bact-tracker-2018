@@ -13,6 +13,14 @@ export default class HomeScreen extends React.Component {
                     <Text style={{fontWeight: 'bold', color: 'white', padding: 10, fontSize: 16, borderColor: 'white', borderRadius: 8, borderWidth: 1 }}>Logout</Text>
                 </TouchableOpacity>
             ),
+            headerRight: (
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('AccountReview',{inNetpass: navigation.getParam('inNetpass')})}
+                    style={{paddingLeft: 10}}
+                >
+                    <Text style={{fontWeight: 'bold', color: 'white', padding: 10, fontSize: 16, borderColor: 'white', borderRadius: 8, borderWidth: 1 }}>{navigation.getParam('inNetpass')}</Text>
+                </TouchableOpacity>
+            ),
         };
     };
 

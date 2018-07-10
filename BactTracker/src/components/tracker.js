@@ -53,6 +53,7 @@ const { SlideInMenu } = renderers;
             //check if connected to internet
             if (connection!=="none" && connection!=="unknown"){  
                 try{
+                    //make name in Netpass !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
                     let name = {name: "bill"};
                     let req = JSON.stringify(name);
                     let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioDB.php',{
