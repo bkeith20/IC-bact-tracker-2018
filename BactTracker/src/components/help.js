@@ -21,7 +21,7 @@ export default class HelpScreen extends React.Component {
             const value = await SecureStore.getItemAsync('videoWatched');
             console.log('1 '+value);
             if(value==null){
-                console.log("got here");
+                //console.log("got here");
                 //save that this screen has been visited
                 await SecureStore.setItemAsync('videoWatched', 'true');
                 const value1 = await SecureStore.getItemAsync('videoWatched');
@@ -49,17 +49,14 @@ export default class HelpScreen extends React.Component {
                     style={styles.view}
                     javaScriptEnabled={true}
                     domStorageEnabled={true}
-                    source={{uri: 'https://www.youtube.com/embed/D86RtevtfrA'}}
+                    source={{uri: 'https://www.youtube.com/embed/NRqIn1gO1kU'}}
                 />
             </View>
             <ScrollView showsVerticalScrollIndicator={false}>
             <View style={{padding: 10}}>
-                <Text style={styles.title}>This is the Help Screen</Text>
-                <Text style={styles.regularText}>These can be written instructions to accompany the video.</Text>
+                <Text style={styles.title}>No help information is currently available</Text>
                 <Text style={styles.subtitles}>Step 1</Text>
-                <Text style={styles.regularText}>These can be written instructions to accompany the video.</Text>
                 <Text style={styles.subtitles}>Step 2</Text>
-                <Text style={styles.regularText}>These can be written instructions to accompany the video.</Text>
                 <Text style={styles.subtitles}>Step 3</Text>
                 <Text style={styles.subtitles}>Step 4</Text>
                 <Text style={styles.subtitles}>Step 5</Text>

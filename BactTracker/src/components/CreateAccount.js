@@ -16,11 +16,19 @@ const Section = t.enums({
 });
 
 const Password = t.refinement(t.String, function (s) {
-  return s.length >= 2;
+  return (s.length >= 4)&&(s.length<50);
 });
 
 const Email = t.refinement(t.String, function (s) {
-  return /@/.test(s);
+  return (/@ithaca.edu/.test(s))&&(s.length<100);
+});
+
+const Name = t.refinement(t.String, function (s) {
+  return (s.length >= 2)&&(s.length<50);
+});
+
+const Initials = t.refinement(t.String, function (s) {
+  return (s.length >= 2)&&(s.length<10);
 });
 
 function samePasswords(x) {
@@ -28,9 +36,9 @@ function samePasswords(x) {
 }
 
 const Student = t.subtype(t.struct({
-    firstName: t.String,
-    lastName: t.String,
-    netpassUsername: t.String,
+    firstName: Name,
+    lastName: Name,
+    netpassUsername: Name,
     password: Password,
     confirmPassword: Password,
     initials: t.String,
@@ -86,6 +94,7 @@ export default class ViewerScreen extends React.Component {
         },
         email: {
             label: "Email",
+            help: 'Please be sure to use your Ithaca email',
             error: 'Invalid Email',
         },
         section: {
@@ -115,7 +124,7 @@ export default class ViewerScreen extends React.Component {
                        },
                         body: toSendStr,
                     });
-                    //console.log(response);
+                    console.log(response);
                     let rJSON = await response.json();
                     console.log(rJSON["submitted"]);
                     if(rJSON["submitted"]==="true"){
@@ -132,7 +141,7 @@ export default class ViewerScreen extends React.Component {
                         this.props.navigation.navigate('Home', {inNetpass: inNetpass});
                     }
                     else{
-                        Alert.alert("Account already exists!")
+                        Alert.alert(rJSON["message"]);
                     }
                 } catch(error){
                     console.log(error);
@@ -165,7 +174,7 @@ export default class ViewerScreen extends React.Component {
   render() {
       
     return (
-    <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false} >
+    <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}  >
       
             <View style={styles.container}>
                 <Form

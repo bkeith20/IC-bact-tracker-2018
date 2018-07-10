@@ -76,6 +76,7 @@ const { SlideInMenu } = renderers;
                                      pinColor: (responsejson[i]["color"]),
                                      key: i,
                                     };
+                         //console.log(responsejson[i]);
                          this.setState(prevState => ({ markers: [...prevState.markers, newMarker]}));
                          this.setState(prevState => ({ options: [...prevState.options, responsejson[i]["options"]]}));
                          //console.log(this.state.options);
@@ -107,7 +108,7 @@ const { SlideInMenu } = renderers;
              );
              var latD = Math.abs(areaCoordinates.latitude - this.state.latitude);
              var lonD = Math.abs(areaCoordinates.longitude - this.state.longitude);
-             var lonThres = 8/305775;
+             var lonThres = 8/77136;
              var latThres = 8/77136;
              console.log(latD+" "+latThres)
              console.log(lonD+" "+lonThres)
