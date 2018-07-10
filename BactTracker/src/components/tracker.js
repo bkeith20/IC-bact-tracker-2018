@@ -53,7 +53,10 @@ const { SlideInMenu } = renderers;
             //check if connected to internet
             if (connection!=="none" && connection!=="unknown"){  
                 try{
-                    let name = {name: "bill"};
+                    //send in user name to ensure locations sampled by the user no longer show up
+                    const { navigation } = this.props;
+                    const inNetpass = navigation.getParam('inNetpass', 'NO-ID');
+                    let name = {name: inNetpass};
                     let req = JSON.stringify(name);
                     let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioDB.php',{
                         method: 'POST',
