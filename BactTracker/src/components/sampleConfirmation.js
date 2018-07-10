@@ -84,7 +84,7 @@ export default class ConfirmScreen extends React.Component {
                 numSaved+=1;
                 await AsyncStorage.setItem('numSavedSamples', numSaved.toString());
             }
-            this.props.navigation.navigate('Tracker');
+            this.props.navigation.navigate('Home', {inNetpass: info.Users});
         } 
     
   render() {
