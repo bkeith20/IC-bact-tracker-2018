@@ -97,7 +97,7 @@
                             //if not in database return "false" and show alert
                             //if in database and correct save to 'deviceUser'
                             //else show this alert
-                            
+                            //may want to us the isconnected property instead of get Connection info!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                             const netInfo = await NetInfo.getConnectionInfo();
                             const connection = netInfo.type;
                             //check if connected to internet

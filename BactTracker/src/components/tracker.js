@@ -20,6 +20,19 @@ const { SlideInMenu } = renderers;
     var descripton = "";
 
     export default class tracker extends React.Component {
+        static navigationOptions = ({navigation}) => {
+            const inNetpass = navigation.getParam('inNetpass', 'NO-ID');
+        return {
+            headerRight: (
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('SampleReview', {inNetpass: inNetpass})}
+                    style={{paddingLeft: 10}}
+                >
+                    <Text style={{fontWeight: 'bold', color: 'white', padding: 10, fontSize: 16, borderColor: 'white', borderRadius: 8, borderWidth: 1 }}>My Samples</Text>
+                </TouchableOpacity>
+            ),
+        };
+    };
 
         constructor(props) {
         super(props);
@@ -68,7 +81,7 @@ const { SlideInMenu } = renderers;
                     });
 
                     let responsejson = await response.json();
-                    //console.log(responsejson+" "+responsejson.length);
+                    console.log(responsejson+" "+responsejson.length);
                     for (let i =0; i<responsejson.length; i++){
                         let newMarker = {title: responsejson[i]["building"],
                                      coordinates: {
