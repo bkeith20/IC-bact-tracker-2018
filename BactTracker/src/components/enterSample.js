@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppRegistry,StyleSheet, Image, Text, View, Button, TouchableOpacity, TextInput, AsyncStorage, ScrollView} from 'react-native';
+import { AppRegistry,StyleSheet, Image, Text, View, Button, TouchableOpacity, TextInput, AsyncStorage, ScrollView, NetInfo} from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 import t from 'tcomb-form-native'; 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -64,6 +64,18 @@ export default class enterSample extends React.Component{
             this.props.navigation.navigate('Confirmation', {fInfo: formInfo, inNetpass: inNetpass});
         }
     }
+    
+    async help(){
+        const netInfo = await NetInfo.getConnectionInfo();
+        const connection = netInfo.type;
+        //check if connected to internet
+        if (connection!=="none" && connection!=="unknown"){
+            this.props.navigation.navigate('Help');
+        }
+        else{
+            Alert.alert("No internet connection! Please turn on mobile data or wifi and retry.")
+        }
+    }
 
     
     
@@ -109,6 +121,15 @@ export default class enterSample extends React.Component{
                     <Text style={styles.buttonText}>Submit</Text>
                 </View>
             </TouchableOpacity>
+            
+                <TouchableOpacity
+                        onPress={() => this.help()}
+                        style={styles.button}
+                        disabled={false}
+                    >
+                        <Text style={styles.buttonText}>HELP</Text>
+                    </TouchableOpacity> 
+            
             
         
             </KeyboardAwareScrollView>
