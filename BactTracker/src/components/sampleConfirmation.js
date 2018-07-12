@@ -49,7 +49,6 @@ export default class ConfirmScreen extends React.Component {
                 if(numSaved!==null && numSaved>0){
                     for (i = 0; i < numSaved; i++){
                         try{
-                            //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!MAKE SURE SAMPLE NUMBER IN DB IS UPDATED WHEN A NEW SAMPLE FOR A LOCTION IS SUBMITTED!!!!!!!11
                             let currSample = await AsyncStorage.getItem('savedSample'+i);
                             let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioDB4.php', {
                                 method: 'POST',
@@ -66,6 +65,7 @@ export default class ConfirmScreen extends React.Component {
                             console.log(error);
                         }
                     }
+                    Alert.alert(numSaved+"Locally stored samples have been submitted successfully!");
                     numSaved = 0;
                     await AsyncStorage.setItem('numSavedSamples', numSaved.toString());
                 }
@@ -83,6 +83,7 @@ export default class ConfirmScreen extends React.Component {
                 await AsyncStorage.setItem('savedSample'+numsaved,sampleStr);
                 numSaved+=1;
                 await AsyncStorage.setItem('numSavedSamples', numSaved.toString());
+                Alert.alert("No Connection! Sample stored locally!", "Connect to internet and open main menu to submit! You will see another notification once submitted.");
             }
             this.props.navigation.navigate('Home', {inNetpass: info.User});
         } 

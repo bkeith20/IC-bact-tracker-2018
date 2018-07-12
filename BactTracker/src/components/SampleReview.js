@@ -77,7 +77,7 @@ export default class HomeScreen extends React.Component {
         </View>
                 
         <View style={{
-                    flex: 7,
+                    flex: 8,
                     justifyContent: 'center',
                     flexDirection: 'row'
                   }}>
@@ -199,7 +199,9 @@ const styles = StyleSheet.create({
         paddingTop: 12,
         paddingBottom: 10,
         paddingLeft: 10,
-        paddingRight: 10
+        paddingRight: 10,
+        flexWrap: "wrap",
+        flex: 1
     },
     subtitles: {
          color: '#003b71',

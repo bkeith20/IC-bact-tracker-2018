@@ -27,6 +27,7 @@ export default class HomeScreen extends React.Component {
                 for (i = 0; i < numSaved; i++){
                     try{
                         let currSample = await AsyncStorage.getItem('savedSample'+i);
+                        await AsyncStorage.removeItem('savedSample'+i);
                         let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioDB4.php', {
                             method: 'POST',
                             headers: {
@@ -44,6 +45,7 @@ export default class HomeScreen extends React.Component {
                 }
                 numsaved = 0;
                 await AsyncStorage.setItem('numSavedSamples', numsaved.toString());
+                Alert.alert("Locally stored samples have been submitted successfully!");
             }
         }
     }

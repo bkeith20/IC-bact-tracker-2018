@@ -198,7 +198,7 @@ const { SlideInMenu } = renderers;
     const styles = StyleSheet.create({
         menu: {
             height: 80,
-            backgroundColor: '#003b71',
+            backgroundColor: 'red',
             alignItems: 'center',
             
         },

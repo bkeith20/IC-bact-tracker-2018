@@ -125,11 +125,12 @@
                                             password: rJSON["pass"],
                                             rememberMe: false,
                                         };
-                                        const inNetpass = finfo.netpassUsername;
+                                        const inNetpass = finfo.Netpass;
+                                        console.log(finfo);
                                         const toSaveStr = JSON.stringify(toSave);
                                         await SecureStore.setItemAsync('deviceUser', toSaveStr);
                                         const retrieved = await SecureStore.getItemAsync('deviceUser');
-                                        console.log(retrieved);
+                                        console.log(retrieved + "hey");
                                         if(finfo.Password===toSave.password){
                                             this.props.navigation.navigate('Home', {inNetpass: inNetpass});
                                         }
@@ -182,7 +183,7 @@
                                         password: rJSON["pass"],
                                         rememberMe: false,
                                     };
-                                    const inNetpass = finfo.netpassUsername;
+                                    const inNetpass = finfo.Netpass;
                                     const toSaveStr = JSON.stringify(toSave);
                                     await SecureStore.setItemAsync('deviceUser', toSaveStr);
                                     const retrieved = await SecureStore.getItemAsync('deviceUser');
