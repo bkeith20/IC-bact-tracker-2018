@@ -122,13 +122,13 @@ export default class enterSample extends React.Component{
                 </View>
             </TouchableOpacity>
             
-                <TouchableOpacity
-                        onPress={() => this.help()}
-                        style={styles.button}
-                        disabled={false}
-                    >
-                        <Text style={styles.buttonText}>HELP</Text>
-                    </TouchableOpacity> 
+            <TouchableOpacity
+                onPress={() => this.help()}
+                style={styles.button}
+                disabled={false}
+            >
+                <Text style={styles.buttonText}>HELP</Text>
+            </TouchableOpacity> 
             
             
         

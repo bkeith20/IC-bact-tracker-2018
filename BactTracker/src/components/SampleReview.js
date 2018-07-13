@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Text, Image, Button, Alert, ScrollView, TextInput, TouchableOpacity, Dimensions, Picker, StyleSheet, BackHandler, AsyncStorage, NetInfo } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 
+var {height, width} = Dimensions.get('window');
+
 export default class HomeScreen extends React.Component {
     constructor(props) {
         super(props);
@@ -95,9 +97,9 @@ export default class HomeScreen extends React.Component {
                 </View>
         
                 <View style={{
-                    flex:3,
+                    flex:4,
                     flexDirection: 'column',
-                    borderLeftWidth: 6,
+                    borderLeftWidth: 3,
                     borderColor: '#003b71'
                   }} >
                     <ScrollView horizontal={true}>
@@ -118,7 +120,7 @@ export default class HomeScreen extends React.Component {
                                         <View style={{flexDirection: 'row'}}><Text style={styles.regularText}> {sample.type} </Text></View>
                                         <View style={{flexDirection: 'row'}}><Text style={styles.regularText}> {sample.object} </Text></View>
                                         <View style={{flexDirection: 'row'}}><Text style={styles.regularText}> {sample.date} </Text></View>
-                                        <View style={{flexDirection: 'row', maxWidth: 400}}><Text style={styles.regularText}> {sample.notes} </Text></View>
+                                        <View style={{flexDirection: 'row', maxWidth: width}}><Text style={styles.regularText}> {sample.notes} </Text></View>
                                         <TouchableOpacity
                                             onPress={() => Alert.alert("This will allow editing")}
                                             style={styles.button}
