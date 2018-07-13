@@ -85,7 +85,7 @@ export default class enterSample extends React.Component{
         const sample = t.struct({
             sampleType: type,
             sampleObject: object, 
-            notes: t.maybe(t.String)
+            notes: t.maybe(Notes)
         });
  
         return(

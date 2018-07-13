@@ -77,7 +77,7 @@ export default class HomeScreen extends React.Component {
         </View>
                 
         <View style={{
-                    flex: 8,
+                    flex: 10,
                     justifyContent: 'center',
                     flexDirection: 'row'
                   }}>
@@ -95,37 +95,40 @@ export default class HomeScreen extends React.Component {
                 </View>
         
                 <View style={{
-                    flex:2,
+                    flex:3,
                     flexDirection: 'column',
-                    borderLeftWidth: 3,
+                    borderLeftWidth: 6,
                     borderColor: '#003b71'
                   }} >
                     <ScrollView horizontal={true}>
                         {this.state.samples.map(sample => (
-
+                            <ScrollView key={sample.key}>
                                 <View style={{
                                         flex:1,
                                         flexDirection: 'column',
                                         paddingRight: 40
                                       }} 
                                       key={sample.key}>
-                                    <Text style={styles.regularText}> {sample.id} </Text>
-                                    <Text style={styles.regularText}> {sample.user} </Text>
-                                    <Text style={styles.regularText}> {sample.location} </Text>
-                                    <Text style={styles.regularText}> {sample.latitude} </Text>
-                                    <Text style={styles.regularText}> {sample.longitude} </Text>
-                                    <Text style={styles.regularText}> {sample.type} </Text>
-                                    <Text style={styles.regularText}> {sample.object} </Text>
-                                    <Text style={styles.regularText}> {sample.date} </Text>
-                                    <Text style={styles.regularText}> {sample.notes} </Text>
-                                    <TouchableOpacity
-                                        onPress={() => Alert.alert("This will allow editing")}
-                                        style={styles.button}
-                                        disabled={false}
-                                    >
-                                        <Text style={styles.buttonText}>Edit</Text>
-                                    </TouchableOpacity>
+
+                                        <View style={{flexDirection: 'row'}}><Text style={styles.regularText}> {sample.id} </Text></View>
+                                        <View style={{flexDirection: 'row'}}><Text style={styles.regularText}> {sample.user} </Text></View>
+                                        <View style={{flexDirection: 'row'}}><Text style={styles.regularText}> {sample.location} </Text></View>
+                                        <View style={{flexDirection: 'row'}}><Text style={styles.regularText}> {sample.latitude} </Text></View>
+                                        <View style={{flexDirection: 'row'}}><Text style={styles.regularText}> {sample.longitude} </Text></View>
+                                        <View style={{flexDirection: 'row'}}><Text style={styles.regularText}> {sample.type} </Text></View>
+                                        <View style={{flexDirection: 'row'}}><Text style={styles.regularText}> {sample.object} </Text></View>
+                                        <View style={{flexDirection: 'row'}}><Text style={styles.regularText}> {sample.date} </Text></View>
+                                        <View style={{flexDirection: 'row', maxWidth: 400}}><Text style={styles.regularText}> {sample.notes} </Text></View>
+                                        <TouchableOpacity
+                                            onPress={() => Alert.alert("This will allow editing")}
+                                            style={styles.button}
+                                            disabled={false}
+                                        >
+                                            <Text style={styles.buttonText}>Edit</Text>
+                                        </TouchableOpacity>
+
                                 </View>
+                            </ScrollView>
 
                         ))}
                     </ScrollView>
@@ -164,7 +167,7 @@ const styles = StyleSheet.create({
   },
   containerCol: {
     //backgroundColor: 'rgba(0,0,0,0)',
-    flex:1,
+    flex:2,
     //alignItems: 'center',
     //justifyContent: 'center',
     flexDirection: 'column'
@@ -196,18 +199,21 @@ const styles = StyleSheet.create({
         //textAlign: 'center',
         //fontWeight: 'bold',
         fontSize: 18,
-        paddingTop: 12,
-        paddingBottom: 10,
+        paddingTop: 7,
+        paddingBottom: 5,
         paddingLeft: 10,
         paddingRight: 10,
         flexWrap: "wrap",
-        flex: 1
+        flex: 1,
     },
     subtitles: {
          color: '#003b71',
         //textAlign: 'center',
         fontWeight: 'bold',
         fontSize: 20,
-        padding: 10
+        paddingTop: 5,
+        paddingBottom: 5,
+        paddingLeft: 10,
+        paddingRight: 10,
     }
 });

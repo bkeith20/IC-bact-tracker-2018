@@ -19,6 +19,8 @@ const { SlideInMenu } = renderers;
     
     var descripton = "";
 
+    var _ismounted;
+
     export default class tracker extends React.Component {
         static navigationOptions = ({navigation}) => {
             const inNetpass = navigation.getParam('inNetpass', 'NO-ID');
@@ -48,6 +50,7 @@ const { SlideInMenu } = renderers;
       }
 
         async componentDidMount() {
+            _ismounted = true;
         navigator.geolocation.getCurrentPosition(
            (position) => {
             
@@ -93,9 +96,11 @@ const { SlideInMenu } = renderers;
                                      key: i,
                                     };
                          //console.log(responsejson[i]);
+                        if(_ismounted) {
                          this.setState(prevState => ({ markers: [...prevState.markers, newMarker]}));
                          this.setState(prevState => ({ options: [...prevState.options, responsejson[i]["options"]]}));
                          //console.log(this.state.options);
+                        }
                     };
                 } catch (error){
                     console.error(error);
@@ -105,6 +110,10 @@ const { SlideInMenu } = renderers;
                 Alert.alert("No internet connection! Please turn on mobile data or wifi and retry.");
             }
        }
+
+        componentWillUnmount(){
+            _ismounted = false;
+        }
 
         print(){
             console.log(this.state.selLocal);

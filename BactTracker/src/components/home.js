@@ -76,31 +76,26 @@ export default class HomeScreen extends React.Component {
             </View>
         
             <View style={styles.containerRow}>
-                <View style={styles.containerCol}>
-                    <TouchableOpacity
-                        onPress={() => this.props.navigation.navigate('Viewer')}
-                        style={styles.button}
-                        disabled={false}
-                    >
-                        <Text style={styles.buttonText}>BACT-VIEWER</Text>
-                    </TouchableOpacity>
-                </View>
-        
-                <View style={styles.containerCol}>
-                    <TouchableOpacity
-                        onPress={() => this.props.navigation.navigate('Tracker', {inNetpass: inNetpass})}
-                        style={styles.button}
-                        disabled={false}
-                    >
-                        <Text style={styles.buttonText}>BACT-TRACKER</Text>
-                    </TouchableOpacity>        
-                </View>
-            </View>
+                <TouchableOpacity
+                    onPress={() => this.props.navigation.navigate('Tracker', {inNetpass: inNetpass})}
+                    style={styles.button}
+                    disabled={false}
+                >
+                    <Text style={styles.buttonText}>BACT-TRACKER</Text>
+                </TouchableOpacity>        
+             </View>    
         
             <View style={styles.containerRow}>
-                
+                <TouchableOpacity
+                    onPress={() => this.props.navigation.navigate('Viewer')}
+                    style={styles.button}
+                    disabled={false}
+                >
+                    <Text style={styles.buttonText}>BACT-VIEWER</Text>
+                </TouchableOpacity>
             </View>
         
+                        
             <View style={styles.containerRow}>
                 <TouchableOpacity
                         onPress={() => this.help()}
