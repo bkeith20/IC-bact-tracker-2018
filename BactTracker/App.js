@@ -14,6 +14,7 @@ import ViewerScreen from './src/components/viewer.js';
 import CreateAccountScreen from './src/components/CreateAccount.js';
 import ForgotPasswordScreen from './src/components/forgotPassword.js';
 import SampleReviewScreen from './src/components/SampleReview.js';
+import editSamplesScreen from './src/components/editSamples.js';
 
 const RootStack = createStackNavigator({
    Home: HomeScreen,
@@ -26,6 +27,7 @@ const RootStack = createStackNavigator({
     CreateAccount: CreateAccountScreen,
     ForgotPassword: ForgotPasswordScreen,
     SampleReview: SampleReviewScreen,
+    Edit: editSamplesScreen,
 },
 {
     initialRouteName: 'Login',

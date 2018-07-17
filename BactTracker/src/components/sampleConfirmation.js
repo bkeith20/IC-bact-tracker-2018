@@ -83,7 +83,7 @@ export default class ConfirmScreen extends React.Component {
                 await AsyncStorage.setItem('savedSample'+numsaved,sampleStr);
                 numSaved+=1;
                 await AsyncStorage.setItem('numSavedSamples', numSaved.toString());
-                Alert.alert("No Connection! Sample stored locally!", "Connect to internet and open main menu to submit! You will see another notification once submitted.");
+                Alert.alert("No Connection! Sample stored locally!", "Connect to internet and open main menu to submit! You will recieve another notification once submitted.");
             }
             this.props.navigation.navigate('Home', {inNetpass: info.User});
         } 

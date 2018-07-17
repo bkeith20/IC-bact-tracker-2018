@@ -12,7 +12,7 @@ const type = t.enums({
     Double: 'Double'
 });
 
-var sDate = new Date();
+
 
 var options = {
     auto: 'placeholders',
@@ -25,6 +25,7 @@ var options = {
         },
         notes: {
             label: "Additional Notes",
+            error: 'Notes cannot exceed 255 characters',
         }
     }
 };
@@ -46,7 +47,7 @@ export default class enterSample extends React.Component{
         };
     }
     
-    onSubmit(inNetpass, sampleLat, sampleLong, sampleLocation, sampleID){
+    onSubmit(inNetpass, sampleLat, sampleLong, sampleLocation, sampleID, sDate){
     
         const Fvalue = this._form.getValue();
         if(Fvalue){
@@ -80,6 +81,8 @@ export default class enterSample extends React.Component{
     
     
     render () {
+        
+        var sDate = new Date();
         
         const { navigation } = this.props;
         const inNetpass = navigation.getParam('inNetpass', 'NO-ID');
@@ -116,7 +119,7 @@ export default class enterSample extends React.Component{
             /> 
             </View>
         
-            <TouchableOpacity onPress ={() => this.onSubmit(inNetpass, sampleLat, sampleLong, sampleLocation, sampleID)}>
+            <TouchableOpacity onPress ={() => this.onSubmit(inNetpass, sampleLat, sampleLong, sampleLocation, sampleID, sDate)}>
                 <View style = {styles.button}>
                     <Text style={styles.buttonText}>Submit</Text>
                 </View>

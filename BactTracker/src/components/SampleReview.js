@@ -22,6 +22,7 @@ export default class HomeScreen extends React.Component {
 
     async fetchSamples(){
         //triggered by refresh button
+        this.setState({samples: []})
         //pull down any samples from the database from the current user
         const netInfo = await NetInfo.getConnectionInfo();
         const connection = netInfo.type;
@@ -108,7 +109,7 @@ export default class HomeScreen extends React.Component {
                                 <View style={{
                                         flex:1,
                                         flexDirection: 'column',
-                                        paddingRight: 40
+                                        paddingRight: 20
                                       }} 
                                       key={sample.key}>
 
@@ -122,7 +123,7 @@ export default class HomeScreen extends React.Component {
                                         <View style={{flexDirection: 'row'}}><Text style={styles.regularText}> {sample.date} </Text></View>
                                         <View style={{flexDirection: 'row', maxWidth: width}}><Text style={styles.regularText}> {sample.notes} </Text></View>
                                         <TouchableOpacity
-                                            onPress={() => Alert.alert("This will allow editing")}
+                                            onPress={() => this.props.navigation.navigate('Edit', {inNetpass: inNetpass, sampleLat: sample.latitude, sampleLong: sample.longitude, sampleLocation: sample.location, sampleDate: sample.date, sampleID: sample.id, sampleObject: sample.object, notes: sample.notes, sampleType: sample.type})}
                                             style={styles.button}
                                             disabled={false}
                                         >
