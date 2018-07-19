@@ -1,5 +1,5 @@
    import React from 'react';
-    import { AppRegistry,StyleSheet, Image, Text, View, Button, TouchableOpacity, TextInput, AsyncStorage, Dimensions } from 'react-native';
+    import { AppRegistry,StyleSheet, Image, Text, View, Button, TouchableOpacity, TextInput, AsyncStorage, Dimensions, WebView } from 'react-native';
     import { createStackNavigator, TabNavigator} from 'react-navigation';
 
 
@@ -10,8 +10,12 @@
 
         return (
             <View style={styles.container}>
-                <Text style={styles.title}> Welcome to the BACT-Viewer! </Text>
-                <Text style={styles.subtitles}> Here you will be able to view data collected and analyzed by your fellow students. Unfortunately, there is currently no data. Please check back once more data has been collected and analyzed. </Text>
+                <WebView
+                    style={styles.view}
+                    javaScriptEnabled={true}
+                    domStorageEnabled={true}
+                    source={{uri: 'http://ic-research.eastus.cloudapp.azure.com/~bkeith/heatmap/other.html'}}
+                />
             </View>
             
         );
@@ -21,9 +25,9 @@
     const styles = StyleSheet.create({
         
         container: {
-        //flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
+        flex: 1,
+        //alignItems: 'center',
+        //justifyContent: 'center',
         //backgroundColor: '#ecf0f1',
         margin: 5,
       },
