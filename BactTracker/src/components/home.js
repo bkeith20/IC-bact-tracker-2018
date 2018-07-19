@@ -50,12 +50,25 @@ export default class HomeScreen extends React.Component {
         }
     }
 
+    // will need to pass inNetpass to here to store value in database
     async help(){
         const netInfo = await NetInfo.getConnectionInfo();
         const connection = netInfo.type;
         //check if connected to internet
         if (connection!=="none" && connection!=="unknown"){
             this.props.navigation.navigate('Help');
+        }
+        else{
+            Alert.alert("No internet connection! Please turn on mobile data or wifi and retry.")
+        }
+    }
+
+    async view(){
+        const netInfo = await NetInfo.getConnectionInfo();
+        const connection = netInfo.type;
+        //check if connected to internet
+        if (connection!=="none" && connection!=="unknown"){
+            this.props.navigation.navigate('Viewer');
         }
         else{
             Alert.alert("No internet connection! Please turn on mobile data or wifi and retry.")
@@ -87,7 +100,7 @@ export default class HomeScreen extends React.Component {
         
             <View style={styles.containerRow}>
                 <TouchableOpacity
-                    onPress={() => this.props.navigation.navigate('Viewer')}
+                    onPress={() => this.view()}
                     style={styles.button}
                     disabled={false}
                 >
