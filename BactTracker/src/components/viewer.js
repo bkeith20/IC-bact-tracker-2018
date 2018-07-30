@@ -4,10 +4,12 @@ import { createStackNavigator, TabNavigator} from 'react-navigation';
 
 
 
-    export default class tracker extends React.Component {
-        
-        componentDidMount(){
-            this.refs.map.reload();
+    export default class viewer extends React.Component {
+        constructor(props) {
+            super(props);
+            this.state = {
+                myURL: 'http://ic-research.eastus.cloudapp.azure.com/~bkeith/heatmap'
+            }
         }
 
         render() {
@@ -16,12 +18,12 @@ import { createStackNavigator, TabNavigator} from 'react-navigation';
             <View style={styles.container}>
                 <WebView
                     ref="map"
+                    onLoadStart={() => this.setState({myURL: 'http://ic-research.eastus.cloudapp.azure.com/~bkeith/heatmap/viewer.html'})}
                     style={styles.view}
                     javaScriptEnabled={true}
                     domStorageEnabled={false}
-                    startInLoadingState={ this.props.startInLoadingState }
                     thirdPartyCookiesEnabled={false}
-                    source={{uri: 'http://ic-research.eastus.cloudapp.azure.com/~bkeith/heatmap/viewer.html', headers: {"cache": "reload"}}}
+                    source={{uri: this.state.myURL, headers: {"cache": "no-cache"}}}
                 />
             </View>
             
