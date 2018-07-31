@@ -8,7 +8,6 @@
 
     const User = t.struct({
       Netpass: t.String,
-      Password: t.String,
       RememberMe: t.Boolean,
     });
 
@@ -19,7 +18,6 @@
         super(props);
         this.state = {defaultVal:{
                           Netpass: '',
-                          Password: '',
                           RememberMe: false,
                       }
                      }
@@ -34,7 +32,6 @@
                     if(savedUser.rememberMe){
                         const vals = {
                             Netpass: savedUser.userName,
-                            Password: savedUser.password,
                             RememberMe: savedUser.rememberMe,
                         }
                         this.setState({defaultVal: vals});
@@ -52,13 +49,8 @@
             fields: {
                 Netpass: {
                     label: 'Netpass Username', // <= label for the name field
-                    onSubmitEditing: () => this._form.getComponent('Password').refs.input.focus()
-                },
-                Password: {
-                    label: 'Password',
-                    secureTextEntry: true,
                     onSubmitEditing: () => this._onClick()
-                }
+                },
             }
         };
 
@@ -69,27 +61,20 @@
             if(Fvalue){
                 try{
                     const inNetpass = Fvalue.Netpass;
-                    const inPass = Fvalue.Password;
-                    //console.log(inNetpass+": "+inPass);
+                    //console.log(inNetpass);
                     const saved = await SecureStore.getItemAsync('deviceUser');
                     if(saved!=null){
                         const savedUser = JSON.parse(saved);
                         if(inNetpass==savedUser.userName){
-                            if(inPass==savedUser.password){
                                 if(Fvalue.RememberMe!=savedUser.rememberMe){
                                     const toSave = {
                                         userName: inNetpass,
-                                        password: inPass,
                                         rememberMe: Fvalue.RememberMe,
                                     };
                                     const toSaveStr = JSON.stringify(toSave);
                                     await SecureStore.setItemAsync('deviceUser', toSaveStr);
                                 }
                                 this.props.navigation.navigate('Home', {inNetpass: inNetpass});
-                            }
-                            else{
-                               Alert.alert("Your netpass and/or password were incorrect."); 
-                            }
                         }
                         else{
                             //check database here
@@ -122,7 +107,6 @@
                                         //here
                                         const toSave = {
                                             userName: uname,
-                                            password: rJSON["pass"],
                                             rememberMe: false,
                                         };
                                         const inNetpass = finfo.Netpass;
@@ -131,12 +115,6 @@
                                         await SecureStore.setItemAsync('deviceUser', toSaveStr);
                                         const retrieved = await SecureStore.getItemAsync('deviceUser');
                                         console.log(retrieved + "hey");
-                                        if(finfo.Password===toSave.password){
-                                            this.props.navigation.navigate('Home', {inNetpass: inNetpass});
-                                        }
-                                        else{
-                                           Alert.alert("Password Incorrect!"); 
-                                        }
                                     }
                                     else{
                                         Alert.alert("Account Does not exist!!");
@@ -180,7 +158,6 @@
                                     //here
                                     const toSave = {
                                         userName: uname,
-                                        password: rJSON["pass"],
                                         rememberMe: false,
                                     };
                                     const inNetpass = finfo.Netpass;
@@ -188,12 +165,6 @@
                                     await SecureStore.setItemAsync('deviceUser', toSaveStr);
                                     const retrieved = await SecureStore.getItemAsync('deviceUser');
                                     console.log(retrieved);
-                                    if(finfo.Password===toSave.password){
-                                        this.props.navigation.navigate('Home', {inNetpass: inNetpass});
-                                    }
-                                    else{
-                                       Alert.alert("Password Incorrect!"); 
-                                    }
                                 }
                                 else{
                                     Alert.alert("Account Does not exist!!");
@@ -218,34 +189,21 @@
         return (
 
         
-          <View style={{alignItems: 'center',justifyContent: 'center', backgroundColor: 'white', flex: 1 }}>
-             
-            <View style={{width: 180}}>
+          <View style={{alignItems: 'center', backgroundColor: 'white', flex: 1, padding: 10}}>
+            
+            <Text style={styles.title}> Welcome to the Bact-Tracker!</Text> 
             <Form 
                     type={User} 
                     options = {this.options}
                     value={this.state.defaultVal}
                     ref={c => this._form = c}
                 />
-            </View>
+
             <TouchableOpacity onPress ={() => this._onClick()}>
             <View style = {styles.button}>
             <Text style={styles.buttonText}>Log in</Text>
             </View>
             </TouchableOpacity>
-
-            <TouchableOpacity onPress ={() => this.props.navigation.navigate('CreateAccount')}>
-            <View style = {styles.button}>
-            <Text style={styles.buttonText}>Create an Account</Text>
-            </View>
-            </TouchableOpacity>
-
-            <TouchableOpacity onPress ={() => this.props.navigation.navigate('ForgotPassword')}>
-            <View style = {styles.button}>
-            <Text style={styles.buttonText}>Forgot Password</Text>
-            </View>
-            </TouchableOpacity>
-
 
           </View>
 
@@ -267,6 +225,13 @@
     fontWeight: 'bold',
     padding: 10,
   },
-       
+     title: {
+    //color: 'white',
+    color: '#003b71',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 30,
+    padding: 10
+  }  
 
     });

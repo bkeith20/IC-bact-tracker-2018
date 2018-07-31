@@ -19,6 +19,7 @@ export default class ConfirmScreen extends React.Component {
         );
     };
             
+    // possibly change so that final sample id is sent back from the DB to make sure it is different from any others already saved
     async alertPress(info){
             //send info to DB
             const netInfo = await NetInfo.getConnectionInfo();
