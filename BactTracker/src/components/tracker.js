@@ -133,8 +133,8 @@ const { SlideInMenu } = renderers;
              );
              var latD = Math.abs(areaCoordinates.latitude - this.state.latitude);
              var lonD = Math.abs(areaCoordinates.longitude - this.state.longitude);
-             var lonThres = 8/77136;
-             var latThres = 8/77136;
+             var lonThres = 0.0002;
+             var latThres = 0.0002;
              console.log(latD+" "+latThres)
              console.log(lonD+" "+lonThres)
              if(lonD <= lonThres && latD <= latThres){
