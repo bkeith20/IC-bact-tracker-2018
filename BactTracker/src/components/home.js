@@ -36,9 +36,9 @@ export default class HomeScreen extends React.Component {
                             },
                             body: currSample,
                         });
-                        console.log(response);
+                        
                         let rJSON = await response.json();
-                        console.log(rJSON);
+                        
                     } catch(error){
                         console.log(error);
                     }

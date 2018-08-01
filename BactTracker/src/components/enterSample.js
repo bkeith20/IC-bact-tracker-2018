@@ -12,24 +12,6 @@ const type = t.enums({
     Double: 'Double'
 });
 
-
-
-var options = {
-    auto: 'placeholders',
-    fields: {
-        sampleType: {
-            label: "Sample Type",
-        },
-        sampleObject: {
-            label: "Object Sampled"
-        },
-        notes: {
-            label: "Additional Notes",
-            error: 'Notes cannot exceed 255 characters',
-        }
-    }
-};
-
 export default class enterSample extends React.Component{
     //object will be an empty object {} and will be set in componentDidMount()
     constructor(props) {
@@ -41,9 +23,7 @@ export default class enterSample extends React.Component{
                 sampleObject: null,
                 notes: ''
             },
-            object: {
-                
-            }
+            textHeight: 36,
         };
     }
     
@@ -77,7 +57,11 @@ export default class enterSample extends React.Component{
             Alert.alert("No internet connection! Please turn on mobile data or wifi and retry.")
         }
     }
-
+    
+    onChange(formValue){
+        this.setState({formValue: formValue, 
+                       textHeight: (formValue.notes.height+12)});
+    }
     
     
     render () {
@@ -91,7 +75,6 @@ export default class enterSample extends React.Component{
         const sampleLocation = navigation.getParam('sampleLocation', 'No-Location');
         const sampleID = inNetpass+""+sDate.getFullYear()+"-"+(sDate.getMonth()+1)+"-"+sDate.getDate()+"-"+sDate.getHours()+"-"+sDate.getMinutes()+"-"+sDate.getSeconds();
         const object = t.enums( navigation.getParam('options'));
-        console.log(object);
         
         const Notes = t.refinement(t.String, function (s) {
             return s.length<255;
@@ -102,6 +85,41 @@ export default class enterSample extends React.Component{
             sampleObject: object, 
             notes: t.maybe(Notes)
         });
+        
+        
+        var options = {
+            auto: 'placeholders',
+            fields: {
+                sampleType: {
+                    label: "Sample Type",
+                },
+                sampleObject: {
+                    label: "Object Sampled"
+                },
+                notes: {
+                    label: "Additional Notes",
+                    error: 'Notes cannot exceed 255 characters',
+                    multiline: true,
+                    stylesheet: {
+                        ...Form.stylesheet,
+                        textbox: {
+                            ...Form.stylesheet.textbox,
+                            normal: {
+                                ...Form.stylesheet.textbox.normal,
+                                height: this.state.textHeight,
+
+                            },
+                            error: {
+                                ...Form.stylesheet.textbox.error,
+                                height: this.state.textHeight
+                            }
+                        }
+                    },
+                    onSubmitEditing: () => this.onSubmit(inNetpass, sampleLat, sampleLong, sampleLocation, sampleID, sDate)
+
+                }
+            }
+        };
  
         return(
             <View style = {{justifyContent: 'center', backgroundColor: 'white', flex: 1,  }}>
@@ -115,7 +133,7 @@ export default class enterSample extends React.Component{
                 options= {options}
                 ref={c => this._form = c}
                 value={this.state.formValue}
-                onChange={(formValue) => this.setState({formValue})}
+                onChange={(formValue) => this.onChange(formValue)}
             /> 
             </View>
         

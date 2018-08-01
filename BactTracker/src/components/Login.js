@@ -61,7 +61,7 @@
             if(Fvalue){
                 try{
                     const inNetpass = Fvalue.Netpass;
-                    //console.log(inNetpass);
+                   
                     const saved = await SecureStore.getItemAsync('deviceUser');
                     if(saved!=null){
                         const savedUser = JSON.parse(saved);
@@ -77,12 +77,9 @@
                                 this.props.navigation.navigate('Home', {inNetpass: inNetpass});
                         }
                         else{
-                            //check database here
-                            //send username entered and if in DB return password 
+                            //check database here 
                             //if not in database return "false" and show alert
                             //if in database and correct save to 'deviceUser'
-                            //else show this alert
-                            //may want to us the isconnected property instead of get Connection info!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                             const netInfo = await NetInfo.getConnectionInfo();
                             const connection = netInfo.type;
                             //check if connected to internet
@@ -91,7 +88,7 @@
                                     const finfo = this._form.getValue();
                                     const uname = finfo.Netpass;
                                     const toSendStr = JSON.stringify({uname: uname});
-                                    console.log(toSendStr);
+                                    
                                     let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioLogin.php',{
                                         method: 'POST',
                                         headers: {
@@ -100,9 +97,9 @@
                                         },
                                         body: toSendStr,
                                     });
-                                    //console.log(response);
+                                    
                                     let rJSON = await response.json();
-                                    console.log(rJSON["pass"]);
+                                    
                                     if(rJSON["pass"]!=="false"){
                                         //here
                                         const toSave = {
@@ -110,11 +107,9 @@
                                             rememberMe: false,
                                         };
                                         const inNetpass = finfo.Netpass;
-                                        console.log(finfo);
                                         const toSaveStr = JSON.stringify(toSave);
                                         await SecureStore.setItemAsync('deviceUser', toSaveStr);
-                                        const retrieved = await SecureStore.getItemAsync('deviceUser');
-                                        console.log(retrieved + "hey");
+                                        this.props.navigation.navigate('Home', {inNetpass: inNetpass});
                                     }
                                     else{
                                         Alert.alert("Account Does not exist!!");
@@ -130,7 +125,6 @@
                     }
                     else{
                         //check database here
-                            //send username entered and if in DB return password 
                             //if not in database return "false" and show alert
                             //if in database and correct save to 'deviceUser'
                             //else show this alert
@@ -142,7 +136,7 @@
                                 const finfo = this._form.getValue();
                                 const uname = finfo.Netpass;
                                 const toSendStr = JSON.stringify({uname: uname});
-                                console.log(toSendStr);
+                               
                                 let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioLogin.php',{
                                     method: 'POST',
                                     headers: {
@@ -151,9 +145,9 @@
                                     },
                                     body: toSendStr,
                                 });
-                                //console.log(response);
+                           
                                 let rJSON = await response.json();
-                                console.log(rJSON["pass"]);
+                           
                                 if(rJSON["pass"]!=="false"){
                                     //here
                                     const toSave = {
@@ -164,7 +158,7 @@
                                     const toSaveStr = JSON.stringify(toSave);
                                     await SecureStore.setItemAsync('deviceUser', toSaveStr);
                                     const retrieved = await SecureStore.getItemAsync('deviceUser');
-                                    console.log(retrieved);
+                               
                                 }
                                 else{
                                     Alert.alert("Account Does not exist!!");

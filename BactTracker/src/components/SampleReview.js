@@ -43,7 +43,7 @@ export default class HomeScreen extends React.Component {
                     });
 
                     let responsejson = await response.json();
-                    console.log(responsejson+" "+responsejson.length);
+                    
                     for (let i =0; i<responsejson.length; i++){
                         let newSample = {
                               id: responsejson[i]["sample_id"],
@@ -57,7 +57,7 @@ export default class HomeScreen extends React.Component {
                               notes: responsejson[i]["notes"],
                               key: i,
                           };
-                         //console.log(responsejson[i]);
+                         
                          this.setState(prevState => ({ samples: [...prevState.samples, newSample]}));
                     };
                 } catch (error){

@@ -40,6 +40,12 @@ const { SlideInMenu } = renderers;
         super(props);
 
         this.state = {
+          region: {
+            latitude: 1,
+            longitude: 1,
+            latitudeDelta: 1,
+            longitudeDelta: 1
+          },
           latitude: 1,
           longitude: 1, 
           selLocal: '',
@@ -49,78 +55,81 @@ const { SlideInMenu } = renderers;
         };
       }
 
-        async componentDidMount() {
-            _ismounted = true;
-        navigator.geolocation.getCurrentPosition(
-           (position) => {
-            
-             this.setState({
-               latitude: position.coords.latitude,
-               longitude: position.coords.longitude,
+async componentDidMount() {
+    this.ismounted = true;
+    const netInfo = await NetInfo.getConnectionInfo();
+    const connection = netInfo.type;
+    //check if connected to internet
+    if (connection!=="none" && connection!=="unknown"){
                 
-             });
-           },
-              
-
-         );
-            //read sample locations for markers in from DB write them into state
-            const netInfo = await NetInfo.getConnectionInfo();
-            const connection = netInfo.type;
-            //check if connected to internet
-            if (connection!=="none" && connection!=="unknown"){  
-                try{
-                    //send in user name to ensure locations sampled by the user no longer show up
-                    const { navigation } = this.props;
-                    const inNetpass = navigation.getParam('inNetpass', 'NO-ID');
-                    let name = {name: inNetpass};
-                    let req = JSON.stringify(name);
-                    let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioDB.php',{
-                        method: 'POST',
-                        headers: {
-                            Accept: 'application/json',
-                            'Content-Type': 'application/json',
-                        },
-                        body: req
-                    });
-
-                    let responsejson = await response.json();
-                    console.log(responsejson+" "+responsejson.length);
-                    for (let i =0; i<responsejson.length; i++){
-                        let newMarker = {title: responsejson[i]["building"],
-                                     coordinates: {
-                                         latitude: (responsejson[i]["lat"]*1),
-                                         longitude: (responsejson[i]["long"]*1),
-                                     },
-                                     samplesLeft: (responsejson[i]["sleft"]),
-                                     pinColor: (responsejson[i]["color"]),
-                                     key: i,
-                                    };
-                         //console.log(responsejson[i]);
-                        if(_ismounted) {
-                         this.setState(prevState => ({ markers: [...prevState.markers, newMarker]}));
-                         this.setState(prevState => ({ options: [...prevState.options, responsejson[i]["options"]]}));
-                         //console.log(this.state.options);
-                        }
-                    };
-                } catch (error){
-                    console.error(error);
-                }
-            }
-            else{
-                Alert.alert("No internet connection! Please turn on mobile data or wifi and retry.");
-            }
-       }
-
-        componentWillUnmount(){
-            _ismounted = false;
+        if(this.ismounted){
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    if(this.ismounted){
+                        this.setState({
+                            region: {
+                                latitude: position.coords.latitude,
+                                longitude: position.coords.longitude,
+                                latitudeDelta: 0.015,
+                                longitudeDelta:0.0121
+                            },
+                            latitude: position.coords.latitude,
+                            longitude: position.coords.longitude,
+                        
+                        });
+                    }
+                },
+            );
         }
-
-        print(){
-            console.log(this.state.selLocal);
+        //read sample locations for markers in from DB write them into state  
+        try{
+            //send in user name to ensure locations sampled by the user no longer show up
+            const { navigation } = this.props;
+            const inNetpass = navigation.getParam('inNetpass', 'NO-ID');
+            let name = {name: inNetpass};
+            let req = JSON.stringify(name);
+            let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioDB.php',{
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: req
+            });
+            
+            let responsejson = await response.json();
+            for (let i =0; i<responsejson.length; i++){
+                let newMarker = {title: responsejson[i]["building"],
+                                 coordinates: {
+                                     latitude: (responsejson[i]["lat"]*1),
+                                     longitude: (responsejson[i]["long"]*1),
+                                 },
+                                 samplesLeft: (responsejson[i]["sleft"]),
+                                 pinColor: (responsejson[i]["color"]),
+                                 key: i,
+                                };
+                
+                if(this.ismounted) {
+                    this.setState(prevState => ({ markers: [...prevState.markers, newMarker]}));
+                    this.setState(prevState => ({ options: [...prevState.options, responsejson[i]["options"]]}));
+                   
+                }
+            };
+        } catch (error){
+            console.error(error);
+        }
+    }
+    else{
+        Alert.alert("No internet connection! Please turn on mobile data or wifi and retry.");
+    }
+}
+    
+        componentWillUnmount(){
+            this.ismounted = false;
         }
 
         async openMenu(areaCoordinates, area, key) {
-            console.log(this.state.options[key]);
+            
              navigator.geolocation.getCurrentPosition(
                  (position) => {
             
@@ -135,17 +144,20 @@ const { SlideInMenu } = renderers;
              var lonD = Math.abs(areaCoordinates.longitude - this.state.longitude);
              var lonThres = 0.0002;
              var latThres = 0.0002;
-             console.log(latD+" "+latThres)
-             console.log(lonD+" "+lonThres)
+
              if(lonD <= lonThres && latD <= latThres){
                 this.menu.open();
              }
-            this.setState({selLocal: area},this.print);
-            this.setState({key: key},this.print);
+            this.setState({selLocal: area});
+            this.setState({key: key});
         }
 
             onRef = r => {
                 this.menu = r;
+            }
+            
+            onRegionChange(region){
+                this.setState({region: region});
             }
             
 
@@ -175,11 +187,12 @@ const { SlideInMenu } = renderers;
                             provider={PROVIDER_GOOGLE}
                             style={styles.map}
                             region={{
-                                    latitude: this.state.latitude,
-                                    longitude: this.state.longitude,
-                                    latitudeDelta: 0.015,
-                                    longitudeDelta: 0.0121,
+                                    latitude: this.state.region.latitude,
+                                    longitude: this.state.region.longitude,
+                                    latitudeDelta: this.state.region.latitudeDelta,
+                                    longitudeDelta: this.state.region.longitudeDelta,
                                    }}
+                            onRegionChangeComplete={(region) => this.onRegionChange(region)}
                             showsUserLocation={true}
                             showsMyLocationButton={true}
                             maxZoomLevel = {20}

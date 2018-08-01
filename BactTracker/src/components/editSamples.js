@@ -7,15 +7,6 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 
 const Form = t.form.Form;
 
-var options = {
-    auto: 'placeholders',
-    fields: {
-        notes: {
-            label: "Additional Notes",
-        }
-    }
-};
-
 export default class enterSample extends React.Component{
     //object will be an empty object {} and will be set in componentDidMount()
     constructor(props) {
@@ -25,6 +16,7 @@ export default class enterSample extends React.Component{
             formValue: {
                 notes: ''
             },
+            textHeight: 36
         };
     }
     
@@ -82,6 +74,11 @@ export default class enterSample extends React.Component{
         this.setState({formValue: defaultVal});
     }
     
+    onChange(formValue){
+        this.setState({formValue: formValue,
+                      textHeight: (formValue.notes.height+10)})
+    }
+    
     
     render () {
         
@@ -102,6 +99,32 @@ export default class enterSample extends React.Component{
         const sample = t.struct({ 
             notes: Notes
         });
+        
+        var options = {
+            auto: 'placeholders',
+            fields: {
+                notes: {
+                    label: "Additional Notes",
+                            error: 'Notes cannot exceed 255 characters',
+                            multiline: true,
+                            stylesheet: {
+                                ...Form.stylesheet,
+                                textbox: {
+                                    ...Form.stylesheet.textbox,
+                                    normal: {
+                                        ...Form.stylesheet.textbox.normal,
+                                        height: this.state.textHeight,
+
+                                    },
+                                    error: {
+                                        ...Form.stylesheet.textbox.error,
+                                        height: this.state.textHeight
+                                    }
+                                }
+                            },
+                }
+            }
+        };
  
         return(
             <View style = {{justifyContent: 'center', backgroundColor: 'white', flex: 1,  }}>
@@ -115,7 +138,7 @@ export default class enterSample extends React.Component{
                 options= {options}
                 ref={c => this._form = c}
                 value={this.state.formValue}
-                onChange={(formValue) => this.setState({formValue})}
+                onChange={(formValue) => this.onChange(formValue)}
             /> 
             </View>
         

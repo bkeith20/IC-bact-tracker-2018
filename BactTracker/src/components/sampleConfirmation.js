@@ -8,13 +8,13 @@ export default class ConfirmScreen extends React.Component {
     };
     
     onSubmit(myID, info){
-        console.log(myID);
+        
         Alert.alert(
             'Please be sure to write the sample ID on your sample tube!',
             'Sample ID: '+myID,
             [
                 {text: 'OK', onPress: () => this.alertPress(info)},
-                {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                {text: 'Cancel', style: 'cancel'},
             ],
         );
     };
@@ -30,7 +30,7 @@ export default class ConfirmScreen extends React.Component {
                 try{
                     const sample = info;
                     const sampleStr = JSON.stringify(sample);
-                    console.log(sampleStr);
+                   
                     let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioDB4.php',{
                         method: 'POST',
                         headers: {
@@ -39,9 +39,9 @@ export default class ConfirmScreen extends React.Component {
                         },
                         body: sampleStr,
                     });
-                    console.log(response);
+                    
                     let rJSON = await response.json();
-                    console.log(rJSON);
+                    
                 }catch(error) {
                     console.log(error);
                 }
@@ -59,9 +59,9 @@ export default class ConfirmScreen extends React.Component {
                                 },
                                 body: currSample,
                             });
-                            console.log(response);
+                            
                             let rJSON = await response.json();
-                            console.log(rJSON);
+                            
                         } catch(error){
                             console.log(error);
                         }
@@ -73,9 +73,9 @@ export default class ConfirmScreen extends React.Component {
             }
             else{
                 //if not connected save locally to be sent later
-                console.log("offline save")
+                
                 const sampleStr = JSON.stringify(info);
-                console.log(sampleStr);
+                
                 let numSaved = await AsyncStorage.getItem('numSavedSamples');
                 if(numSaved===null){
                     numsaved=0;
