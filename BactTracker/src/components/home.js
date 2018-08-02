@@ -56,7 +56,9 @@ export default class HomeScreen extends React.Component {
         const connection = netInfo.type;
         //check if connected to internet
         if (connection!=="none" && connection!=="unknown"){
-            this.props.navigation.navigate('Help');
+            const { navigation } = this.props;
+            const inNetpass = navigation.getParam('inNetpass', 'NO-ID');
+            this.props.navigation.navigate('Help', {inNetpass: inNetpass});
         }
         else{
             Alert.alert("No internet connection! Please turn on mobile data or wifi and retry.")

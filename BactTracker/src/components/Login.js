@@ -33,6 +33,7 @@
                         const vals = {
                             Netpass: savedUser.userName,
                             RememberMe: savedUser.rememberMe,
+                            seenVideo: null
                         }
                         this.setState({defaultVal: vals});
                     }
@@ -70,6 +71,7 @@
                                     const toSave = {
                                         userName: inNetpass,
                                         rememberMe: Fvalue.RememberMe,
+                                        seenVideo: null
                                     };
                                     const toSaveStr = JSON.stringify(toSave);
                                     await SecureStore.setItemAsync('deviceUser', toSaveStr);
@@ -104,7 +106,8 @@
                                         //here
                                         const toSave = {
                                             userName: uname,
-                                            rememberMe: false,
+                                            rememberMe: finfo.RememberMe,
+                                            seenVideo: null
                                         };
                                         const inNetpass = finfo.Netpass;
                                         const toSaveStr = JSON.stringify(toSave);
@@ -153,6 +156,7 @@
                                     const toSave = {
                                         userName: uname,
                                         rememberMe: false,
+                                        seenVideo: null
                                     };
                                     const inNetpass = finfo.Netpass;
                                     const toSaveStr = JSON.stringify(toSave);
