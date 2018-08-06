@@ -56,8 +56,8 @@ export default class HelpScreen extends React.Component {
                     source={{uri: 'https://www.youtube.com/embed/NRqIn1gO1kU'}}
                 />
             </View>
-            <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={{padding: 10}}>
+            <ScrollView style={{alignItems: 'center'}} >
+            <View style={{width: width*0.8}}>
                 <Text style={styles.title}>No help information is currently available</Text>
                 <Text style={styles.subtitles}>Step 1</Text>
                 <Text style={styles.subtitles}>Step 2</Text>

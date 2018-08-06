@@ -103,8 +103,9 @@ export default class ConfirmScreen extends React.Component {
         
         <View style={styles.Scroll}>
         
-        <ScrollView showsVerticalScrollIndicator={false} style={{width: width*0.8}} >
+        <ScrollView style={{alignItems: 'center'}} >
         
+        <View style={{width: width*0.8}} >
             <View style={styles.containerRow}>
                 <Text style={styles.title}> Please review the entered information for any errors. </Text>
             </View>
@@ -172,10 +173,11 @@ export default class ConfirmScreen extends React.Component {
             <View style={styles.containerRow}>
                 <Text style={styles.info}> {formInfo.SampleNotes} </Text>
             </View>
+        </View>
         
-            </ScrollView>
+        </ScrollView>
         
-            </View>
+        </View>
         
                 <View style={styles.containerRowB}>
                     <TouchableOpacity
@@ -274,6 +276,6 @@ const styles = StyleSheet.create({
   Scroll: {
     flex:5,
     flexDirection: 'row',
-      width: width*0.8
+      //width: width*0.8
   }
 });

@@ -118,8 +118,8 @@ export default class enterSample extends React.Component{
                             }
                         }
                     },
-                    onSubmitEditing: () => this.onSubmit(inNetpass, sampleLat, sampleLong, sampleLocation, sampleID, sDate)
-
+                    onSubmitEditing: () => this.onSubmit(inNetpass, sampleLat, sampleLong, sampleLocation, sampleID, sDate),
+                    blurOnSubmit: true,
                 }
             }
         };
