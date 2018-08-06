@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Text, Image, Button, Alert, ScrollView, TextInput, TouchableOpacity, Dimensions, Picker, StyleSheet, BackHandler, AsyncStorage, NetInfo } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 
+const {height, width} = Dimensions.get('window');
+
 export default class HomeScreen extends React.Component {
     static navigationOptions = ({navigation}) => {
         return {
@@ -84,6 +86,9 @@ export default class HomeScreen extends React.Component {
       <View style={styles.containerOuter}>
         
             <View style={styles.containerRow}>
+            </View>
+        
+            <View style={styles.containerRow}>
                 <Text style={styles.title}> Welcome to the Bact-Tracker!</Text>
             </View>
         
@@ -150,7 +155,7 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#003b71',
-    width: 130,
+    width: width*0.8,
     height: 40,
     borderRadius: 8,
     marginBottom: 10,
@@ -166,7 +171,7 @@ const styles = StyleSheet.create({
     color: '#003b71',
     textAlign: 'center',
     fontWeight: 'bold',
-    fontSize: 30,
+    fontSize: 42,
     padding: 10
   }
 });

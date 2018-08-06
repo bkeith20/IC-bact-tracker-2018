@@ -80,7 +80,7 @@ export default class HomeScreen extends React.Component {
         </View>
                 
         <View style={{
-                    flex: 10,
+                    flex: 8,
                     justifyContent: 'center',
                     flexDirection: 'row'
                   }}>
@@ -124,7 +124,7 @@ export default class HomeScreen extends React.Component {
                                         <View style={{flexDirection: 'row', maxWidth: width}}><Text style={styles.regularText}> {sample.notes} </Text></View>
                                         <TouchableOpacity
                                             onPress={() => this.props.navigation.navigate('Edit', {inNetpass: inNetpass, sampleLat: sample.latitude, sampleLong: sample.longitude, sampleLocation: sample.location, sampleDate: sample.date, sampleID: sample.id, sampleObject: sample.object, notes: sample.notes, sampleType: sample.type})}
-                                            style={styles.button}
+                                            style={styles.buttonE}
                                             disabled={false}
                                         >
                                             <Text style={styles.buttonText}>Edit</Text>
@@ -177,7 +177,15 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#003b71',
-    width: 130,
+    width: width*0.8,
+    height: 40,
+    borderRadius: 8,
+    marginBottom: 10,
+    marginLeft: 10,
+  },
+ buttonE: {
+    backgroundColor: '#003b71',
+    width: 180,
     height: 40,
     borderRadius: 8,
     marginBottom: 10,

@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Text, Image, Button, Alert, ScrollView, TextInput, TouchableHighlight, Dimensions, Picker, StyleSheet, TouchableOpacity, AsyncStorage, NetInfo } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 
+const {height, width} = Dimensions.get('window');
+
 export default class ConfirmScreen extends React.Component {
     static navigationOptions = {
         title: 'Confirmation',
@@ -101,7 +103,7 @@ export default class ConfirmScreen extends React.Component {
         
         <View style={styles.Scroll}>
         
-        <ScrollView showsVerticalScrollIndicator={false} >
+        <ScrollView showsVerticalScrollIndicator={false} style={{width: width*0.8}} >
         
             <View style={styles.containerRow}>
                 <Text style={styles.title}> Please review the entered information for any errors. </Text>
@@ -175,18 +177,7 @@ export default class ConfirmScreen extends React.Component {
         
             </View>
         
-            <View style={styles.containerRow}>
-                <View style={styles.containerCol}>
-                    <TouchableOpacity
-                        onPress={() => this.props.navigation.goBack()}
-                        style={styles.button}
-                        disabled={false}
-                    >
-                        <Text style={styles.buttonText}>Cancel</Text>
-                    </TouchableOpacity>
-                </View>
-        
-                <View style={styles.containerCol}>
+                <View style={styles.containerRowB}>
                     <TouchableOpacity
                         onPress={() => this.onSubmit(formInfo.SampleID, formInfo)}
                         style={styles.button}
@@ -195,8 +186,17 @@ export default class ConfirmScreen extends React.Component {
                         <Text style={styles.buttonText}>Submit</Text>
                     </TouchableOpacity>        
                 </View>
-            </View>
         
+                <View style={styles.containerRowB}>
+                    <TouchableOpacity
+                        onPress={() => this.props.navigation.goBack()}
+                        style={styles.button}
+                        disabled={false}
+                    >
+                        <Text style={styles.buttonText}>Cancel</Text>
+                    </TouchableOpacity>
+                </View>
+            
             
         
       </View>
@@ -211,15 +211,21 @@ const styles = StyleSheet.create({
     flex:1,
     alignItems: 'center',
     justifyContent: 'center',
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
   containerRow: {
     backgroundColor: 'rgba(0,0,0,0)',
     flex:1,
-    //alignItems: 'center',
-    //justifyContent: 'center',
     flexDirection: 'row',
-    //padding: 10
+    width: width*0.8
+  },
+    containerRowB: {
+    backgroundColor: 'rgba(0,0,0,0)',
+    flex:1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    width: width*0.8
   },
   containerCol: {
     backgroundColor: 'rgba(0,0,0,0)',
@@ -227,13 +233,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'column',
-      //padding: 20
   },
   button: {
     backgroundColor: '#003b71',
-    width: 130,
+    width: width*0.8,
     height: 40,
-    //padding: 30,
     borderRadius: 8,
   },
   buttonText: {
@@ -243,26 +247,24 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   title: {
-    //color: 'white',
-    color: '#003b71',
-    //textAlign: 'center',
+    color: 'black',
     fontWeight: 'bold',
     fontSize: 20,
-    padding: 10
+    padding: 10,
   },
   info: {
-    color: '#003b71',
+    color: 'black',
     fontSize: 20,
-    //textAlign: 'center',
     paddingLeft: 30,
     paddingBottom: 10,
-    paddingRight: 10
+    paddingRight: 10,
+      width: width*0.8
   },
   buttonWrapper: {
     padding: 10
   },
   infoLabel :{
-    color: '#003b71',
+    color: 'black',
     fontSize: 20,
     paddingLeft: 10,
     paddingRight: 10,
@@ -270,11 +272,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   Scroll: {
-      //backgroundColor: 'rgba(0,0,0,0)',
     flex:5,
-    //alignItems: 'center',
-    //justifyContent: 'center',
     flexDirection: 'row',
-    //padding: 10
+      width: width*0.8
   }
 });

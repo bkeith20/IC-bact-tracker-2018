@@ -1,11 +1,12 @@
 import React from 'react';
-import { AppRegistry,StyleSheet, Image, Text, View, Button, TouchableOpacity, TextInput, AsyncStorage, ScrollView, NetInfo} from 'react-native';
+import { AppRegistry,StyleSheet, Image, Text, View, Button, TouchableOpacity, TextInput, AsyncStorage, ScrollView, NetInfo, Dimensions } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 import t from 'tcomb-form-native'; 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
-
 const Form = t.form.Form;
+
+const {height, width} = Dimensions.get('window');
     
 const type = t.enums({
     Single: 'Single',
@@ -107,11 +108,13 @@ export default class enterSample extends React.Component{
                             normal: {
                                 ...Form.stylesheet.textbox.normal,
                                 height: this.state.textHeight,
+                                width: width*0.8,
 
                             },
                             error: {
                                 ...Form.stylesheet.textbox.error,
-                                height: this.state.textHeight
+                                height: this.state.textHeight,
+                                width: width*0.8,
                             }
                         }
                     },
@@ -122,12 +125,12 @@ export default class enterSample extends React.Component{
         };
  
         return(
-            <View style = {{justifyContent: 'center', backgroundColor: 'white', flex: 1,  }}>
+            <View style = {{justifyContent: 'center', alignItems: 'center', backgroundColor: 'white', flex: 1,  }}>
             <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false} >
             
             <Text style={styles.infoLabel}> Sample ID: {sampleID}</Text>
             <Text style={styles.infoLabel}> Location: {sampleLocation}  </Text>
-            <View style={{padding: 20}}>
+            <View style={{padding: 20, alignItems: 'center'}}>
             <Form 
                 type={sample}
                 options= {options}
@@ -163,7 +166,7 @@ export default class enterSample extends React.Component{
 const styles = StyleSheet.create({
       button: {
         marginBottom: 30,
-        width: 250,
+        width: width*0.8,
         alignItems: 'center',
         backgroundColor: '#003b71',
         borderRadius: 8,
@@ -177,14 +180,14 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
       },
       infoLabel :{
-          color: '#003b71',
+          color: 'black',
           fontSize: 20,
           paddingLeft: 20,
           paddingRight: 20,
           paddingTop: 20,
           paddingBottom: 10,
           fontWeight: 'bold',
-          alignSelf: 'center'
+          width: width*0.8,
       },
 
 });

@@ -1,10 +1,12 @@
     import React from 'react';
-    import { AppRegistry,StyleSheet, Image, Text, View, Button, TouchableOpacity, TextInput, AsyncStorage, Alert, NetInfo} from 'react-native';
+    import { AppRegistry,StyleSheet, Image, Text, View, Button, TouchableOpacity, TextInput, AsyncStorage, Alert, Dimensions, NetInfo} from 'react-native';
     import { createStackNavigator, TabNavigator} from 'react-navigation';
     import {SecureStore} from 'expo';
     import t from 'tcomb-form-native'; 
 
     const Form = t.form.Form;
+
+    const {height, width} = Dimensions.get('window');
 
     const User = t.struct({
       Netpass: t.String,
@@ -50,7 +52,22 @@
             fields: {
                 Netpass: {
                     label: 'Netpass Username', // <= label for the name field
-                    onSubmitEditing: () => this._onClick()
+                    onSubmitEditing: () => this._onClick(),
+                    stylesheet: {
+                         ...Form.stylesheet,
+                                textbox: {
+                                    ...Form.stylesheet.textbox,
+                                    normal: {
+                                        ...Form.stylesheet.textbox.normal,
+                                        width: width*0.8,
+
+                                    },
+                                    error: {
+                                        ...Form.stylesheet.textbox.error,
+                                        width: width*0.8,
+                                    }
+                        }
+                    }
                 },
             }
         };
@@ -188,21 +205,24 @@
 
         
           <View style={{alignItems: 'center', backgroundColor: 'white', flex: 1, padding: 10}}>
-            
-            <Text style={styles.title}> Welcome to the Bact-Tracker!</Text> 
-            <Form 
+            <View style={{flex: 1,  justifyContent: 'center'}}>
+                <Text style={styles.title}> IC Bact-Tracker</Text> 
+            </View>
+            <View style={{flex: 1, justifyContent: 'center'}}>
+                <Form 
                     type={User} 
                     options = {this.options}
                     value={this.state.defaultVal}
                     ref={c => this._form = c}
                 />
-
-            <TouchableOpacity onPress ={() => this._onClick()}>
-            <View style = {styles.button}>
-            <Text style={styles.buttonText}>Log in</Text>
             </View>
-            </TouchableOpacity>
-
+            <View style={{flex: 1}}>
+                <TouchableOpacity onPress ={() => this._onClick()}>
+                    <View style = {styles.button}>
+                        <Text style={styles.buttonText}>Log in</Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
           </View>
 
         );
@@ -212,7 +232,7 @@
 
       button: {
     backgroundColor: '#003b71',
-    width: 180,
+    width: width*0.8,
     height: 40,
     borderRadius: 8,
     marginBottom: 10,
@@ -228,7 +248,8 @@
     color: '#003b71',
     textAlign: 'center',
     fontWeight: 'bold',
-    fontSize: 30,
+    fontSize: 42,
+    width: width*0.8,
     padding: 10
   }  
 
