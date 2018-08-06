@@ -142,8 +142,8 @@ async componentDidMount() {
              );
              var latD = Math.abs(areaCoordinates.latitude - this.state.latitude);
              var lonD = Math.abs(areaCoordinates.longitude - this.state.longitude);
-             var lonThres = 0.0002;
-             var latThres = 0.0002;
+             var lonThres = 0.0004;
+             var latThres = 0.0004;
 
              if(lonD <= lonThres && latD <= latThres){
                 this.menu.open();

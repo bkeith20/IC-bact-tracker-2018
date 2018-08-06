@@ -1,6 +1,6 @@
     import React from 'react';
-    import { AppRegistry,StyleSheet, Image, Text, View, Button, TouchableOpacity, TextInput, AsyncStorage, Alert, Dimensions, NetInfo} from 'react-native';
-    import { createStackNavigator, TabNavigator} from 'react-navigation';
+    import { AppRegistry, StyleSheet, Text, View, TouchableOpacity, TextInput, AsyncStorage, Alert, Dimensions, NetInfo} from 'react-native';
+    import { createStackNavigator} from 'react-navigation';
     import {SecureStore} from 'expo';
     import t from 'tcomb-form-native'; 
 
@@ -14,13 +14,12 @@
     });
 
     export default class Login extends React.Component {
-        
-
-         constructor(props) {
+        constructor(props) {
         super(props);
         this.state = {defaultVal:{
                           Netpass: '',
                           RememberMe: false,
+                          seenVideo: null
                       }
                      }
 
@@ -35,7 +34,7 @@
                         const vals = {
                             Netpass: savedUser.userName,
                             RememberMe: savedUser.rememberMe,
-                            seenVideo: null
+                            seenVideo: savedUser.seenVideo
                         }
                         this.setState({defaultVal: vals});
                     }
@@ -81,14 +80,24 @@
                     const inNetpass = Fvalue.Netpass;
                    
                     const saved = await SecureStore.getItemAsync('deviceUser');
+                    
+                    var savedUser = null;
+                    var checkName = null;
+                    
                     if(saved!=null){
-                        const savedUser = JSON.parse(saved);
-                        if(inNetpass==savedUser.userName){
+                        savedUser = JSON.parse(saved);
+                        checkName = savedUser.userName;
+                        console.log("here");
+                    }
+                    else{
+                        checkName = null;
+                    }
+                        if(inNetpass===checkName){
                                 if(Fvalue.RememberMe!=savedUser.rememberMe){
                                     const toSave = {
                                         userName: inNetpass,
                                         rememberMe: Fvalue.RememberMe,
-                                        seenVideo: null
+                                        seenVideo: savedUser.seenVideo
                                     };
                                     const toSaveStr = JSON.stringify(toSave);
                                     await SecureStore.setItemAsync('deviceUser', toSaveStr);
@@ -98,7 +107,7 @@
                         else{
                             //check database here 
                             //if not in database return "false" and show alert
-                            //if in database and correct save to 'deviceUser'
+                            //if in database save to 'deviceUser'
                             const netInfo = await NetInfo.getConnectionInfo();
                             const connection = netInfo.type;
                             //check if connected to internet
@@ -116,7 +125,7 @@
                                         },
                                         body: toSendStr,
                                     });
-                                    
+
                                     let rJSON = await response.json();
                                     
                                     if(rJSON["pass"]!=="false"){
@@ -124,7 +133,7 @@
                                         const toSave = {
                                             userName: uname,
                                             rememberMe: finfo.RememberMe,
-                                            seenVideo: null
+                                            seenVideo: rJSON["seen"]
                                         };
                                         const inNetpass = finfo.Netpass;
                                         const toSaveStr = JSON.stringify(toSave);
@@ -142,56 +151,6 @@
                                 Alert.alert("No internet connection! Please turn on mobile data or wifi and retry.");
                             }
                         }
-                    }
-                    else{
-                        //check database here
-                            //if not in database return "false" and show alert
-                            //if in database and correct save to 'deviceUser'
-                            //else show this alert
-                        const netInfo = await NetInfo.getConnectionInfo();
-                        const connection = netInfo.type;
-                        //check if connected to internet
-                        if (connection!=="none" && connection!=="unknown"){ 
-                            try{
-                                const finfo = this._form.getValue();
-                                const uname = finfo.Netpass;
-                                const toSendStr = JSON.stringify({uname: uname});
-                               
-                                let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioLogin.php',{
-                                    method: 'POST',
-                                    headers: {
-                                        Accept: 'application/json',
-                                        'Content-Type': 'application/json',
-                                    },
-                                    body: toSendStr,
-                                });
-                           
-                                let rJSON = await response.json();
-                           
-                                if(rJSON["pass"]!=="false"){
-                                    //here
-                                    const toSave = {
-                                        userName: uname,
-                                        rememberMe: false,
-                                        seenVideo: null
-                                    };
-                                    const inNetpass = finfo.Netpass;
-                                    const toSaveStr = JSON.stringify(toSave);
-                                    await SecureStore.setItemAsync('deviceUser', toSaveStr);
-                                    const retrieved = await SecureStore.getItemAsync('deviceUser');
-                               
-                                }
-                                else{
-                                    Alert.alert("Account Does not exist!!");
-                                }
-                            } catch(error){
-                                console.log(error);
-                            } 
-                        }
-                        else{
-                            Alert.alert("No internet connection! Please turn on mobile data or wifi and retry.");
-                        }
-                    }
                 } catch (error){
                     console.log(error);
                 }
