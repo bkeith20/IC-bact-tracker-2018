@@ -87,7 +87,6 @@
                     if(saved!=null){
                         savedUser = JSON.parse(saved);
                         checkName = savedUser.userName;
-                        console.log("here");
                     }
                     else{
                         checkName = null;

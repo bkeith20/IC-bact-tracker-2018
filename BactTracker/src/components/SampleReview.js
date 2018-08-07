@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, Button, Alert, ScrollView, TextInput, TouchableOpacity, Dimensions, Picker, StyleSheet, BackHandler, AsyncStorage, NetInfo } from 'react-native';
+import { View, Text, Image, Button, Alert, ScrollView, TextInput, TouchableOpacity, Dimensions, Picker, StyleSheet, BackHandler, AsyncStorage, NetInfo, ActivityIndicator } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 
 var {height, width} = Dimensions.get('window');
@@ -12,12 +12,15 @@ export default class HomeScreen extends React.Component {
           samples: [
               
           ],
+          loading: false,
+          error: null
         };
       }    
 
     async componentDidMount(){
         //set state with any locally stored samples
         //maybe also add in to submit any locally stored samples that need to be submitted
+        this.fetchSamples();
     }
 
     async fetchSamples(){
@@ -28,6 +31,7 @@ export default class HomeScreen extends React.Component {
         const connection = netInfo.type;
         //check if connected to internet
         if (connection!=="none" && connection!=="unknown"){
+            this.setState({loading: true});
             try{
                     const { navigation } = this.props;
                     const inNetpass = navigation.getParam('inNetpass', 'NO-ID');
@@ -60,8 +64,10 @@ export default class HomeScreen extends React.Component {
                          
                          this.setState(prevState => ({ samples: [...prevState.samples, newSample]}));
                     };
+                    this.setState({loading: false});
                 } catch (error){
                     console.error(error);
+                    this.setState({loading: false, error: error});
                 }
         }
         else{
@@ -72,6 +78,29 @@ export default class HomeScreen extends React.Component {
   render() {
       const { navigation } = this.props;
       const inNetpass = navigation.getParam('inNetpass', 'NO-ID');
+    if(this.state.loading){
+        return (
+            <View style={styles.containerOuter}>
+        
+                <View style={styles.containerRow}>
+                    <Text style={styles.title}> My Samples </Text>
+                </View>
+                <View style={{flex: 8, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                    <ActivityIndicator size="large" color="#003b71" />
+                </View>
+                <View style={styles.containerRow}>
+                    <TouchableOpacity
+                        onPress={() => this.fetchSamples()}
+                        style={styles.button}
+                        disabled={false}
+                    >
+                        <Text style={styles.buttonText}>Refresh</Text>
+                    </TouchableOpacity>
+                </View>
+
+            </View>
+        );
+    } else {
     return (
       <View style={styles.containerOuter}>
         
@@ -84,54 +113,67 @@ export default class HomeScreen extends React.Component {
                     justifyContent: 'center',
                     flexDirection: 'row'
                   }}>
-            
-                <View style={styles.containerCol} >
-                    <Text style={styles.subtitles}> Sample ID: </Text>
-                    <Text style={styles.subtitles}> User: </Text>
-                    <Text style={styles.subtitles}> Location: </Text>
-                    <Text style={styles.subtitles}> Latitude: </Text>
-                    <Text style={styles.subtitles}> Longitude: </Text>
-                    <Text style={styles.subtitles}> Type: </Text>
-                    <Text style={styles.subtitles}> Object: </Text>
-                    <Text style={styles.subtitles}> Date: </Text>
-                    <Text style={styles.subtitles}> Notes: </Text>
-                </View>
         
                 <View style={{
-                    flex:4,
                     flexDirection: 'column',
-                    borderLeftWidth: 3,
-                    borderColor: '#003b71'
                   }} >
-                    <ScrollView horizontal={true}>
+                    <ScrollView>
                         {this.state.samples.map(sample => (
-                            <ScrollView key={sample.key}>
+                            
                                 <View style={{
                                         flex:1,
                                         flexDirection: 'column',
-                                        paddingRight: 20
+                                        paddingBottom: 20
                                       }} 
                                       key={sample.key}>
 
-                                        <View style={{flexDirection: 'row'}}><Text style={styles.regularText}> {sample.id} </Text></View>
-                                        <View style={{flexDirection: 'row'}}><Text style={styles.regularText}> {sample.user} </Text></View>
-                                        <View style={{flexDirection: 'row'}}><Text style={styles.regularText}> {sample.location} </Text></View>
-                                        <View style={{flexDirection: 'row'}}><Text style={styles.regularText}> {sample.latitude} </Text></View>
-                                        <View style={{flexDirection: 'row'}}><Text style={styles.regularText}> {sample.longitude} </Text></View>
-                                        <View style={{flexDirection: 'row'}}><Text style={styles.regularText}> {sample.type} </Text></View>
-                                        <View style={{flexDirection: 'row'}}><Text style={styles.regularText}> {sample.object} </Text></View>
-                                        <View style={{flexDirection: 'row'}}><Text style={styles.regularText}> {sample.date} </Text></View>
-                                        <View style={{flexDirection: 'row', maxWidth: width}}><Text style={styles.regularText}> {sample.notes} </Text></View>
+                                        <View style={{flexDirection: 'row', width:width*0.8}}>
+                                            <Text style={styles.subtitles}> Sample ID: </Text>
+                                            <Text style={styles.regularText}> {sample.id} </Text>
+                                        </View>
+                                        <View style={{flexDirection: 'row'}}>
+                                            <Text style={styles.subtitles}> User: </Text>
+                                            <Text style={styles.regularText}> {sample.user} </Text>
+                                        </View>
+                                        <View style={{flexDirection: 'row'}}>
+                                            <Text style={styles.subtitles}> Location: </Text>
+                                            <Text style={styles.regularText}> {sample.location} </Text>
+                                        </View>
+                                        <View style={{flexDirection: 'row'}}>
+                                            <Text style={styles.subtitles}> Latitude: </Text>
+                                            <Text style={styles.regularText}> {sample.latitude} </Text>
+                                        </View>
+                                        <View style={{flexDirection: 'row'}}>
+                                            <Text style={styles.subtitles}> Longitude: </Text>
+                                            <Text style={styles.regularText}> {sample.longitude} </Text>
+                                        </View>
+                                        <View style={{flexDirection: 'row'}}>
+                                            <Text style={styles.subtitles}> Type: </Text>
+                                            <Text style={styles.regularText}> {sample.type} </Text>
+                                        </View>
+                                        <View style={{flexDirection: 'row'}}>
+                                            <Text style={styles.subtitles}> Object: </Text>
+                                            <Text style={styles.regularText}> {sample.object} </Text>
+                                        </View>
+                                        <View style={{flexDirection: 'row'}}>
+                                            <Text style={styles.subtitles}> Date: </Text>
+                                            <Text style={styles.regularText}> {sample.date} </Text>
+                                        </View>
+                                        <View style={{flexDirection: 'row'}}>
+                                            <Text style={styles.subtitles}> Notes: </Text>
+                                            <Text style={styles.regularText}> {sample.notes} </Text>
+                                        </View>
+                                        <View style={{flexDirection: 'row', alignItems: 'center', justifyContent:'center'}}>
                                         <TouchableOpacity
                                             onPress={() => this.props.navigation.navigate('Edit', {inNetpass: inNetpass, sampleLat: sample.latitude, sampleLong: sample.longitude, sampleLocation: sample.location, sampleDate: sample.date, sampleID: sample.id, sampleObject: sample.object, notes: sample.notes, sampleType: sample.type})}
-                                            style={styles.buttonE}
+                                            style={styles.button}
                                             disabled={false}
                                         >
                                             <Text style={styles.buttonText}>Edit</Text>
                                         </TouchableOpacity>
-
+                                        </View>
                                 </View>
-                            </ScrollView>
+                            
 
                         ))}
                     </ScrollView>
@@ -150,6 +192,7 @@ export default class HomeScreen extends React.Component {
         
       </View>
     );
+}
   }
 }
 
@@ -182,14 +225,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 10,
     marginLeft: 10,
-  },
- buttonE: {
-    backgroundColor: '#003b71',
-    width: 180,
-    height: 40,
-    borderRadius: 8,
-    marginBottom: 10,
-    marginLeft: 10,
+      alignSelf: 'center'
   },
   buttonText: {
     alignSelf: 'center',
@@ -216,6 +252,7 @@ const styles = StyleSheet.create({
         paddingRight: 10,
         flexWrap: "wrap",
         flex: 1,
+        textAlign: 'right'
     },
     subtitles: {
          color: '#003b71',

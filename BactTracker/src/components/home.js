@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, Button, Alert, ScrollView, TextInput, TouchableOpacity, Dimensions, Picker, StyleSheet, BackHandler, AsyncStorage, NetInfo } from 'react-native';
+import { View, Text, Alert, TouchableOpacity, Dimensions, StyleSheet, BackHandler, AsyncStorage, NetInfo } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 
 const {height, width} = Dimensions.get('window');
@@ -52,7 +52,6 @@ export default class HomeScreen extends React.Component {
         }
     }
 
-    // will need to pass inNetpass to here to store value in database
     async help(){
         const netInfo = await NetInfo.getConnectionInfo();
         const connection = netInfo.type;

@@ -128,7 +128,7 @@ export default class enterSample extends React.Component{
             <View style = {{justifyContent: 'center', alignItems: 'center', backgroundColor: 'white', flex: 1,  }}>
             <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false} >
             
-            <Text style={styles.infoLabel}> Sample ID: {sampleID}</Text>
+            
             <Text style={styles.infoLabel}> Location: {sampleLocation}  </Text>
             <View style={{padding: 20, alignItems: 'center'}}>
             <Form 

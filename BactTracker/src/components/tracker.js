@@ -1,5 +1,5 @@
     import React from 'react';
-    import { AppRegistry,StyleSheet, Image, Text, View, Button, TouchableOpacity, TextInput, AsyncStorage, Dimensions, NetInfo, Alert } from 'react-native';
+    import { AppRegistry,StyleSheet, Image, Text, View, TouchableOpacity, AsyncStorage, Dimensions, NetInfo, Alert, ActivityIndicator } from 'react-native';
     import { createStackNavigator, TabNavigator} from 'react-navigation';
     import FormData from 'FormData';
     import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
@@ -52,6 +52,7 @@ const { SlideInMenu } = renderers;
           key: 0,
           markers: [],
           options: [],
+          loading: false,
         };
       }
 
@@ -61,7 +62,7 @@ async componentDidMount() {
     const connection = netInfo.type;
     //check if connected to internet
     if (connection!=="none" && connection!=="unknown"){
-                
+        this.setState({loading: true});     
         if(this.ismounted){
             navigator.geolocation.getCurrentPosition(
                 (position) => {
@@ -114,6 +115,7 @@ async componentDidMount() {
                     this.setState(prevState => ({ options: [...prevState.options, responsejson[i]["options"]]}));
                    
                 }
+                this.setState({loading: false});
             };
         } catch (error){
             console.error(error);
@@ -166,7 +168,14 @@ async componentDidMount() {
                 
                 const { navigation } = this.props;
                 const inNetpass = navigation.getParam('inNetpass', 'NO-ID');
-
+                
+                if(this.state.loading){
+                    return (
+                        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                            <ActivityIndicator size="large" color="#003b71" />
+                        </View>
+                    );
+                } else{
                 return (
                     <MenuProvider style={styles.container}>  
                     <View>
@@ -214,6 +223,7 @@ async componentDidMount() {
                     </View>
                     </MenuProvider>
             );
+            }
         }
     }
 

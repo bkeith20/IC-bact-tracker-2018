@@ -103,7 +103,7 @@ export default class ConfirmScreen extends React.Component {
         
         <View style={styles.Scroll}>
         
-        <ScrollView style={{alignItems: 'center'}} >
+        <ScrollView contentContainerStyle={{alignItems: 'center'}} >
         
         <View style={{width: width*0.8}} >
             <View style={styles.containerRow}>
@@ -114,7 +114,7 @@ export default class ConfirmScreen extends React.Component {
                 <Text style={styles.infoLabel}> Sample ID: </Text>
             </View>
             <View style={styles.containerRow}>
-                <Text style={styles.info}> {formInfo.SampleID} </Text>
+                <Text style={styles.info}> Submit to view your sample ID! </Text>
             </View>
         
         
