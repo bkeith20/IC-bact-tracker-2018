@@ -29,7 +29,6 @@ export default class enterSample extends React.Component{
     }
     
     onSubmit(inNetpass, sampleLat, sampleLong, sampleLocation, sampleID, sDate){
-    
         const Fvalue = this._form.getValue();
         if(Fvalue){
             var formInfo = {

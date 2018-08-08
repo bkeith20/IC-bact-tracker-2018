@@ -9,21 +9,10 @@ export default class ConfirmScreen extends React.Component {
         title: 'Confirmation',
     };
     
-    onSubmit(myID, info){
+    async onSubmit(myID, info){
         
-        Alert.alert(
-            'Please be sure to write the sample ID on your sample tube!',
-            'Sample ID: '+myID,
-            [
-                {text: 'OK', onPress: () => this.alertPress(info)},
-                {text: 'Cancel', style: 'cancel'},
-            ],
-        );
-    };
-            
-    // possibly change so that final sample id is sent back from the DB to make sure it is different from any others already saved
-    async alertPress(info){
-            //send info to DB
+        //send info to DB
+            var sID = null;
             const netInfo = await NetInfo.getConnectionInfo();
             const connection = netInfo.type;
             //check if connected to internet
@@ -31,6 +20,7 @@ export default class ConfirmScreen extends React.Component {
                 //if connected send sample to DB
                 try{
                     const sample = info;
+                    info.saved = "false";
                     const sampleStr = JSON.stringify(sample);
                    
                     let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioDB4.php',{
@@ -41,8 +31,8 @@ export default class ConfirmScreen extends React.Component {
                         },
                         body: sampleStr,
                     });
-                    
                     let rJSON = await response.json();
+                    sID = rJSON.id;
                     
                 }catch(error) {
                     console.log(error);
@@ -50,8 +40,8 @@ export default class ConfirmScreen extends React.Component {
                 let numSaved = await AsyncStorage.getItem('numSavedSamples');
                 numsaved = numSaved*1;
                 if(numSaved!==null && numSaved>0){
-                    for (i = 0; i < numSaved; i++){
-                        try{
+                    try{
+                        for (i = (numSaved-1); i > -1; i--){
                             let currSample = await AsyncStorage.getItem('savedSample'+i);
                             let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioDB4.php', {
                                 method: 'POST',
@@ -63,10 +53,12 @@ export default class ConfirmScreen extends React.Component {
                             });
                             
                             let rJSON = await response.json();
-                            
-                        } catch(error){
-                            console.log(error);
+                            numSaved--;
                         }
+                    } catch(error){
+                        console.log(error);
+                        await AsyncStorage.setItem('numSavedSamples', numSaved.toString());
+                        return;
                     }
                     Alert.alert(numSaved+"Locally stored samples have been submitted successfully!");
                     numSaved = 0;
@@ -75,19 +67,35 @@ export default class ConfirmScreen extends React.Component {
             }
             else{
                 //if not connected save locally to be sent later
-                
-                const sampleStr = JSON.stringify(info);
-                
+                //need to add something to the end of the id to make sure that it is unique and check against other saved sample                
                 let numSaved = await AsyncStorage.getItem('numSavedSamples');
                 if(numSaved===null){
                     numsaved=0;
                 }
                 numsaved = numSaved*1;
+                sID = myID.concat("saved"+numSaved);
+                info.SampleID = sID;
+                info.saved = "true";
+                const sampleStr = JSON.stringify(info);
                 await AsyncStorage.setItem('savedSample'+numsaved,sampleStr);
                 numSaved+=1;
                 await AsyncStorage.setItem('numSavedSamples', numSaved.toString());
                 Alert.alert("No Connection! Sample stored locally!", "Connect to internet and open main menu to submit! You will recieve another notification once submitted.");
             }
+        
+        Alert.alert(
+            'Please be sure to write the sample ID on your sample tube!',
+            'Sample ID: '+sID,
+            [
+                {text: 'OK', onPress: () => this.alertPress(info)},
+
+            ],
+        );
+    };
+            
+    // possibly change so that final sample id is sent back from the DB to make sure it is different from any others already saved
+    async alertPress(info){
+            
             this.props.navigation.navigate('Home', {inNetpass: info.User});
         } 
     

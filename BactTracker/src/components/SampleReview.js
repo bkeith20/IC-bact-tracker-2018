@@ -117,17 +117,19 @@ export default class HomeScreen extends React.Component {
                 <View style={{
                     flexDirection: 'column',
                   }} >
-                    <ScrollView>
+                    <ScrollView contentContainerStyle={{alignItems: 'center'}}>
+                    <View style={{alignItems: 'center', width: width}}>
                         {this.state.samples.map(sample => (
                             
                                 <View style={{
                                         flex:1,
                                         flexDirection: 'column',
                                         paddingBottom: 20
+                                        , width:width*0.8
                                       }} 
                                       key={sample.key}>
 
-                                        <View style={{flexDirection: 'row', width:width*0.8}}>
+                                        <View style={{flexDirection: 'row'}}>
                                             <Text style={styles.subtitles}> Sample ID: </Text>
                                             <Text style={styles.regularText}> {sample.id} </Text>
                                         </View>
@@ -176,6 +178,7 @@ export default class HomeScreen extends React.Component {
                             
 
                         ))}
+                    </View>
                     </ScrollView>
                 </View>
             </View>

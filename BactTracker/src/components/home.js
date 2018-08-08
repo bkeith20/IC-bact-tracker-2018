@@ -26,8 +26,9 @@ export default class HomeScreen extends React.Component {
             let numSaved = await AsyncStorage.getItem('numSavedSamples');
             numsaved = numSaved*1;
             if(numSaved!==null && numSaved>0){
-                for (i = 0; i < numSaved; i++){
-                    try{
+                try{
+                    for (i = (numSaved-1); i > -1; i--){
+                    
                         let currSample = await AsyncStorage.getItem('savedSample'+i);
                         await AsyncStorage.removeItem('savedSample'+i);
                         let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioDB4.php', {
@@ -40,10 +41,13 @@ export default class HomeScreen extends React.Component {
                         });
                         
                         let rJSON = await response.json();
-                        
-                    } catch(error){
-                        console.log(error);
+                        numSaved--;
+                    
                     }
+                } catch(error){
+                    console.log(error);
+                    await AsyncStorage.setItem('numSavedSamples', numSaved.toString());
+                    return;
                 }
                 numsaved = 0;
                 await AsyncStorage.setItem('numSavedSamples', numsaved.toString());
