@@ -76,7 +76,8 @@ export default class enterSample extends React.Component{
     
     onChange(formValue){
         this.setState({formValue: formValue,
-                      textHeight: (formValue.notes.height+10)})
+                      //textHeight: (formValue.notes.height+10)
+                      })
     }
     
     
@@ -107,6 +108,15 @@ export default class enterSample extends React.Component{
                     label: "Additional Notes",
                             error: 'Notes cannot exceed 255 characters',
                             multiline: true,
+                            onContentSizeChange: (event) => {
+                                if (event && event.nativeEvent && event.nativeEvent.contentSize) {
+                                    this.setState({
+                                        textHeight: event.nativeEvent.contentSize.height+13
+                                    })
+                                    console.log(event.nativeEvent.contentSize.height);
+                                }
+                                this.props.onContentSizeChange && this.props.onContentSizeChange(event)
+                            },
                             stylesheet: {
                                 ...Form.stylesheet,
                                 textbox: {

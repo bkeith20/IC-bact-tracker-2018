@@ -19,7 +19,7 @@ const { SlideInMenu } = renderers;
     
     var descripton = "";
 
-    var _ismounted;
+    
 
     export default class tracker extends React.Component {
         static navigationOptions = ({navigation}) => {
@@ -38,11 +38,12 @@ const { SlideInMenu } = renderers;
 
         constructor(props) {
         super(props);
+        //this._ismounted = false;
 
         this.state = {
           region: {
-            latitude: 1,
-            longitude: 1,
+            latitude: 42.422921,
+            longitude: -76.494432,
             latitudeDelta: 1,
             longitudeDelta: 1
           },
