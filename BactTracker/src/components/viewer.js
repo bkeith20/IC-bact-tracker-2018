@@ -1,17 +1,30 @@
-   import React from 'react';
-    import { AppRegistry,StyleSheet, Image, Text, View, Button, TouchableOpacity, TextInput, AsyncStorage, Dimensions } from 'react-native';
-    import { createStackNavigator, TabNavigator} from 'react-navigation';
+import React from 'react';
+import { View, Text, Image, Button, Alert, ScrollView, TextInput, TouchableHighlight, Dimensions, Picker, StyleSheet, WebView, Platform, AsyncStorage } from 'react-native';
+import { createStackNavigator, TabNavigator} from 'react-navigation';
 
 
 
-    export default class tracker extends React.Component {
+    export default class viewer extends React.Component {
+        constructor(props) {
+            super(props);
+            this.state = {
+                myURL: 'http://ic-research.eastus.cloudapp.azure.com/~bkeith/heatmap'
+            }
+        }
 
         render() {
 
         return (
             <View style={styles.container}>
-                <Text style={styles.title}> Welcome to the BACT-Viewer! </Text>
-                <Text style={styles.subtitles}> Here you will be able to view data collected and analyzed by your fellow students. Unfortunately, there is currently no data. Please check back once more data has been collected and analyzed. </Text>
+                <WebView
+                    ref="map"
+                    onLoadStart={() => this.setState({myURL: 'http://ic-research.eastus.cloudapp.azure.com/~bkeith/heatmap/viewer.html'})}
+                    style={styles.view}
+                    javaScriptEnabled={true}
+                    domStorageEnabled={false}
+                    thirdPartyCookiesEnabled={false}
+                    source={{uri: this.state.myURL, headers: {"cache": "no-cache"}}}
+                />
             </View>
             
         );
@@ -21,9 +34,9 @@
     const styles = StyleSheet.create({
         
         container: {
-        //flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
+        flex: 1,
+        //alignItems: 'center',
+        //justifyContent: 'center',
         //backgroundColor: '#ecf0f1',
         margin: 5,
       },
@@ -51,6 +64,9 @@
         fontWeight: 'bold',
         fontSize: 20,
         paddingLeft: 10
-    }
+    },
+        view: {
+        marginTop: (Platform.OS == 'ios')?20:0,
+    },
 
     });

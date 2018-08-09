@@ -116,6 +116,7 @@ export default class ViewerScreen extends React.Component {
                 try{
                     const toSend = this._accform.getValue();
                     const toSendStr = JSON.stringify(toSend);
+                    //Send info here but dont add to bd just check if username and email are taken? maybe do put in but add a field for active vs not? or have a whole table just for accounts that still need to be verified
                     let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioDB3.php',{
                        method: 'POST',
                        headers: {
@@ -126,6 +127,7 @@ export default class ViewerScreen extends React.Component {
                     });
                     console.log(response);
                     let rJSON = await response.json();
+                    //move this to verify email + send in email address
                     console.log(rJSON["submitted"]);
                     if(rJSON["submitted"]==="true"){
                         const toSave = {

@@ -1,6 +1,8 @@
 import React from 'react';
-import { View, Text, Image, Button, Alert, ScrollView, TextInput, TouchableOpacity, Dimensions, Picker, StyleSheet, BackHandler, AsyncStorage, NetInfo } from 'react-native';
+import { View, Text, Image, Button, Alert, ScrollView, TextInput, TouchableOpacity, Dimensions, Picker, StyleSheet, BackHandler, AsyncStorage, NetInfo, ActivityIndicator } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
+
+var {height, width} = Dimensions.get('window');
 
 export default class HomeScreen extends React.Component {
     constructor(props) {
@@ -10,21 +12,26 @@ export default class HomeScreen extends React.Component {
           samples: [
               
           ],
+          loading: false,
+          error: null
         };
       }    
 
     async componentDidMount(){
         //set state with any locally stored samples
         //maybe also add in to submit any locally stored samples that need to be submitted
+        this.fetchSamples();
     }
 
     async fetchSamples(){
         //triggered by refresh button
+        this.setState({samples: []})
         //pull down any samples from the database from the current user
         const netInfo = await NetInfo.getConnectionInfo();
         const connection = netInfo.type;
         //check if connected to internet
         if (connection!=="none" && connection!=="unknown"){
+            this.setState({loading: true});
             try{
                     const { navigation } = this.props;
                     const inNetpass = navigation.getParam('inNetpass', 'NO-ID');
@@ -40,7 +47,7 @@ export default class HomeScreen extends React.Component {
                     });
 
                     let responsejson = await response.json();
-                    console.log(responsejson+" "+responsejson.length);
+                    
                     for (let i =0; i<responsejson.length; i++){
                         let newSample = {
                               id: responsejson[i]["sample_id"],
@@ -54,11 +61,13 @@ export default class HomeScreen extends React.Component {
                               notes: responsejson[i]["notes"],
                               key: i,
                           };
-                         //console.log(responsejson[i]);
+                         
                          this.setState(prevState => ({ samples: [...prevState.samples, newSample]}));
                     };
+                    this.setState({loading: false});
                 } catch (error){
                     console.error(error);
+                    this.setState({loading: false, error: error});
                 }
         }
         else{
@@ -69,6 +78,29 @@ export default class HomeScreen extends React.Component {
   render() {
       const { navigation } = this.props;
       const inNetpass = navigation.getParam('inNetpass', 'NO-ID');
+    if(this.state.loading){
+        return (
+            <View style={styles.containerOuter}>
+        
+                <View style={styles.containerRow}>
+                    <Text style={styles.title}> My Samples </Text>
+                </View>
+                <View style={{flex: 8, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                    <ActivityIndicator size="large" color="#003b71" />
+                </View>
+                <View style={styles.containerRow}>
+                    <TouchableOpacity
+                        onPress={() => this.fetchSamples()}
+                        style={styles.button}
+                        disabled={false}
+                    >
+                        <Text style={styles.buttonText}>Refresh</Text>
+                    </TouchableOpacity>
+                </View>
+
+            </View>
+        );
+    } else {
     return (
       <View style={styles.containerOuter}>
         
@@ -77,57 +109,76 @@ export default class HomeScreen extends React.Component {
         </View>
                 
         <View style={{
-                    flex: 7,
+                    flex: 8,
                     justifyContent: 'center',
                     flexDirection: 'row'
                   }}>
-            
-                <View style={styles.containerCol} >
-                    <Text style={styles.subtitles}> Sample ID: </Text>
-                    <Text style={styles.subtitles}> User: </Text>
-                    <Text style={styles.subtitles}> Location: </Text>
-                    <Text style={styles.subtitles}> Latitude: </Text>
-                    <Text style={styles.subtitles}> Longitude: </Text>
-                    <Text style={styles.subtitles}> Type: </Text>
-                    <Text style={styles.subtitles}> Object: </Text>
-                    <Text style={styles.subtitles}> Date: </Text>
-                    <Text style={styles.subtitles}> Notes: </Text>
-                </View>
         
                 <View style={{
-                    flex:2,
                     flexDirection: 'column',
-                    borderLeftWidth: 3,
-                    borderColor: '#003b71'
                   }} >
-                    <ScrollView horizontal={true}>
+                    <ScrollView contentContainerStyle={{alignItems: 'center'}}>
+                    <View style={{alignItems: 'center', width: width}}>
                         {this.state.samples.map(sample => (
-
+                            
                                 <View style={{
                                         flex:1,
                                         flexDirection: 'column',
-                                        paddingRight: 40
+                                        paddingBottom: 20
+                                        , width:width*0.8
                                       }} 
                                       key={sample.key}>
-                                    <Text style={styles.regularText}> {sample.id} </Text>
-                                    <Text style={styles.regularText}> {sample.user} </Text>
-                                    <Text style={styles.regularText}> {sample.location} </Text>
-                                    <Text style={styles.regularText}> {sample.latitude} </Text>
-                                    <Text style={styles.regularText}> {sample.longitude} </Text>
-                                    <Text style={styles.regularText}> {sample.type} </Text>
-                                    <Text style={styles.regularText}> {sample.object} </Text>
-                                    <Text style={styles.regularText}> {sample.date} </Text>
-                                    <Text style={styles.regularText}> {sample.notes} </Text>
-                                    <TouchableOpacity
-                                        onPress={() => Alert.alert("This will allow editing")}
-                                        style={styles.button}
-                                        disabled={false}
-                                    >
-                                        <Text style={styles.buttonText}>Edit</Text>
-                                    </TouchableOpacity>
+
+                                        <View style={{flexDirection: 'row'}}>
+                                            <Text style={styles.subtitles}> Sample ID: </Text>
+                                            <Text style={styles.regularText}> {sample.id} </Text>
+                                        </View>
+                                        <View style={{flexDirection: 'row'}}>
+                                            <Text style={styles.subtitles}> User: </Text>
+                                            <Text style={styles.regularText}> {sample.user} </Text>
+                                        </View>
+                                        <View style={{flexDirection: 'row'}}>
+                                            <Text style={styles.subtitles}> Location: </Text>
+                                            <Text style={styles.regularText}> {sample.location} </Text>
+                                        </View>
+                                        <View style={{flexDirection: 'row'}}>
+                                            <Text style={styles.subtitles}> Latitude: </Text>
+                                            <Text style={styles.regularText}> {sample.latitude} </Text>
+                                        </View>
+                                        <View style={{flexDirection: 'row'}}>
+                                            <Text style={styles.subtitles}> Longitude: </Text>
+                                            <Text style={styles.regularText}> {sample.longitude} </Text>
+                                        </View>
+                                        <View style={{flexDirection: 'row'}}>
+                                            <Text style={styles.subtitles}> Type: </Text>
+                                            <Text style={styles.regularText}> {sample.type} </Text>
+                                        </View>
+                                        <View style={{flexDirection: 'row'}}>
+                                            <Text style={styles.subtitles}> Object: </Text>
+                                            <Text style={styles.regularText}> {sample.object} </Text>
+                                        </View>
+                                        <View style={{flexDirection: 'row'}}>
+                                            <Text style={styles.subtitles}> Date: </Text>
+                                            <Text style={styles.regularText}> {sample.date} </Text>
+                                        </View>
+                                        <View style={{flexDirection: 'row'}}>
+                                            <Text style={styles.subtitles}> Notes: </Text>
+                                            <Text style={styles.regularText}> {sample.notes} </Text>
+                                        </View>
+                                        <View style={{flexDirection: 'row', alignItems: 'center', justifyContent:'center'}}>
+                                        <TouchableOpacity
+                                            onPress={() => this.props.navigation.navigate('Edit', {inNetpass: inNetpass, sampleLat: sample.latitude, sampleLong: sample.longitude, sampleLocation: sample.location, sampleDate: sample.date, sampleID: sample.id, sampleObject: sample.object, notes: sample.notes, sampleType: sample.type})}
+                                            style={styles.button}
+                                            disabled={false}
+                                        >
+                                            <Text style={styles.buttonText}>Edit</Text>
+                                        </TouchableOpacity>
+                                        </View>
                                 </View>
+                            
 
                         ))}
+                    </View>
                     </ScrollView>
                 </View>
             </View>
@@ -144,6 +195,7 @@ export default class HomeScreen extends React.Component {
         
       </View>
     );
+}
   }
 }
 
@@ -164,18 +216,19 @@ const styles = StyleSheet.create({
   },
   containerCol: {
     //backgroundColor: 'rgba(0,0,0,0)',
-    flex:1,
+    flex:2,
     //alignItems: 'center',
     //justifyContent: 'center',
     flexDirection: 'column'
   },
   button: {
     backgroundColor: '#003b71',
-    width: 130,
+    width: width*0.8,
     height: 40,
     borderRadius: 8,
     marginBottom: 10,
     marginLeft: 10,
+      alignSelf: 'center'
   },
   buttonText: {
     alignSelf: 'center',
@@ -196,16 +249,22 @@ const styles = StyleSheet.create({
         //textAlign: 'center',
         //fontWeight: 'bold',
         fontSize: 18,
-        paddingTop: 12,
-        paddingBottom: 10,
+        paddingTop: 7,
+        paddingBottom: 5,
         paddingLeft: 10,
-        paddingRight: 10
+        paddingRight: 10,
+        flexWrap: "wrap",
+        flex: 1,
+        textAlign: 'right'
     },
     subtitles: {
          color: '#003b71',
         //textAlign: 'center',
         fontWeight: 'bold',
         fontSize: 20,
-        padding: 10
+        paddingTop: 5,
+        paddingBottom: 5,
+        paddingLeft: 10,
+        paddingRight: 10,
     }
 });

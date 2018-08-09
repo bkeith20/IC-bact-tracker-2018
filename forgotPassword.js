@@ -4,6 +4,8 @@ import { createStackNavigator } from 'react-navigation';
 
 export default class HomeScreen extends React.Component {
     
+    //query db, compose email, should there be a code and a way to reset password or just send the old password by email? 
+    
   render() {
     return (
       <View style={styles.containerOuter}>

@@ -16,21 +16,25 @@ export default class HelpScreen extends React.Component {
     //just before screen is rendered this function checks if the help screen has been visited before(value stored in async), if it has not: the value is set in async and the value is changed in the database
     async componentDidMount(){
         ScreenOrientation.allow(ScreenOrientation.Orientation.ALL);
-         //console.log("function running");
         try{
-            const value = await SecureStore.getItemAsync('videoWatched');
-            console.log('1 '+value);
-            if(value==null){
-                //console.log("got here");
-                //save that this screen has been visited
+            const value = await SecureStore.getItemAsync('deviceUser');
+            const user = JSON.parse(value);
+            if(user.seenVideo==null){
                 await SecureStore.setItemAsync('videoWatched', 'true');
                 const value1 = await SecureStore.getItemAsync('videoWatched');
-                console.log('2 '+value1);
-                //set value in database
-                //TODO 
-                
+                const { navigation } = this.props;
+                const inNetpass = navigation.getParam('inNetpass', 'NO-ID');
+                const toSendStr = JSON.stringify({uname: inNetpass});
+                                    
+                let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/setHelp.php',{
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: toSendStr,
+                });
             }
-            console.log('3 '+value);
         }catch (error) {
             console.log("Error accessing data " + error);
         }
@@ -52,8 +56,8 @@ export default class HelpScreen extends React.Component {
                     source={{uri: 'https://www.youtube.com/embed/NRqIn1gO1kU'}}
                 />
             </View>
-            <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={{padding: 10}}>
+            <ScrollView contentContainerStyle={{alignItems: 'center'}} >
+            <View style={{width: width*0.8}}>
                 <Text style={styles.title}>No help information is currently available</Text>
                 <Text style={styles.subtitles}>Step 1</Text>
                 <Text style={styles.subtitles}>Step 2</Text>
