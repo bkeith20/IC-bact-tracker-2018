@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, Button, Alert, ScrollView, TextInput, TouchableHighlight, Dimensions, Picker, StyleSheet, WebView, Platform, AsyncStorage } from 'react-native';
+import { View, Text, Alert, ScrollView, TextInput, Dimensions, StyleSheet, WebView, Platform, AsyncStorage } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 import {SecureStore, ScreenOrientation} from 'expo';
 

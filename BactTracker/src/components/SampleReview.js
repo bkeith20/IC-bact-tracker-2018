@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, Button, Alert, ScrollView, TextInput, TouchableOpacity, Dimensions, Picker, StyleSheet, BackHandler, AsyncStorage, NetInfo, ActivityIndicator } from 'react-native';
+import { View, Text, Alert, ScrollView, TextInput, TouchableOpacity, Dimensions, StyleSheet, AsyncStorage, NetInfo, ActivityIndicator } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 
 var {height, width} = Dimensions.get('window');
@@ -25,13 +25,12 @@ export default class HomeScreen extends React.Component {
 
     async fetchSamples(){
         //triggered by refresh button
-        this.setState({samples: []})
         //pull down any samples from the database from the current user
         const netInfo = await NetInfo.getConnectionInfo();
         const connection = netInfo.type;
         //check if connected to internet
         if (connection!=="none" && connection!=="unknown"){
-            this.setState({loading: true});
+            this.setState({loading: true, samples: []});
             try{
                     const { navigation } = this.props;
                     const inNetpass = navigation.getParam('inNetpass', 'NO-ID');
@@ -213,13 +212,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row'
-  },
-  containerCol: {
-    //backgroundColor: 'rgba(0,0,0,0)',
-    flex:2,
-    //alignItems: 'center',
-    //justifyContent: 'center',
-    flexDirection: 'column'
   },
   button: {
     backgroundColor: '#003b71',

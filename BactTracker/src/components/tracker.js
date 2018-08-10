@@ -1,7 +1,6 @@
     import React from 'react';
-    import { AppRegistry,StyleSheet, Image, Text, View, TouchableOpacity, AsyncStorage, Dimensions, NetInfo, Alert, ActivityIndicator } from 'react-native';
-    import { createStackNavigator, TabNavigator} from 'react-navigation';
-    import FormData from 'FormData';
+    import { AppRegistry, StyleSheet, Text, View, TouchableOpacity, AsyncStorage, Dimensions, NetInfo, Alert, ActivityIndicator } from 'react-native';
+    import { createStackNavigator} from 'react-navigation';
     import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
     import {
       MenuProvider,

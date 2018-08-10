@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppRegistry,StyleSheet, Image, Text, View, Button, TouchableOpacity, TextInput, AsyncStorage, ScrollView, NetInfo, Dimensions } from 'react-native';
+import { AppRegistry, StyleSheet, Text, View, TouchableOpacity, TextInput, AsyncStorage, ScrollView, NetInfo, Dimensions } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 import t from 'tcomb-form-native'; 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';

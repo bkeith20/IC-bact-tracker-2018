@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Alert, TouchableOpacity, Dimensions, StyleSheet, BackHandler, AsyncStorage, NetInfo } from 'react-native';
+import { View, Text, Alert, TouchableOpacity, Dimensions, StyleSheet, AsyncStorage, NetInfo } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 
 const {height, width} = Dimensions.get('window');
