@@ -10,6 +10,8 @@ export default class HelpScreen extends React.Component {
         super(props);
         this.state = {
             hasVisited: null,
+            url: null,
+            steps: [],
         }
     }
     
@@ -19,22 +21,23 @@ export default class HelpScreen extends React.Component {
         try{
             const value = await SecureStore.getItemAsync('deviceUser');
             const user = JSON.parse(value);
-            if(user.seenVideo==null){
-                await SecureStore.setItemAsync('videoWatched', 'true');
-                const value1 = await SecureStore.getItemAsync('videoWatched');
-                const { navigation } = this.props;
-                const inNetpass = navigation.getParam('inNetpass', 'NO-ID');
-                const toSendStr = JSON.stringify({uname: inNetpass});
-                                    
-                let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/setHelp.php',{
-                    method: 'POST',
-                    headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json',
-                    },
-                    body: toSendStr,
-                });
-            }
+            await SecureStore.setItemAsync('videoWatched', 'true');
+            const value1 = await SecureStore.getItemAsync('videoWatched');
+            const { navigation } = this.props;
+            const inNetpass = navigation.getParam('inNetpass', 'NO-ID');
+            const toSendStr = JSON.stringify({uname: inNetpass});
+                                
+            let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/setHelp.php',{
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: toSendStr,
+            });
+            console.log(response);
+            let rJSON = await response.json();
+
         }catch (error) {
             console.log("Error accessing data " + error);
         }
@@ -53,7 +56,7 @@ export default class HelpScreen extends React.Component {
                     style={styles.view}
                     javaScriptEnabled={true}
                     domStorageEnabled={true}
-                    source={{uri: 'https://www.youtube.com/embed/NRqIn1gO1kU'}}
+                    source={{uri: this.state.url}}
                 />
             </View>
             <ScrollView contentContainerStyle={{alignItems: 'center'}} >
@@ -77,6 +80,7 @@ export default class HelpScreen extends React.Component {
                 <Text style={styles.subtitles}>Step 16</Text>
                 <Text style={styles.subtitles}>Step 17</Text>
                 <Text style={styles.subtitles}>Step 18</Text>
+
                
             </View>
             </ScrollView>
