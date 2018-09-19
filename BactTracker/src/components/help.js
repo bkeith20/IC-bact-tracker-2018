@@ -27,7 +27,7 @@ export default class HelpScreen extends React.Component {
             const inNetpass = navigation.getParam('inNetpass', 'NO-ID');
             const toSendStr = JSON.stringify({uname: inNetpass});
                                 
-            let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/setHelp.php',{
+            let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioHelpInfo.php',{
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
@@ -37,6 +37,13 @@ export default class HelpScreen extends React.Component {
             });
             console.log(response);
             let rJSON = await response.json();
+            console.log(rJSON);
+            // need to do something with the data
+            this.setState(
+                {url: rJSON['url'],
+                steps:rJSON['steps']}
+            );
+
 
         }catch (error) {
             console.log("Error accessing data " + error);
@@ -61,26 +68,13 @@ export default class HelpScreen extends React.Component {
             </View>
             <ScrollView contentContainerStyle={{alignItems: 'center'}} >
             <View style={{width: width*0.8}}>
-                <Text style={styles.title}>No help information is currently available</Text>
-                <Text style={styles.subtitles}>Step 1</Text>
-                <Text style={styles.subtitles}>Step 2</Text>
-                <Text style={styles.subtitles}>Step 3</Text>
-                <Text style={styles.subtitles}>Step 4</Text>
-                <Text style={styles.subtitles}>Step 5</Text>
-                <Text style={styles.subtitles}>Step 6</Text>
-                <Text style={styles.subtitles}>Step 7</Text>
-                <Text style={styles.subtitles}>Step 8</Text>
-                <Text style={styles.subtitles}>Step 9</Text>
-                <Text style={styles.subtitles}>Step 10</Text>
-                <Text style={styles.subtitles}>Step 11</Text>
-                <Text style={styles.subtitles}>Step 12</Text>
-                <Text style={styles.subtitles}>Step 13</Text>
-                <Text style={styles.subtitles}>Step 14</Text>
-                <Text style={styles.subtitles}>Step 15</Text>
-                <Text style={styles.subtitles}>Step 16</Text>
-                <Text style={styles.subtitles}>Step 17</Text>
-                <Text style={styles.subtitles}>Step 18</Text>
 
+            {
+                this.state.steps.map(step => (
+                        <Text style={styles.subtitles} key={step.key}>Step {step.key}: {step.step}</Text>
+                    )
+                )
+            }
                
             </View>
             </ScrollView>
