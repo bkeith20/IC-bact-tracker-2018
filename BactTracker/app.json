@@ -1,6 +1,9 @@
 {
   "expo": {
     "sdkVersion": "27.0.0",
+    "name": "BactTracker",
+    "slug": "bacttracker",
+    "version": "0.1.0",
     "orientation": "portrait",
     "privacy": "unlisted",
   }
