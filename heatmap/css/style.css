@@ -1,0 +1,62 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+#map {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}
+
+#basemaps-wrapper {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 400;
+    background: white;
+    padding: 5px;
+}
+
+#basemaps {
+    margin-bottom: 5px;
+    display: block;
+}
+
+.title {
+    padding: 1px;
+    padding-top: 5px;
+    margin: 0px;
+    font-size: 16px;
+}
+
+#menu {
+    overflow: auto;
+    height: 100%;
+}
+
+.button {
+    margin: 5px 7px;
+    padding: 5px;
+    border-radius: 4px;
+    display: inline-block;
+    width: 80px;
+    background-color: #003b71;
+    color: white;
+    font-size: 12px;
+}
+
+.buttonWrapper {
+    display: block;
+    width: 90px;
+}
+
+.sub1, .sub2, .sub3, .sub4, .sub5, .sub6, .sub7, .sub8, .sub9, .sub10 { display: none; }
+
+:checked ~ .sub1, :checked ~ .sub2, :checked ~ .sub3, :checked ~ .sub4, :checked ~ .sub5, :checked ~ .sub6, :checked ~ .sub7, :checked ~ .sub8, :checked ~ .sub9, :checked ~ .sub10 {
+    display: block;
+    margin-left: 5px;
+}
+
