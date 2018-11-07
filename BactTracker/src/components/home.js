@@ -31,7 +31,8 @@ export default class HomeScreen extends React.Component {
                     
                         let currSample = await AsyncStorage.getItem('savedSample'+i);
                         await AsyncStorage.removeItem('savedSample'+i);
-                        let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioDB4.php', {
+                        //http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioDB4.php
+                        let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/enterSamplev2.php', {
                             method: 'POST',
                             headers: {
                                 Accept: 'application/json',

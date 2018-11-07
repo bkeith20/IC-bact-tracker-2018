@@ -26,8 +26,8 @@ export default class HelpScreen extends React.Component {
             const { navigation } = this.props;
             const inNetpass = navigation.getParam('inNetpass', 'NO-ID');
             const toSendStr = JSON.stringify({uname: inNetpass});
-                                
-            let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioHelpInfo.php',{
+            //http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioHelpInfo.php       
+            let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/helpInfov2.php',{
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',

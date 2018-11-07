@@ -42,7 +42,8 @@ export default class enterSample extends React.Component{
                             Longitude: sampleLong
                         };
                         const tosend = JSON.stringify(formInfo);
-                        let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioSampleEdit.php', {
+                        //http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioSampleEdit.php
+                        let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/sampleEditv2.php', {
                             method: 'POST',
                             headers: {
                                 Accept: 'application/json',

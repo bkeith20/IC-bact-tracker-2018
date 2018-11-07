@@ -89,7 +89,8 @@ async componentDidMount() {
             const inNetpass = navigation.getParam('inNetpass', 'NO-ID');
             let name = {name: inNetpass};
             let req = JSON.stringify(name);
-            let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioDB.php',{
+            //http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioDB.php
+            let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/getLocationsv2.php',{
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
@@ -97,7 +98,7 @@ async componentDidMount() {
                 },
                 body: req
             });
-            
+            console.log(response);
             let responsejson = await response.json();
             for (let i =0; i<responsejson.length; i++){
                 let newMarker = {title: responsejson[i]["building"],

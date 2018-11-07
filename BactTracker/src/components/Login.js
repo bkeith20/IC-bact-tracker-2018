@@ -115,8 +115,8 @@
                                     const finfo = this._form.getValue();
                                     const uname = finfo.Netpass;
                                     const toSendStr = JSON.stringify({uname: uname});
-                                    
-                                    let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioLogin.php',{
+                                    //http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioLogin.php
+                                    let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/loginv2.php',{
                                         method: 'POST',
                                         headers: {
                                             Accept: 'application/json',
@@ -124,6 +124,7 @@
                                         },
                                         body: toSendStr,
                                     });
+                                    console.log(response);
 
                                     let rJSON = await response.json();
                                     

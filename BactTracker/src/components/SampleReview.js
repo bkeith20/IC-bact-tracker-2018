@@ -36,7 +36,8 @@ export default class HomeScreen extends React.Component {
                     const inNetpass = navigation.getParam('inNetpass', 'NO-ID');
                     let name = {name: inNetpass};
                     let req = JSON.stringify(name);
-                    let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioGetSamples.php',{
+                    //http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioGetSamples.php
+                    let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/getSamplesv2.php',{
                         method: 'POST',
                         headers: {
                             Accept: 'application/json',
