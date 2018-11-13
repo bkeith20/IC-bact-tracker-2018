@@ -16,6 +16,7 @@ import { createStackNavigator} from 'react-navigation';
 
         return (
             <View style={styles.container}>
+                //need to rename html page or clear cache!
                 <WebView
                     ref="map"
                     onLoadStart={() => this.setState({myURL: 'http://ic-research.eastus.cloudapp.azure.com/~bkeith/heatmap/viewer.html'})}

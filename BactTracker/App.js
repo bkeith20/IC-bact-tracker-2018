@@ -16,7 +16,7 @@ import {
     createStackNavigator
 } from 'react-navigation';
 
-//imports of my classes
+//imports components i.e. the screens of the app
 import HomeScreen from './src/components/home.js';
 import HelpScreen from './src/components/help.js';
 import EnterSampleScreen from './src/components/enterSample.js';

@@ -90,7 +90,8 @@ async componentDidMount() {
             let name = {name: inNetpass};
             let req = JSON.stringify(name);
             //http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioDB.php
-            let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/getLocationsv2.php',{
+            //http://ic-research.eastus.cloudapp.azure.com/~bkeith/getLocationsv2.php
+            let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioDB.php',{
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',

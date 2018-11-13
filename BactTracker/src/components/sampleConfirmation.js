@@ -23,7 +23,8 @@ export default class ConfirmScreen extends React.Component {
                     info.saved = "false";
                     const sampleStr = JSON.stringify(sample);
                     //http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioDB4.php
-                    let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/enterSamplev2.php',{
+                    //http://ic-research.eastus.cloudapp.azure.com/~bkeith/enterSamplev2.php
+                    let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioDB4.php',{
                         method: 'POST',
                         headers: {
                             Accept: 'application/json',

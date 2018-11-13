@@ -26,8 +26,9 @@ export default class HelpScreen extends React.Component {
             const { navigation } = this.props;
             const inNetpass = navigation.getParam('inNetpass', 'NO-ID');
             const toSendStr = JSON.stringify({uname: inNetpass});
-            //http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioHelpInfo.php       
-            let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/helpInfov2.php',{
+            //http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioHelpInfo.php 
+            //http://ic-research.eastus.cloudapp.azure.com/~bkeith/helpInfov2.php
+            let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioHelpInfo.php',{
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
@@ -56,8 +57,7 @@ export default class HelpScreen extends React.Component {
     
   render() {
       
-    return (
-        <View style={styles.containerOuter}>
+      /*
             <View style={styles.videoContainer}>
                 <WebView
                     style={styles.view}
@@ -66,12 +66,23 @@ export default class HelpScreen extends React.Component {
                     source={{uri: this.state.url}}
                 />
             </View>
+            */
+      
+    return (
+        <View style={styles.containerOuter}>
+            <View style={styles.containerRow}>
+                <Text style={styles.title}> Instructions </Text>
+            </View>
+            
             <ScrollView contentContainerStyle={{alignItems: 'center'}} >
             <View style={{width: width*0.8}}>
 
             {
                 this.state.steps.map(step => (
-                        <Text style={styles.subtitles} key={step.key}>Step {step.key}: {step.step}</Text>
+                        <View key={step.key}>
+                            <Text style={styles.subtitles}>Step {step.key}: </Text>
+                            <Text style={styles.regularText}> {step.step} </Text>
+                        </View>
                     )
                 )
             }
@@ -90,6 +101,12 @@ const styles = StyleSheet.create({
         //alignItems: 'center',
         //justifyContent: 'center',
         //flexDirection: 'column'
+    },
+    containerRow: {
+        //backgroundColor: 'rgba(0,0,0,0)',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'row'
     },
     videoContainer: {
         height: (height>width)?width-(width/5.886):height-(height/5.886),

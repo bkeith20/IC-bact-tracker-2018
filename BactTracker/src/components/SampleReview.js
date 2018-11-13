@@ -37,7 +37,8 @@ export default class HomeScreen extends React.Component {
                     let name = {name: inNetpass};
                     let req = JSON.stringify(name);
                     //http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioGetSamples.php
-                    let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/getSamplesv2.php',{
+                    //http://ic-research.eastus.cloudapp.azure.com/~bkeith/getSamplesv2.php
+                    let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioGetSamples.php',{
                         method: 'POST',
                         headers: {
                             Accept: 'application/json',
