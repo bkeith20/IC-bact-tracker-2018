@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, Alert, ScrollView, TextInput, Dimensions, StyleSheet, WebView, Platform, AsyncStorage } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 import {SecureStore, ScreenOrientation} from 'expo';
+import PinchZoomView from 'react-native-pinch-zoom-view';
 
 const {height, width} = Dimensions.get('window');
 
@@ -75,8 +76,9 @@ export default class HelpScreen extends React.Component {
             </View>
             
             <ScrollView contentContainerStyle={{alignItems: 'center'}} >
+            
             <View style={{width: width*0.8}}>
-
+            <PinchZoomView maxScale={1.5} minScale={1}>
             {
                 this.state.steps.map(step => (
                         <View key={step.key}>
@@ -86,8 +88,9 @@ export default class HelpScreen extends React.Component {
                     )
                 )
             }
-               
+            </PinchZoomView>   
             </View>
+            
             </ScrollView>
         </View>
     );
@@ -106,7 +109,8 @@ const styles = StyleSheet.create({
         //backgroundColor: 'rgba(0,0,0,0)',
         alignItems: 'center',
         justifyContent: 'center',
-        flexDirection: 'row'
+        flexDirection: 'row',
+        width: this.width
     },
     videoContainer: {
         height: (height>width)?width-(width/5.886):height-(height/5.886),
