@@ -60,3 +60,14 @@ body {
     margin-left: 5px;
 }
 
+#slider-range {
+    margin: 10px;
+}
+
+.ui-slider {
+    width: 80%;
+    margin: 10px
+    align-self: center;
+    align-content: center;
+}
+

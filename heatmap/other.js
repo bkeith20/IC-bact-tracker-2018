@@ -98,12 +98,12 @@ Tree.prototype.addBact = function(names, data, res, date){
             }
         }
         //if the date is greater than the maximum date recorded so far make it the new max date
-        if(date>maxDate){
-            maxDate = date;
+        if(date.getTime()>maxDate){
+            maxDate = date.getTime();
         }
         //if the date is less than the minimum date recorded so far make it the new min date
-        else if(date<minDate){
-            minDate = date;
+        else if(date.getTime()<minDate){
+            minDate = date.getTime();
         }
     }
 }
@@ -249,17 +249,10 @@ var data = fetch("http://ic-research.eastus.cloudapp.azure.com/~bkeith/heatmap.p
           myTree.addBact(data[i][0],data[i][1],data[i][2],new Date(data[i][3] + ' 12:00.00'));
       }
       
-      //setup for date pickers
-      //console.log(minDate);
-      //console.log(maxDate);
+    
       currMinDate = minDate;
       currMaxDate = maxDate;
-      var minpicker = document.getElementById("myMin");
-      minpicker.min = formatDate(minDate);
-      minpicker.max = formatDate(maxDate);
-      var maxpicker = document.getElementById("myMax");
-      maxpicker.min = formatDate(minDate);
-      maxpicker.max = formatDate(maxDate);
+      
       
       //start building the html objects
       //get empty div for radio buttons
@@ -304,11 +297,40 @@ var data = fetch("http://ic-research.eastus.cloudapp.azure.com/~bkeith/heatmap.p
       currHeat = Bacteria;
       currHeatName = "Bacteria";
       //heats["Bacteria"] = Bacteria;
+      
+      $(function() {
+            $( "#slider-range" ).slider({
+                range: true,
+                min: new Date(minDate).getTime()/1000, //min date on slider
+                max: new Date(maxDate).getTime()/1000, //max date on slider
+                steps: 86400,
+                values: [new Date(minDate).getTime()/1000, new Date(maxDate).getTime()/1000],
+                slide: function( event, ui ){
+                    $( "#amount" ).val( (new Date(ui.values[ 0 ]*1000)).toDateString() + " - " + (new Date(ui.values[ 1 ]*1000)).toDateString() );
+                    //set currdates and change what is shown
+                    currMaxDate = new Date($( "#slider-range" ).slider( "values", 1 )*1000);
+                    console.log(currMaxDate);
+                    currMinDate = new Date($( "#slider-range" ).slider( "values", 0 )*1000);
+                    console.log(currMinDate);
+                    changeHeatmap(currHeatName);
+                }
+            });
+            $( "#amount" ).val( (new Date($( "#slider-range" ).slider( "values", 0 )*1000).toDateString()) + " - " + (new Date($( "#slider-range" ).slider( "values", 1 )*1000).toDateString()));
+            
+        });
+      
       return data;
   })
   .catch(function (error) {
     console.log('Request failed', error);
-  });    
+  });  
+
+poop = new Date(minDate).getTime()/1000;
+poop2 = new Date('2013.01.01').getTime()/1000;
+console.log(poop);
+console.log(poop2);
+console.log(new Date(minDate))
+
 
     
 // --------------------- define functions used by html elements(buttons) ---------------------
@@ -447,30 +469,4 @@ function toggleResistance(res){
     
 }
 
-var minpicker = document.getElementById("myMin");
-//var mintext = document.getElementById("currmin");
-var maxpicker = document.getElementById("myMax");
-//var maxtext = document.getElementById("currmax");
-
-//not working
-minpicker.onchange = function() {
-    currMinDate = new Date(this.value + ' 12:00.00');
-    //mintext.innerHTML = currMinDate;
-    console.log(this.value);
-    console.log(currMinDate);
-    maxpicker.min = formatDate(currMinDate);
-    changeHeatmap(currHeatName);
-}
-
-maxpicker.onchange = function() {
-    currMaxDate = new Date(this.value + ' 12:00.00');
-    //maxtext.innerHTML = currMaxDate;
-    console.log(this.value);
-    console.log(currMaxDate);
-    minpicker.max = formatDate(currMaxDate);
-    changeHeatmap(currHeatName);
-}
-
-
-
-window.alert("The shown data was randomly generated to demonstrate the maps function.")
+window.alert("The shown data was randomly generated to demonstrate the map's function.")

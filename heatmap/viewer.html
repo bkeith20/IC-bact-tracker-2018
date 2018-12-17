@@ -15,6 +15,11 @@
 
     <!-- Load Esri Leaflet from CDN -->
     <script src="https://unpkg.com/esri-leaflet@2.2.1/dist/esri-leaflet.js" integrity="sha512-6BBVttv13OVrrUSoGmy9/aIVHateyIEGFaQxqnzCgXT9LNCAQ1Cxxj43R6Eq0ynydS7a7bLLfmEWwXFiO6lW2g==" crossorigin=""></script>
+    
+    <!-- jquery -->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <link rel="stylesheet" href="css/style.css">
 
@@ -54,14 +59,16 @@
                 </div>
 
                 <!-- use two date pickers instead -->
-                <p id="currmin">Minimum Date:</p>
-                <div class="datecontainer">
-                    <input type="date" id="myMin" name="min" max="1979-12-31" min="1979-11-31">
-                </div>
-                <p id="currmax">Maximum Date:</p>
-                <div class="datecontainer">
-                    <input type="date" id="myMax" name="min" max="1979-12-31" min="1979-11-31">
-                </div>
+                
+                
+                <!-- attempt at slider -->
+                <p>
+                    <label for="amount">Date range:</label>
+                    <input type="text" id="amount" style="border: 0; color: #f6931f; font-weight: bold;" size="40"/>
+                </p>
+                
+                <div id="slider-range"></div>
+                <br>
 
             </div>
 
