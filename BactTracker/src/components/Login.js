@@ -51,7 +51,7 @@ export default class Login extends React.Component {
     }
 
         
-    //settings
+    //settings for the form
     options = {
         auto: 'placeholders',
         fields: {
@@ -78,13 +78,14 @@ export default class Login extends React.Component {
     };
 
 
+// called when form is submitted - logs in user or alerts of invalid username
    async _onClick(){
 
       const Fvalue = this._form.getValue();
         if(Fvalue){
             try{
                 const inNetpass = Fvalue.Netpass;
-                   
+                //probably should change this to query db everytime to make sure user has not been removed from db - future work
                 const saved = await SecureStore.getItemAsync('deviceUser');
                     
                 var savedUser = null;

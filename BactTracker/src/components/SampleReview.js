@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Text, Alert, ScrollView, TextInput, TouchableOpacity, Dimensions, StyleSheet, AsyncStorage, NetInfo, ActivityIndicator } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 
+//review previously entered samples with the option to edit notes
+
 var {height, width} = Dimensions.get('window');
 
 export default class HomeScreen extends React.Component {
@@ -23,6 +25,7 @@ export default class HomeScreen extends React.Component {
         this.fetchSamples();
     }
 
+    //get samples taken by current user from db 
     async fetchSamples(){
         //triggered by refresh button
         //pull down any samples from the database from the current user

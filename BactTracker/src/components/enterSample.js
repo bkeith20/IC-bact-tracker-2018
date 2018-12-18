@@ -4,10 +4,13 @@ import { createStackNavigator } from 'react-navigation';
 import t from 'tcomb-form-native'; 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
+//screen for entering information about sample being taken
+
 const Form = t.form.Form;
 
 const {height, width} = Dimensions.get('window');
-    
+   
+//types of samples
 const type = t.enums({
     Single: 'Single',
     Double: 'Double'
@@ -28,6 +31,7 @@ export default class enterSample extends React.Component{
         };
     }
     
+    //pass form info on to the next page to be reviewed
     onSubmit(inNetpass, sampleLat, sampleLong, sampleLocation, sampleID, sDate){
         const Fvalue = this._form.getValue();
         if(Fvalue){
@@ -46,6 +50,7 @@ export default class enterSample extends React.Component{
         }
     }
     
+    //send to help screen 
     async help(){
         const netInfo = await NetInfo.getConnectionInfo();
         const connection = netInfo.type;
@@ -58,6 +63,7 @@ export default class enterSample extends React.Component{
         }
     }
     
+    //keep track of what info is in the text boxes
     onChange(formValue){
         this.setState({formValue: formValue});
     }
@@ -67,25 +73,29 @@ export default class enterSample extends React.Component{
         
         var sDate = new Date();
         
+        //get data from previous page
         const { navigation } = this.props;
         const inNetpass = navigation.getParam('inNetpass', 'NO-ID');
         const sampleLat = navigation.getParam('sampleLat', 'No-Lat');
         const sampleLong = navigation.getParam('sampleLong', 'No-Long');
         const sampleLocation = navigation.getParam('sampleLocation', 'No-Location');
+        //build sample id
         const sampleID = inNetpass+""+sDate.getFullYear()+"-"+(sDate.getMonth()+1)+"-"+sDate.getDate()+"-"+sDate.getHours()+"-"+sDate.getMinutes()+"-"+sDate.getSeconds();
         const object = t.enums( navigation.getParam('options'));
         
+        //make sure notes are not too long
         const Notes = t.refinement(t.String, function (s) {
             return s.length<255;
         });
         
+        //sample object for form
         const sample = t.struct({
             sampleType: type,
             sampleObject: object, 
             notes: t.maybe(Notes)
         });
         
-        
+        //form settings
         var options = {
             auto: 'placeholders',
             fields: {

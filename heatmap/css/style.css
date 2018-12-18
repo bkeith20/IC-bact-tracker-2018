@@ -71,3 +71,7 @@ body {
     align-content: center;
 }
 
+.col-1 {
+    width: 80%;
+}
+

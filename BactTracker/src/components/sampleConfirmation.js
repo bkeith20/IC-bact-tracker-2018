@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Text, Button, Alert, ScrollView, TextInput, Dimensions, StyleSheet, TouchableOpacity, AsyncStorage, NetInfo } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 
+//confrimation screen to check data and submit sample
+
 const {height, width} = Dimensions.get('window');
 
 export default class ConfirmScreen extends React.Component {
@@ -11,7 +13,7 @@ export default class ConfirmScreen extends React.Component {
     
     async onSubmit(myID, info){
         
-        //send info to DB
+        //send sample info to DB
             var sID = null;
             const netInfo = await NetInfo.getConnectionInfo();
             const connection = netInfo.type;
@@ -38,6 +40,8 @@ export default class ConfirmScreen extends React.Component {
                 }catch(error) {
                     console.log(error);
                 }
+                
+                //check if any samples are saved locally that need to be submitted and attempt to submit them
                 let numSaved = await AsyncStorage.getItem('numSavedSamples');
                 numsaved = numSaved*1;
                 if(numSaved!==null && numSaved>0){
@@ -68,8 +72,7 @@ export default class ConfirmScreen extends React.Component {
                 }
             }
             else{
-                //if not connected save locally to be sent later
-                //need to add something to the end of the id to make sure that it is unique and check against other saved sample                
+                //if not connected save locally to be sent later                
                 let numSaved = await AsyncStorage.getItem('numSavedSamples');
                 if(numSaved===null){
                     numsaved=0;
@@ -95,7 +98,6 @@ export default class ConfirmScreen extends React.Component {
         );
     };
             
-    // possibly change so that final sample id is sent back from the DB to make sure it is different from any others already saved
     async alertPress(info){
             
             this.props.navigation.navigate('Home', {inNetpass: info.User});

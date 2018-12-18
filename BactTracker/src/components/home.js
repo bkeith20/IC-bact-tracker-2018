@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Text, Alert, TouchableOpacity, Dimensions, StyleSheet, AsyncStorage, NetInfo } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 
+//main navigation homescreen
+
 const {height, width} = Dimensions.get('window');
 
 export default class HomeScreen extends React.Component {
@@ -18,6 +20,7 @@ export default class HomeScreen extends React.Component {
         };
     };
 
+    //check if any samples are saved locally to be submitted and submit them if possible
     async componentDidMount(){
         const netInfo = await NetInfo.getConnectionInfo();
         const connection = netInfo.type;
@@ -58,6 +61,7 @@ export default class HomeScreen extends React.Component {
         }
     }
 
+    //send to help screen if there is internet access
     async help(){
         const netInfo = await NetInfo.getConnectionInfo();
         const connection = netInfo.type;
@@ -72,6 +76,7 @@ export default class HomeScreen extends React.Component {
         }
     }
 
+    //send to heatmap if there is internet access
     async view(){
         const netInfo = await NetInfo.getConnectionInfo();
         const connection = netInfo.type;

@@ -12,6 +12,8 @@
         renderers
     } from 'react-native-popup-menu';
 
+//map screen to search for sample locations
+
 var {height, width} = Dimensions.get('window');
 
 const { SlideInMenu } = renderers;
@@ -22,18 +24,18 @@ const { SlideInMenu } = renderers;
 
     export default class tracker extends React.Component {
         static navigationOptions = ({navigation}) => {
-            const inNetpass = navigation.getParam('inNetpass', 'NO-ID');
-        return {
-            headerRight: (
-                <TouchableOpacity
-                    onPress={() => navigation.navigate('SampleReview', {inNetpass: inNetpass})}
-                    style={{paddingLeft: 10}}
-                >
-                    <Text style={{fontWeight: 'bold', color: 'white', padding: 10, fontSize: 16, borderColor: 'white', borderRadius: 8, borderWidth: 1 }}>My Samples</Text>
-                </TouchableOpacity>
-            ),
+                const inNetpass = navigation.getParam('inNetpass', 'NO-ID');
+            return {
+                headerRight: (
+                    <TouchableOpacity
+                        onPress={() => navigation.navigate('SampleReview', {inNetpass: inNetpass})}
+                        style={{paddingLeft: 10}}
+                    >
+                        <Text style={{fontWeight: 'bold', color: 'white', padding: 10, fontSize: 16, borderColor: 'white', borderRadius: 8, borderWidth: 1 }}>My Samples</Text>
+                    </TouchableOpacity>
+                ),
+            };
         };
-    };
 
         constructor(props) {
         super(props);
@@ -62,6 +64,7 @@ async componentDidMount() {
     const connection = netInfo.type;
     //check if connected to internet
     if (connection!=="none" && connection!=="unknown"){
+        //show loading screen while markers are fetched from db
         this.setState({loading: true});     
         if(this.ismounted){
             navigator.geolocation.getCurrentPosition(
@@ -160,6 +163,7 @@ async componentDidMount() {
                 this.menu = r;
             }
             
+            //track region being viewd on the map
             onRegionChange(region){
                 this.setState({region: region});
             }
@@ -171,6 +175,7 @@ async componentDidMount() {
                 const { navigation } = this.props;
                 const inNetpass = navigation.getParam('inNetpass', 'NO-ID');
                 
+                //loading screen
                 if(this.state.loading){
                     return (
                         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -178,6 +183,7 @@ async componentDidMount() {
                         </View>
                     );
                 } else{
+                    
                 return (
                     <MenuProvider style={styles.container}>  
                     <View>

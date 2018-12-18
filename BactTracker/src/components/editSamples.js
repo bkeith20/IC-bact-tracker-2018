@@ -4,6 +4,7 @@ import { createStackNavigator } from 'react-navigation';
 import t from 'tcomb-form-native'; 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
+//form for editing previously taken samples
 
 const Form = t.form.Form;
 
@@ -20,6 +21,7 @@ export default class enterSample extends React.Component{
         };
     }
     
+    //submit new info
     async onSubmit(inNetpass, sampleLat, sampleLong, sampleLocation, sampleID, sampleType, sampleObject, sampleDate, sampleNotes){
         const netInfo = await NetInfo.getConnectionInfo();
         const connection = netInfo.type;
@@ -76,6 +78,7 @@ export default class enterSample extends React.Component{
         this.setState({formValue: defaultVal});
     }
     
+    //keep track of values in text boxes
     onChange(formValue){
         this.setState({formValue: formValue,
                       //textHeight: (formValue.notes.height+10)
@@ -85,6 +88,7 @@ export default class enterSample extends React.Component{
     
     render () {
         
+        //get the info from the previous screen
         const { navigation } = this.props;
         const inNetpass = navigation.getParam('inNetpass', 'NO-ID');
         const sampleLat = navigation.getParam('sampleLat', 'No-Lat');

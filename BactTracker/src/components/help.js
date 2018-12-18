@@ -27,6 +27,8 @@ export default class HelpScreen extends React.Component {
             const { navigation } = this.props;
             const inNetpass = navigation.getParam('inNetpass', 'NO-ID');
             const toSendStr = JSON.stringify({uname: inNetpass});
+            
+            //call to db
             //http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioHelpInfo.php 
             //http://ic-research.eastus.cloudapp.azure.com/~bkeith/helpInfov2.php
             let response = await fetch('http://ic-research.eastus.cloudapp.azure.com/~bkeith/bioHelpInfo.php',{
@@ -40,7 +42,6 @@ export default class HelpScreen extends React.Component {
             console.log(response);
             let rJSON = await response.json();
             console.log(rJSON);
-            // need to do something with the data
             this.setState(
                 {url: rJSON['url'],
                 steps:rJSON['steps']}
@@ -52,6 +53,7 @@ export default class HelpScreen extends React.Component {
         }
     } 
     
+    //reset so app only works vertically on phone
     componentWillUnmount(){
         ScreenOrientation.allow(ScreenOrientation.Orientation.PORTRAIT_UP);
     }
@@ -59,6 +61,7 @@ export default class HelpScreen extends React.Component {
   render() {
       
       /*
+      video player for tutorial video
             <View style={styles.videoContainer}>
                 <WebView
                     style={styles.view}

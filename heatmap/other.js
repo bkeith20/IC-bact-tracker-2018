@@ -1,5 +1,5 @@
 // --------------------- create map object ---------------------
-var map = L.map('map').setView([42.4226, -76.4950], 15);
+var map = L.map('map',{ zoomControl:false }).setView([42.4226, -76.4950], 15);
 var layer = L.esri.basemapLayer('DarkGray').addTo(map);
 //var layerLabels;
 
@@ -13,7 +13,7 @@ var resistances = {};
 
 
 
-//----------------------- values for calculating date pickers ---------------
+//----------------------- values for calculating date slider ---------------
 var minDate = Date.now();
 var maxDate = Date.now();
 var currMinDate = Date.now();
@@ -223,9 +223,7 @@ Tree.prototype.bfs = function(toFind) {
 // --------------------- Build the tree and use it to build the radio buttons and resistance checkboxes ---------------------
 var myTree = new Tree("Bacteria", [0,0,0], []);
 
-// --------------------- Build default heatmap and the object to hold the heatmaps ---------------------
-//hashmap of all the heatmaps previousy shown with bacteria name as the key, does not save anything about resistances or times 
-//var heats = {};
+// --------------------- Build default heatmap ---------------------
 //heatmap currently being displayed
 var currHeat = null;
 //name of heatmap currently being displayed i.e. the key to find the current heatmap in heats{}
@@ -238,18 +236,18 @@ var data = fetch("http://ic-research.eastus.cloudapp.azure.com/~bkeith/heatmap.p
     headers: {
       "Content-type": "application/json; charset=UTF-8"
     },
-    //here could specify the school -- could add a pop-up at page open that asks which school's data you wish to view
+    //here could specify the school -- could add a pop-up at page open that asks which school's data you wish to view for future developement
     body: JSON.stringify({uname: "name"})
   })
   .then((response) => response.json())
   .then((data) => {
       console.log(data);
       for(let i = 0, l = data.length; i<l; i++){
-          //myTree.addBact(data[i][0],data[i][1],data[i][2],new Date(data[i][3]+"Z"));
+          //add 12 hours to make sure even if time zone is wrong will still be correct day
           myTree.addBact(data[i][0],data[i][1],data[i][2],new Date(data[i][3] + ' 12:00.00'));
       }
       
-    
+      
       currMinDate = minDate;
       currMaxDate = maxDate;
       
@@ -264,6 +262,7 @@ var data = fetch("http://ic-research.eastus.cloudapp.azure.com/~bkeith/heatmap.p
 
         //get the empty div for the checkboxes
         var checkWrapper = document.getElementById("checkBoxDiv");
+      
         //build the checkboxes for each resistance and add them to the empty div
         Object.keys(resistances).forEach(function(key, index){
            //make checkbox for each resistance
@@ -293,10 +292,10 @@ var data = fetch("http://ic-research.eastus.cloudapp.azure.com/~bkeith/heatmap.p
             blur: 25,
             maxZoom: 11
         }).addTo(map);
-      //set this base heatmap as the current heatmap and add it to heats{}
+      //set this base heatmap as the current heatmap
       currHeat = Bacteria;
       currHeatName = "Bacteria";
-      //heats["Bacteria"] = Bacteria;
+      
       
       $(function() {
             $( "#slider-range" ).slider({
@@ -325,12 +324,6 @@ var data = fetch("http://ic-research.eastus.cloudapp.azure.com/~bkeith/heatmap.p
     console.log('Request failed', error);
   });  
 
-poop = new Date(minDate).getTime()/1000;
-poop2 = new Date('2013.01.01').getTime()/1000;
-console.log(poop);
-console.log(poop2);
-console.log(new Date(minDate))
-
 
     
 // --------------------- define functions used by html elements(buttons) ---------------------
@@ -349,31 +342,24 @@ function toggleMenu() {
 }
 
 //changes the heatmap that is shown on the map
-//if heats does not yet contain a heatmap layer for the chosen classification, the layer is created and added to heats
 function changeHeatmap(value) {
-    //value is always just the name of the bacteria beign shown, it does not show the resistances or time
+    //value is always just the name of the bacteria being shown, it does not show the resistances or time
     if (currHeat != null) {
         map.removeLayer(currHeat);
     }
     //build the correct label using bacteria and the resistances and the dates
     var label = value;
     var currRes = [];
-    //console.log(label);
     Object.keys(resistances).forEach(function(key, index){
         if(resistances[key]){
-            //console.log(key);
             label = label.concat(key);
             currRes.push(key);
         }
     });
     label = label.concat(currMinDate);
     label = label.concat(currMaxDate);
-    //console.log(label);
-    //console.log(currRes);
     
     
-    //if(heats[label]==null){
-        //create heat layer and add to heats 
         var currNode = myTree.bfs(value);
         //console.log(currNode);
         var info = currNode.data;
@@ -381,7 +367,6 @@ function changeHeatmap(value) {
         for(var q = 0, length = info.length; q<length; q++){
             let notIn = 0;
             //look through the list of resistances listed with the current sample and if any of the resistances selected are not within the samples list, then it is not added to the heatmap 
-            //console.log(currNode.resistance);
             for(var r = 0, l = currRes.length; r<l; r++){
                 if(!currNode.resistance[q].includes(currRes[r])){
                     notIn++;
@@ -396,8 +381,6 @@ function changeHeatmap(value) {
             blur: 25,
             maxZoom: 11
         });
-        //console.log(heats);
-    //}
     //close any buttons of a lower level and uncheck them
     var currNode = document.getElementById(value);
     switch(currNode.parentNode.parentNode.className){
@@ -436,19 +419,15 @@ function changeHeatmap(value) {
             break;
     }
     n = n+2;
-    //console.log(n);
     for(n; n<10; n++){
         var radios = document.getElementsByName("level"+n);
         for(var i = 0, l = radios.length; i<l; i++){
             radios[i].checked=false;
         }
     }
-    //console.log(heats[label])
     map.addLayer(newHeat);
     currHeat = newHeat;
     currHeatName = value;
-    //console.log(currHeatName);
-    //console.log(Object.keys(heats).length);
 }
 
 //triggered by the none radio button, removes the currently displayed heatmap layer from the map
@@ -457,6 +436,7 @@ function removeHeat() {
     currHeat = null;
 }
 
+//toggles whether a resistance is used as a filter
 function toggleResistance(res){
     if(resistances[res.value]){
         resistances[res.value] = false;
